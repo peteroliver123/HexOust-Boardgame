@@ -24,6 +24,4 @@ Inside the new VM options field, insert this line of code (Make sure to edit the
 
 Save and apply.
 
-If it still doesn't work
-
 Note: You will need to do this for any class at all that incorporates JavaFX and renders the stage.
