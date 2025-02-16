@@ -2,8 +2,11 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
+
 
 public class HexMap extends Application {
     private static final int SIZE = 7; // Size of hexmap board (Adjustable board size (Possible extra additions later))
@@ -12,6 +15,18 @@ public class HexMap extends Application {
     private static final double LENGTH = 30; // Size of hexagon (Distance from center to any vertice)
     private static final double PADDING = 150;
     private Polygon[][] hexagons = new Polygon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
+
+    public enum PlayerTurn {
+        RED,
+        BLUE;
+
+        // Helper method to switch turns
+        public PlayerTurn next() {
+            return this == RED ? BLUE : RED;
+        }
+    }
+    private PlayerTurn currentPlayer = PlayerTurn.RED;
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -53,6 +68,14 @@ public class HexMap extends Application {
             tempY = y; // Reset tempY to new y
         }
 
+        /*Display Initial Red Sphere */
+        Circle circle = drawCircle();
+        root.getChildren().add(circle);
+
+        /*Display Text*/
+        Text text = makeMoveText();
+        root.getChildren().add(text);
+
         Scene scene = new Scene(root, 1280, 720); // Initialize new scene, taking in field/map and size parameters.
         primaryStage.setScene(scene); // Set scene to stage.
         primaryStage.setTitle("HexMap"); // Title of stage.
@@ -73,6 +96,36 @@ public class HexMap extends Application {
         hex.setFill(Color.web("#DEE6E8"));
         return hex;
     }
+
+    public void changePlayer(){
+        currentPlayer = currentPlayer.next();
+    }
+
+    public Text makeMoveText(){
+        Text text = new Text("To Make a Move");
+        text.setX(950); // X position on screen
+        text.setY(510); // Y position on screen
+        text.setFont(javafx.scene.text.Font.font("Verdana", 30));
+        text.setFill(javafx.scene.paint.Color.BLACK);
+        return text;
+    }
+
+    public Circle drawCircle(){
+        Circle circle = new Circle();
+        circle.setCenterX(900);
+        circle.setCenterY(500);
+        circle.setRadius(25);
+        if(currentPlayer == PlayerTurn.BLUE){
+            circle.setFill(Color.BLUE); // Fill color
+        }
+        else {
+            circle.setFill(Color.RED); // Fill color
+        }
+        circle.setStroke(Color.BLACK); // Border color
+        circle.setStrokeWidth(2);
+        return circle;
+    }
+
 
     public static void main(String[] args) {
         launch(args);
