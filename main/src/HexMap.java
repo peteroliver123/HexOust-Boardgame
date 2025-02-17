@@ -1,5 +1,7 @@
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -43,6 +45,7 @@ public class HexMap extends Application {
                     Polygon hex = createHexagon(x, tempY); // Create new hexagon using center point.
                     System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
+                    hex.setOnMouseClicked(new MouseClickHandler(root, x, tempY)); //creates mouse click event listener
                     root.getChildren().add(hex); // Add hexagon to scene/map.
                     tempY -= ((Math.sqrt(0.75) * LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
                 }
@@ -52,6 +55,7 @@ public class HexMap extends Application {
                     Polygon hex = createHexagon(x, tempY);
                     System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
+                    hex.setOnMouseClicked(new MouseClickHandler(root, x, tempY)); //creates mouse click event listener
                     root.getChildren().add(hex);
                     tempY -= ((Math.sqrt(0.75) * LENGTH) * 2);
                 }
@@ -69,7 +73,7 @@ public class HexMap extends Application {
         }
 
         /*Display Initial Red Sphere */
-        Circle circle = drawCircle();
+        Circle circle = drawCircle(900,500);
         root.getChildren().add(circle);
 
         /*Display Text*/
@@ -80,6 +84,25 @@ public class HexMap extends Application {
         primaryStage.setScene(scene); // Set scene to stage.
         primaryStage.setTitle("HexMap"); // Title of stage.
         primaryStage.show(); // Render stage.
+
+
+    }
+
+    private class MouseClickHandler implements EventHandler<MouseEvent>{
+        Pane root;
+        double centerX;
+        double centerY;
+        public MouseClickHandler(Pane root, double centerX, double centerY){
+            this.root = root;
+            this.centerX = centerX;
+            this.centerY = centerY;
+        }
+        @Override
+        public void handle(MouseEvent event){
+            Circle circle = drawCircle(centerX, centerY);
+            root.getChildren().add(circle);
+            changePlayer();
+        }
     }
 
     private Polygon createHexagon(double centerX, double centerY) {
@@ -110,10 +133,10 @@ public class HexMap extends Application {
         return text;
     }
 
-    public Circle drawCircle(){
+    public Circle drawCircle(double x, double y){
         Circle circle = new Circle();
-        circle.setCenterX(900);
-        circle.setCenterY(500);
+        circle.setCenterX(x);
+        circle.setCenterY(y);
         circle.setRadius(25);
         if(currentPlayer == PlayerTurn.BLUE){
             circle.setFill(Color.BLUE); // Fill color
@@ -125,6 +148,7 @@ public class HexMap extends Application {
         circle.setStrokeWidth(2);
         return circle;
     }
+
 
 
     public static void main(String[] args) {
