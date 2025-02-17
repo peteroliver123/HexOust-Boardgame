@@ -5,10 +5,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
-
 
 public class HexMap extends Application {
     private static final int SIZE = 7; // Size of hexmap board (Adjustable board size (Possible extra additions later))
@@ -16,7 +14,8 @@ public class HexMap extends Application {
     private static final double CENTRE_Y = 520; // Center coordinates of the first initial hexagon (top left, [0][0])
     private static final double LENGTH = 30; // Size of hexagon (Distance from center to any vertice)
     private static final double PADDING = 150;
-    private Polygon[][] hexagons = new Polygon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
+    static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
+    private Circle playerTurnCircle;
 
     public enum PlayerTurn {
         RED,
@@ -29,9 +28,7 @@ public class HexMap extends Application {
     }
     private PlayerTurn currentPlayer = PlayerTurn.RED;
 
-
-    @Override
-    public void start(Stage primaryStage) {
+    public Pane initialize() {
         Pane root = new Pane(); // Initialize the field/map
         double x = CENTRE_X;
         double y = CENTRE_Y; // Variables assigned constants.
@@ -42,20 +39,18 @@ public class HexMap extends Application {
         for (int q = 0; q < ((SIZE * 2) - 1); q++) { // Loop for all columns
             if (!(q >= SIZE-1)) { // Loop for generating columns that ascend (towards center column)
                 for (int i = 0; i < column; i++) {
-                    Polygon hex = createHexagon(x, tempY); // Create new hexagon using center point.
-                    System.out.println("q: " + q + ", i: " + i);
+                    Hexagon hex = createHexagon(x, tempY, root); // Create new hexagon using center point.
+                    // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
-                    hex.setOnMouseClicked(new MouseClickHandler(root, x, tempY)); //creates mouse click event listener
                     root.getChildren().add(hex); // Add hexagon to scene/map.
                     tempY -= ((Math.sqrt(0.75) * LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
                 }
             } else {
                 ascFlag = false; // Flag set to false, loop to generate descending columns.
                 for (int i = 0; i < column; i++) {
-                    Polygon hex = createHexagon(x, tempY);
-                    System.out.println("q: " + q + ", i: " + i);
+                    Hexagon hex = createHexagon(x, tempY, root);
+                    // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
-                    hex.setOnMouseClicked(new MouseClickHandler(root, x, tempY)); //creates mouse click event listener
                     root.getChildren().add(hex);
                     tempY -= ((Math.sqrt(0.75) * LENGTH) * 2);
                 }
@@ -72,41 +67,66 @@ public class HexMap extends Application {
             tempY = y; // Reset tempY to new y
         }
 
-        /*Display Initial Red Sphere */
-        Circle circle = drawCircle(900,500);
-        root.getChildren().add(circle);
+        // Circle piece corresponding to current player's turn.
+        playerTurnCircle = drawCircle(900, 500);
+        root.getChildren().add(playerTurnCircle);
 
         /*Display Text*/
         Text text = makeMoveText();
         root.getChildren().add(text);
 
+        return root;
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        Pane root = initialize();
         Scene scene = new Scene(root, 1280, 720); // Initialize new scene, taking in field/map and size parameters.
         primaryStage.setScene(scene); // Set scene to stage.
         primaryStage.setTitle("HexMap"); // Title of stage.
         primaryStage.show(); // Render stage.
-
-
     }
 
-    private class MouseClickHandler implements EventHandler<MouseEvent>{
+    private class MouseClickHandler implements EventHandler<MouseEvent> {
         Pane root;
-        double centerX;
-        double centerY;
-        public MouseClickHandler(Pane root, double centerX, double centerY){
+        Hexagon hexagon;
+
+        public MouseClickHandler(Pane root, Hexagon hexagon) {
             this.root = root;
-            this.centerX = centerX;
-            this.centerY = centerY;
+            this.hexagon = hexagon;
         }
+
         @Override
-        public void handle(MouseEvent event){
-            Circle circle = drawCircle(centerX, centerY);
-            root.getChildren().add(circle);
-            changePlayer();
+        public void handle(MouseEvent event) {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
+
+            // Function to make the area of each hexagon interactable.
+            if (hexagon.contains(mouseX, mouseY)) {
+                boolean hasCircle = false;
+
+                // Prevents re-interaction if mouse event is registered inside the hexagonal area not occupied by the circle
+                for (javafx.scene.Node node : root.getChildren()) {
+                    if (node instanceof Circle) {
+                        Circle circle = (Circle) node;
+                        if (circle.getCenterX() == hexagon.getX() && circle.getCenterY() == hexagon.getY()) {
+                            hasCircle = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasCircle) {
+                    Circle circle = drawCircle(hexagon.getX(), hexagon.getY());
+                    root.getChildren().add(circle);
+                    changePlayer();
+                }
+            }
         }
     }
 
-    private Polygon createHexagon(double centerX, double centerY) {
-        Polygon hex = new Polygon(); // Create a new polygon.
+    private Hexagon createHexagon(double centerX, double centerY, Pane root) {
+        Hexagon hex = new Hexagon(centerX, centerY); // Create a new polygon.
         hex.getPoints().addAll(new Double[]{ // Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
                 centerX - LENGTH, centerY,
                 centerX - (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),
@@ -117,11 +137,19 @@ public class HexMap extends Application {
         });
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
+
+        hex.setOnMouseClicked(new MouseClickHandler(root, hex));
         return hex;
     }
 
     public void changePlayer(){
         currentPlayer = currentPlayer.next();
+
+        if (currentPlayer == PlayerTurn.BLUE) {
+            playerTurnCircle.setFill(Color.BLUE);
+        } else {
+            playerTurnCircle.setFill(Color.RED);
+        }
     }
 
     public Text makeMoveText(){
@@ -137,7 +165,7 @@ public class HexMap extends Application {
         Circle circle = new Circle();
         circle.setCenterX(x);
         circle.setCenterY(y);
-        circle.setRadius(25);
+        circle.setRadius(LENGTH / 1.5);
         if(currentPlayer == PlayerTurn.BLUE){
             circle.setFill(Color.BLUE); // Fill color
         }
