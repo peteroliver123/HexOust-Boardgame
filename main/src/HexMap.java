@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -84,6 +85,7 @@ public class HexMap extends Application {
         Scene scene = new Scene(root, 1280, 720); // Initialize new scene, taking in field/map and size parameters.
         primaryStage.setScene(scene); // Set scene to stage.
         primaryStage.setTitle("HexMap"); // Title of stage.
+        scene.setOnKeyPressed(new keyPressHandler()); //quit button
         primaryStage.show(); // Render stage.
     }
 
@@ -122,6 +124,16 @@ public class HexMap extends Application {
                     changePlayer();
                 }
             }
+        }
+    }
+
+    private class keyPressHandler implements EventHandler<KeyEvent>{
+        @Override
+        public void handle(KeyEvent keyEvent){
+            if(keyEvent.getText().equals("q")){
+                System.exit(1);
+            }
+
         }
     }
 
