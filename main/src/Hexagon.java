@@ -35,4 +35,20 @@ public class Hexagon extends Polygon {
         }
         return inside;
     }
+
+    //returns whether the given hex is a neighbor of this one
+    public boolean isNeighbor(Hexagon hex){
+        boolean toReturn = false;
+        int xDiff = (int)Math.abs(hex.getX() - this.x);
+        int yDiff = (int)Math.abs(hex.getY() - this.y);
+        //the hex is directly above or below the current one
+        if(xDiff == 0 && yDiff == 51){
+            toReturn = true;
+        }
+        //hex is to the side of the current one
+        if(xDiff == 45 && yDiff == 25){
+            toReturn = true;
+        }
+        return toReturn;
+    }
 }

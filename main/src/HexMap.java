@@ -9,6 +9,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+
 public class HexMap extends Application {
     private static final int SIZE = 7; // Size of hexmap board (Adjustable board size (Possible extra additions later))
     private static final double CENTRE_X = 100;
@@ -17,6 +19,8 @@ public class HexMap extends Application {
     private static final double PADDING = 150;
     static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
     private Circle playerTurnCircle;
+    private ArrayList<Hexagon> redHexagons = new ArrayList<Hexagon>();
+    private ArrayList<Hexagon> blueHexagons = new ArrayList<Hexagon>();
 
     public enum PlayerTurn {
         RED,
@@ -121,6 +125,13 @@ public class HexMap extends Application {
                 if (!hasCircle) {
                     Circle circle = drawCircle(hexagon.getX(), hexagon.getY());
                     root.getChildren().add(circle);
+                    //adds new hexagon to appropriate array based on current player turn
+                    if(currentPlayer == PlayerTurn.BLUE){
+                        blueHexagons.add(hexagon);
+                    }
+                    else{
+                        redHexagons.add(hexagon);
+                    }
                     changePlayer();
                 }
             }
