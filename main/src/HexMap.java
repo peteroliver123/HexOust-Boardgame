@@ -9,8 +9,6 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
-import java.util.ArrayList;
-
 public class HexMap extends Application {
     private static final int SIZE = 7; // Size of hexmap board (Adjustable board size (Possible extra additions later))
     private static final double CENTRE_X = 100;
@@ -19,8 +17,7 @@ public class HexMap extends Application {
     private static final double PADDING = 150;
     static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
     private Circle playerTurnCircle;
-    private ArrayList<Hexagon> redHexagons = new ArrayList<Hexagon>();
-    private ArrayList<Hexagon> blueHexagons = new ArrayList<Hexagon>();
+    private int[][] placement = new int[2 * SIZE - 1][2 * SIZE - 1];
 
     public enum PlayerTurn {
         RED,
@@ -96,10 +93,54 @@ public class HexMap extends Application {
     private class MouseClickHandler implements EventHandler<MouseEvent> {
         Pane root;
         Hexagon hexagon;
+        Circle hoverCircle;
 
-        public MouseClickHandler(Pane root, Hexagon hexagon) {
+        public MouseClickHandler(Pane root, Hexagon hexagon, Circle hoverCircle) {
             this.root = root;
             this.hexagon = hexagon;
+            this.hoverCircle = hoverCircle;
+        }
+
+        @Override
+        public void handle(MouseEvent event) {
+            double mouseX = event.getX();
+            double mouseY = event.getY();
+
+            // Function to make the area of each hexagon interactable.
+            if (hexagon.contains(mouseX, mouseY)) {
+                boolean hasCircle = false;
+
+                // Prevents re-interaction if mouse event is registered inside the hexagonal area not occupied by the circle
+                for (javafx.scene.Node node : root.getChildren()) {
+                    if (node.getClass() == Stone.class) {
+                        Stone circle = (Stone) node;
+                        if (circle.getCenterX() == hexagon.getX() && circle.getCenterY() == hexagon.getY()) {
+                            hasCircle = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasCircle) {
+                    root.getChildren().remove(hoverCircle);
+                    Stone stone = drawCircle(hexagon.getX(), hexagon.getY());
+                    root.getChildren().add(stone);
+                    changePlayer();
+                }
+            }
+        }
+    }
+
+
+    private class MouseHoverHandler implements EventHandler<MouseEvent> {
+        Pane root;
+        Hexagon hexagon;
+        Circle hoverCircle;
+
+        public MouseHoverHandler(Pane root, Hexagon hexagon, Circle hoverCircle) {
+            this.root = root;
+            this.hexagon = hexagon;
+            this.hoverCircle = hoverCircle;
         }
 
         @Override
@@ -123,17 +164,20 @@ public class HexMap extends Application {
                 }
 
                 if (!hasCircle) {
-                    Circle circle = drawCircle(hexagon.getX(), hexagon.getY());
-                    root.getChildren().add(circle);
-                    //adds new hexagon to appropriate array based on current player turn
                     if(currentPlayer == PlayerTurn.BLUE){
-                        blueHexagons.add(hexagon);
+                        hoverCircle.setFill(Color.rgb(0, 0, 255, 0.3));
                     }
-                    else{
-                        redHexagons.add(hexagon);
+                    else {
+                        hoverCircle.setFill(Color.rgb(255, 0, 0, 0.3));
                     }
-                    changePlayer();
+                    hoverCircle.setStroke(Color.rgb(0, 0, 0, 0.3));
+                    hoverCircle.setStrokeWidth(2);
+                    root.getChildren().add(hoverCircle);
                 }
+            } else {
+                hoverCircle.setFill(Color.rgb(0, 0, 0, 0));
+                hoverCircle.setStroke(Color.rgb(0, 0, 0, 0));
+                root.getChildren().remove(hoverCircle);
             }
         }
     }
@@ -161,7 +205,12 @@ public class HexMap extends Application {
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
-        hex.setOnMouseClicked(new MouseClickHandler(root, hex));
+        Circle hoverCircle = drawHoverCircle(hex.getX(), hex.getY());
+        EventHandler<MouseEvent> Hover = new MouseHoverHandler(root, hex, hoverCircle);
+        hex.setOnMouseEntered(Hover);
+        hex.setOnMouseExited(Hover);
+        hex.setOnMouseClicked(new MouseClickHandler(root, hex, hoverCircle));
+
         return hex;
     }
 
@@ -184,8 +233,8 @@ public class HexMap extends Application {
         return text;
     }
 
-    public Circle drawCircle(double x, double y){
-        Circle circle = new Circle();
+    public Stone drawCircle(double x, double y){
+        Stone circle = new Stone(x, y);
         circle.setCenterX(x);
         circle.setCenterY(y);
         circle.setRadius(LENGTH / 1.5);
@@ -200,7 +249,14 @@ public class HexMap extends Application {
         return circle;
     }
 
-
+    public Circle drawHoverCircle(double x, double y){
+        Circle circle = new Circle();
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+        circle.setRadius(LENGTH / 1.5);
+        circle.setMouseTransparent(true); // Allows mouse events to pass through.
+        return circle;
+    }
 
     public static void main(String[] args) {
         launch(args);
