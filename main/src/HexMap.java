@@ -8,16 +8,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import java.util.ArrayList;
+
 
 public class HexMap extends Application {
     private static final int SIZE = 7; // Size of hexmap board (Adjustable board size (Possible extra additions later))
     private static final double CENTRE_X = 100;
-    private static final double CENTRE_Y = 520; // Center coordinates of the first initial hexagon (top left, [0][0])
+    private static final double CENTRE_Y = 520; // Center coordinates of the first initial hexagon (bottom left, [0][0])
     private static final double LENGTH = 30; // Size of hexagon (Distance from center to any vertice)
     private static final double PADDING = 150;
     static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
     private Circle playerTurnCircle;
-    private int[][] placement = new int[2 * SIZE - 1][2 * SIZE - 1];
+    private NonCapturing nonCapturing;
+    private int[][] placementGrid = new int[2 * SIZE - 1][2 * SIZE - 1];
+    private ArrayList<Hexagon> redHexagons = new ArrayList<Hexagon>();
+    private ArrayList<Hexagon> blueHexagons = new ArrayList<Hexagon>();
 
     public enum PlayerTurn {
         RED,
@@ -37,11 +42,12 @@ public class HexMap extends Application {
         double tempY = y; // Temporary y variable for generating hexagons at a perfect ideal spacing vertically.
         int column = SIZE; // Amount of hexagons in each column. Incr/Decr depending on ascFlag.
         boolean ascFlag = true; // Ascension flag. Turns false after generating the center column of hexagon.
+        nonCapturing = new NonCapturing(SIZE);
 
         for (int q = 0; q < ((SIZE * 2) - 1); q++) { // Loop for all columns
             if (!(q >= SIZE-1)) { // Loop for generating columns that ascend (towards center column)
                 for (int i = 0; i < column; i++) {
-                    Hexagon hex = createHexagon(x, tempY, root); // Create new hexagon using center point.
+                    Hexagon hex = createHexagon(x, tempY, q, i, root); // Create new hexagon using center point.
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex); // Add hexagon to scene/map.
@@ -50,7 +56,7 @@ public class HexMap extends Application {
             } else {
                 ascFlag = false; // Flag set to false, loop to generate descending columns.
                 for (int i = 0; i < column; i++) {
-                    Hexagon hex = createHexagon(x, tempY, root);
+                    Hexagon hex = createHexagon(x, tempY, q, i, root);
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex);
@@ -122,10 +128,17 @@ public class HexMap extends Application {
                 }
 
                 if (!hasCircle) {
-                    root.getChildren().remove(hoverCircle);
-                    Stone stone = drawCircle(hexagon.getX(), hexagon.getY());
-                    root.getChildren().add(stone);
-                    changePlayer();
+                    int q = hexagon.getQ();
+                    int r = hexagon.getR();
+
+                    if (nonCapturing.isValidPlacement(q, r, currentPlayer)) {
+                        root.getChildren().remove(hoverCircle);
+                        Stone stone = drawCircle(hexagon.getX(), hexagon.getY());
+                        root.getChildren().add(stone);
+
+                        nonCapturing.updatePlacement(hexagon, q, r, currentPlayer);
+                        changePlayer();
+                    }
                 }
             }
         }
@@ -164,15 +177,19 @@ public class HexMap extends Application {
                 }
 
                 if (!hasCircle) {
-                    if(currentPlayer == PlayerTurn.BLUE){
-                        hoverCircle.setFill(Color.rgb(0, 0, 255, 0.3));
+                    int q = hexagon.getQ();
+                    int r = hexagon.getR();
+
+                    if (nonCapturing.isValidPlacement(q, r, currentPlayer)) {
+                        if (currentPlayer == PlayerTurn.BLUE) {
+                            hoverCircle.setFill(Color.rgb(0, 0, 255, 0.3));
+                        } else {
+                            hoverCircle.setFill(Color.rgb(255, 0, 0, 0.3));
+                        }
+                        hoverCircle.setStroke(Color.rgb(0, 0, 0, 0.3));
+                        hoverCircle.setStrokeWidth(2);
+                        root.getChildren().add(hoverCircle);
                     }
-                    else {
-                        hoverCircle.setFill(Color.rgb(255, 0, 0, 0.3));
-                    }
-                    hoverCircle.setStroke(Color.rgb(0, 0, 0, 0.3));
-                    hoverCircle.setStrokeWidth(2);
-                    root.getChildren().add(hoverCircle);
                 }
             } else {
                 hoverCircle.setFill(Color.rgb(0, 0, 0, 0));
@@ -192,8 +209,8 @@ public class HexMap extends Application {
         }
     }
 
-    private Hexagon createHexagon(double centerX, double centerY, Pane root) {
-        Hexagon hex = new Hexagon(centerX, centerY); // Create a new polygon.
+    private Hexagon createHexagon(double centerX, double centerY, int q, int r, Pane root) {
+        Hexagon hex = new Hexagon(centerX, centerY, q, r); // Create a new polygon.
         hex.getPoints().addAll(new Double[]{ // Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
                 centerX - LENGTH, centerY,
                 centerX - (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),

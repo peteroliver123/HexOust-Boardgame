@@ -1,12 +1,14 @@
 import javafx.scene.shape.Polygon;
 
 public class Hexagon extends Polygon {
-    double x;
-    double y;
+    double x, y;
+    int q, r;
 
-    public Hexagon(double x, double y) {
+    public Hexagon(double x, double y, int q, int r) {
         this.x = x;
         this.y = y;
+        this.q = q;
+        this.r = r;
     }
 
     public double getX() {
@@ -15,6 +17,14 @@ public class Hexagon extends Polygon {
 
     public double getY() {
         return this.y;
+    }
+
+    public int getQ() {
+        return this.q; // Column index
+    }
+
+    public int getR() {
+        return this.r; // Row index
     }
 
     public boolean contains(double px, double py) {
