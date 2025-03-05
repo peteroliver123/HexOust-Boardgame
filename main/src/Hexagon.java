@@ -55,10 +55,14 @@ public class Hexagon extends Polygon {
         if(xDiff == 0 && yDiff == 51){
             toReturn = true;
         }
+
         //hex is to the side of the current one
-        if(xDiff == 45 && yDiff == 25){
+        int height = (int)((Math.sqrt(0.75)) * 30);
+
+        if(xDiff == 45 && yDiff == height){
             toReturn = true;
         }
+
         return toReturn;
     }
 }
