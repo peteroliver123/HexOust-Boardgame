@@ -52,8 +52,6 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             }
         }
 
-        System.out.println("here");
-
         if(isNonCapturing){
             nonCapture();
             return;
@@ -67,22 +65,30 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             }
         }
 
-        /*We are placing against our own stones and only our own */
+        /*Find size of new group */
+        friendlyNeighbour.add(hexagon);
+        for(int i = 0; i < friendlyNeighbour.size(); i++){
+            Hexagon a = friendlyNeighbour.get(i);
+            for(Hexagon b : playerHexagons){
+                if(a.isNeighbor(b) && (!friendlyNeighbour.contains(b))){
+                    friendlyNeighbour.add(b);
+                }
+                for(Hexagon d : enemyHexagons){
+                    if(a.isNeighbor(b) && b.isNeighbor(d)){
+                        enemyNeighbour.add(d);
+                    }
+                }
+            }
+        }
+
         if(enemyNeighbour.isEmpty()){
             System.out.println("Invalid move. Cant place by own stone");
             return;
         }
 
-        /*Find size of new group */
-        friendlyNeighbour.add(hexagon);
-        for(Hexagon a : friendlyNeighbour){
-            for(Hexagon b : playerHexagons){
-                if(a.isNeighbor(b) && (!friendlyNeighbour.contains(b))){
-                    friendlyNeighbour.add(b);
-                }
-            }
-        }
         //size of friendlyNeighbour is now size of new group
+
+        /*ENEMY SUBGROUPS */
         int max_group = 0;
         int numSubGroups = 0;
         int size = 100;
@@ -90,7 +96,8 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
         for(Hexagon a : enemyNeighbour){
             tempStorer.add(a);
-            for(Hexagon c : tempStorer){
+            for(int i = 0; i < tempStorer.size(); i++){
+                Hexagon c = tempStorer.get(i);
                 for(Hexagon b : enemyHexagons){
                     if(c.isNeighbor(b) && (!tempStorer.contains(b))){
                         tempStorer.add(b);
@@ -174,21 +181,17 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
                     xCent = (int) b.getX();
                     yCent = (int) b.getY();
                 }
-            }
-        }
-        Circle target = null;
-        System.out.println("XCent: " + xCent + "YCent: " + yCent);
-        for(Node node : root.getChildren()){
-            if(node instanceof Circle){
-                Circle circle;
-                circle = (Circle) node;
-                if((int)circle.getCenterX() == xCent && (int)circle.getCenterY() == yCent){
-                    target = circle;
+                for(int j = 0; j < root.getChildren().size(); j++){
+                    Node node = root.getChildren().get(j);
+                    if(node instanceof Circle){
+                        Circle circle;
+                        circle = (Circle) node;
+                        if((int)circle.getCenterX() == xCent && (int)circle.getCenterY() == yCent){
+                            root.getChildren().remove(circle);
+                        }
+                    }
                 }
             }
-        }
-        if(target != null){
-            root.getChildren().remove(target);
         }
     }
 
