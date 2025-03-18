@@ -14,8 +14,6 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     ArrayList<Hexagon> blueHexagons = HexMap.getBlueHexagons();
     ArrayList<Hexagon> redHexagons = HexMap.getRedHexagons();
 
-    boolean isNonCapturing = true;
-    boolean invalidMove = false;
     ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>();
     ArrayList<Hexagon> enemyNeighbour = new ArrayList<>();
     ArrayList<Hexagon> tempStorer = new ArrayList<>();
@@ -27,6 +25,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
+        boolean isNonCapturing = true;
         ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? redHexagons : blueHexagons;
         ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? blueHexagons : redHexagons;
         friendlyNeighbour.clear();
