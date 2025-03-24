@@ -40,9 +40,13 @@ public class HexMap extends Application {
         }
     }
     public static PlayerTurn currentPlayer = PlayerTurn.RED;
+    public static PlayerTurn startingPlayer = PlayerTurn.RED;
+    public static boolean gameOver = false;
+    public static int turnCount = 1; //starts at one because it only increments when player is changed
+    public static Pane root;
 
     public Pane initialize() {
-        Pane root = new Pane(); // Initialize the field/map
+        root = new Pane(); // Initialize the field/map
         double x = CENTRE_X;
         double y = CENTRE_Y; // Variables assigned constants.
         double tempY = y; // Temporary y variable for generating hexagons at a perfect ideal spacing vertically.
@@ -163,7 +167,9 @@ public class HexMap extends Application {
             if(keyEvent.getText().equals("q")){
                 System.exit(1);
             }
-
+            if(keyEvent.getText().equals("r")){
+                reset();
+            }
         }
     }
 
@@ -206,6 +212,27 @@ public class HexMap extends Application {
         circle.setRadius(LENGTH / 1.5);
         circle.setMouseTransparent(true); // Allows mouse events to pass through.
         return circle;
+    }
+
+    //resets game state
+    private void reset(){
+        for(int i = 0; i < root.getChildren().size(); i++){
+            if(root.getChildren().get(i).getClass() == Circle.class){
+                root.getChildren().remove(i);
+                i--;
+            }
+        }
+        startingPlayer = startingPlayer.next();
+        currentPlayer = startingPlayer;
+        //redraw player turn circle
+        playerTurnCircle = utility.drawCircle(900, 500);
+        root.getChildren().add(playerTurnCircle);
+
+        blueHexagons.clear();
+        redHexagons.clear();
+        gameOver = false;
+
+        turnCount = 1;
     }
 
     public static void main(String[] args) {

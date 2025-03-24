@@ -38,6 +38,10 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         if(!hexagon.contains(mouseX, mouseY)){
             return;
         }
+        if(HexMap.gameOver){
+            System.out.println("Game is over, please start a new one to keep playing!");
+            return;
+        }
         if(!isValidClick()){
             return;
         }
@@ -126,6 +130,12 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             redHexagons.add(hexagon);
         }
         capture(arrayOfArrayLists, numSubGroups);
+
+        //check for victory
+        if(enemyHexagons.isEmpty()){
+            System.out.println(HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns");
+            HexMap.gameOver = true;
+        }
     }
 
     public boolean isValidClick(){
@@ -149,6 +159,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         } else {
             HexMap.playerTurnCircle.setFill(Color.RED);
         }
+        HexMap.turnCount++;
     }
 
     public void nonCapture(){
