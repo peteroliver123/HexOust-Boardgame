@@ -1,10 +1,13 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.robot.Robot;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -17,7 +20,7 @@ public class HexMap extends Application {
     private static final double CENTRE_Y = 520; // Center coordinates of the first initial hexagon (bottom left, [0][0])
     private static final double LENGTH = 30; // Size of hexagon (Distance from center to any vertice)
     private static final double PADDING = 150;
-    static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
+    public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
     public static Circle playerTurnCircle;
     public static ArrayList<Hexagon> redHexagons = new ArrayList<Hexagon>();
     public static ArrayList<Hexagon> blueHexagons = new ArrayList<Hexagon>();
@@ -170,6 +173,15 @@ public class HexMap extends Application {
             if(keyEvent.getText().equals("r")){
                 reset();
             }
+            if(keyEvent.getText().equals("t")){
+                Hexagon hex = HexMap.hexagons[1][2];
+                MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
+                MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
+                        hex.getX(), hex.getY(), 0, 0, MouseButton.PRIMARY, 1,
+                        false, false, false, false, true,
+                        false, false, false, false, false, null);
+                clickHandler.handle(click);
+            }
         }
     }
 
@@ -215,13 +227,14 @@ public class HexMap extends Application {
     }
 
     //resets game state
-    private void reset(){
+    public void reset(){
         for(int i = 0; i < root.getChildren().size(); i++){
             if(root.getChildren().get(i).getClass() == Circle.class){
                 root.getChildren().remove(i);
                 i--;
             }
         }
+        //makes game start with alternating players
         startingPlayer = startingPlayer.next();
         currentPlayer = startingPlayer;
         //redraw player turn circle
@@ -234,6 +247,8 @@ public class HexMap extends Application {
 
         turnCount = 1;
     }
+
+
 
     public static void main(String[] args) {
         launch(args);
