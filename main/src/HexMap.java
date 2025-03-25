@@ -22,15 +22,15 @@ public class HexMap extends Application {
     private static final double PADDING = 150;
     public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
     public static Circle playerTurnCircle;
-    public static ArrayList<Hexagon> redHexagons = new ArrayList<Hexagon>();
-    public static ArrayList<Hexagon> blueHexagons = new ArrayList<Hexagon>();
+    public static ArrayList<Hexagon> redCircles = new ArrayList<Hexagon>();
+    public static ArrayList<Hexagon> blueCircles = new ArrayList<Hexagon>();
 
-    public static ArrayList<Hexagon> getBlueHexagons() {
-        return blueHexagons;
+    public static ArrayList<Hexagon> getBlueCircles() {
+        return blueCircles;
     }
 
-    public static ArrayList<Hexagon> getRedHexagons(){
-        return redHexagons;
+    public static ArrayList<Hexagon> getRedCircles(){
+        return redCircles;
     }
 
     public enum PlayerTurn {
@@ -198,12 +198,11 @@ public class HexMap extends Application {
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
-        Circle hoverCircle = drawHoverCircle(hex.getX(), hex.getY());
+        utility.drawCircle(hex.getX(), hex.getY());
        // EventHandler<MouseEvent> Hover = new MouseHoverHandler(root, hex, hoverCircle);
      //   hex.setOnMouseEntered(Hover);
      //   hex.setOnMouseExited(Hover);
         hex.setOnMouseClicked(new MouseClickHandler(root, hex));
-
         return hex;
     }
 
@@ -217,14 +216,14 @@ public class HexMap extends Application {
     }
 
 
-    public Circle drawHoverCircle(double x, double y){
+  /*  public Circle drawHoverCircle(double x, double y){
         Circle circle = new Circle();
         circle.setCenterX(x);
         circle.setCenterY(y);
         circle.setRadius(LENGTH / 1.5);
         circle.setMouseTransparent(true); // Allows mouse events to pass through.
         return circle;
-    }
+    }*/
 
     //resets game state
     public void reset(){
@@ -235,20 +234,18 @@ public class HexMap extends Application {
             }
         }
         //makes game start with alternating players
-        startingPlayer = startingPlayer.next();
+        startingPlayer = PlayerTurn.RED;
         currentPlayer = startingPlayer;
         //redraw player turn circle
         playerTurnCircle = utility.drawCircle(900, 500);
         root.getChildren().add(playerTurnCircle);
 
-        blueHexagons.clear();
-        redHexagons.clear();
+        blueCircles.clear();
+        redCircles.clear();
         gameOver = false;
 
         turnCount = 1;
     }
-
-
 
     public static void main(String[] args) {
         launch(args);

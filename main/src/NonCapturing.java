@@ -1,13 +1,13 @@
 import java.util.*;
 
 public class NonCapturing {
-    private int[][] placementGrid;
+  /*  private int[][] placementGrid;
     private List<Hexagon> redHexagons;
     private List<Hexagon> blueHexagons;
     private static final int[][] HEX_NEIGHBOR_OFFSETS = {
             {1, 0}, {1, -1}, {0, 1}, {0, -1}, {-1, 0}, {-1, -1}
     };
-
+*/
     // TO FIX:
     /*
     OFFSETS ARE DIFFERENT FOR IF HEXAGON IN DESCENDING (LEFT HAND) SECTION
@@ -18,7 +18,7 @@ public class NonCapturing {
     IMPLEMENT OTHER OFFSETS, HAVE CHECK FOR COLUMN > / < / =
     ALSO HAVE CHECK TO PREVENT OUT OF INDEX (IF OFFSETS APPLIED LEADS TO -1)
      */
-
+/*
     public NonCapturing(int size) {
         this.placementGrid = new int[2 * size - 1][2 * size - 1];
         this.redHexagons = new ArrayList<>();
@@ -62,4 +62,5 @@ public class NonCapturing {
     private boolean isValidHex(int q, int r) {
         return q >= 0 && q < placementGrid.length && r >= 0 && r < placementGrid[0].length;
     }
+    */
 }

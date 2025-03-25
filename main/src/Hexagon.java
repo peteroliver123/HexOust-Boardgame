@@ -5,6 +5,34 @@ public class Hexagon extends Polygon {
     int q, r;
 
     public Hexagon(double x, double y, int q, int r) {
+
+        /*centerX and centerY Error Checking */
+        /*Off Screen */
+        if(x < 0 || y < 0){
+            throw new IllegalArgumentException("center of Hexagon cannot be outside screen");
+        }
+
+        /*Q AND R ERROR CHECKING */
+        /*Negative Obviously Wrong*/
+        if(q < 0 || r < 0){
+            throw new IllegalArgumentException("Positions of Hexagons must be within the board!");
+        }
+        /*If Q is 0 - 6 goes up to Q + 6*/
+        if(q > 12){
+            throw new IllegalArgumentException("There are not more than 12 columns of hexagons");
+        }
+
+        if(q <= 6){
+            if(r > q + 6){
+                throw new IllegalArgumentException("For first 7 columns of hexagons, where i is the column, there is no more than i + 6 rows");
+            }
+        }
+        else {
+            if(r > 18 - q){
+                throw new IllegalArgumentException("For columns 7 to 12, where i is the column, there is no more than 18 - i rows");
+            }
+        }
+
         this.x = x;
         this.y = y;
         this.q = q;

@@ -11,8 +11,8 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     Pane root;
     Hexagon hexagon;
 
-    ArrayList<Hexagon> blueHexagons = HexMap.getBlueHexagons();
-    ArrayList<Hexagon> redHexagons = HexMap.getRedHexagons();
+    ArrayList<Hexagon> blueCircles = HexMap.getBlueCircles();
+    ArrayList<Hexagon> redCircles = HexMap.getRedCircles();
 
     ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>();
     ArrayList<Hexagon> enemyNeighbour = new ArrayList<>();
@@ -26,8 +26,8 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent event) {
         boolean isNonCapturing = true;
-        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? redHexagons : blueHexagons;
-        ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? blueHexagons : redHexagons;
+        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? redCircles : blueCircles;
+        ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? blueCircles : redCircles;
         friendlyNeighbour.clear();
         enemyNeighbour.clear();
         tempStorer.clear();
@@ -125,9 +125,9 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            blueHexagons.add(hexagon);
+            blueCircles.add(hexagon);
         } else {
-            redHexagons.add(hexagon);
+            redCircles.add(hexagon);
         }
         capture(arrayOfArrayLists, numSubGroups);
 
@@ -168,9 +168,9 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            blueHexagons.add(hexagon);
+            blueCircles.add(hexagon);
         } else {
-            redHexagons.add(hexagon);
+            redCircles.add(hexagon);
         }
         changePlayer();
     }
@@ -183,9 +183,9 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             for (Hexagon b : d) {
                 if (b instanceof Hexagon) {
                     if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-                        redHexagons.remove(b);
+                        redCircles.remove(b);
                     } else {
-                        blueHexagons.remove(b);
+                        blueCircles.remove(b);
                     }
                     /*Con-current access exception can occur */
                     xCent = (int) b.getX();
