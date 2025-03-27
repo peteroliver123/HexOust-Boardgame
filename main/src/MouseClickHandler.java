@@ -23,6 +23,27 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         this.hexagon = hexagon;
     }
 
+    /*Checks valid moves not related to mouse event */
+    public boolean checkMoveValid(int max_group){
+        if(!isValidClick()){
+            return false;
+        }
+        else {
+            if (enemyNeighbour.isEmpty()) {
+                System.out.println("Invalid move. Cant place by own stone");
+                return false;
+            }
+            else if (max_group >= friendlyNeighbour.size()) {
+                System.out.println("Invalid move! Group not big Enough");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    }
+
+
     @Override
     public void handle(MouseEvent event) {
         boolean isNonCapturing = true;
@@ -42,6 +63,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             System.out.println("Game is over, please start a new one to keep playing!");
             return;
         }
+
         if(!isValidClick()){
             return;
         }
@@ -84,10 +106,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             }
         }
 
-        if(enemyNeighbour.isEmpty()){
-            System.out.println("Invalid move. Cant place by own stone");
-            return;
-        }
+
 
         //size of friendlyNeighbour is now size of new group
 
@@ -113,8 +132,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             tempStorer.clear();
         }
 
-        if (max_group >= friendlyNeighbour.size()) {
-            System.out.println("Invalid move! Group not big Enough");
+        if(!checkMoveValid(max_group)){
             return;
         }
 
