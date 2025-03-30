@@ -109,13 +109,13 @@ public class TestFetch extends ApplicationTest {
     public void negativeCenter(){
         hexMap.reset();
         try {
-            new Hexagon(new Point (-1, 1), 1, 1);
+            new Hexagon(new Point (-1, 1), new Point(1, 1));
             fail("Allowed negative center!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(new Point (1, -1), 1, 1);
+            new Hexagon(new Point (1, -1), new Point (1, 1));
             fail("Allowed negative center!");
         } catch (IllegalArgumentException _){
 
@@ -129,13 +129,13 @@ public class TestFetch extends ApplicationTest {
     public void negativePosition(){
         hexMap.reset();
         try {
-            new Hexagon(new Point(1, 1), -1, 1);
+            new Hexagon(new Point(1, 1), new Point(-1, 1));
             fail("Allowed negative position!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(new Point (1, 1), 1, -1);
+            new Hexagon(new Point (1, 1), new Point (1, -1));
             fail("Allowed negative position!");
         } catch (IllegalArgumentException _){
 
@@ -149,19 +149,19 @@ public class TestFetch extends ApplicationTest {
         /*Valid Position are q = 0...12, when q = 0..6 r = 0..q + 6 when q = 7..12 r = 0..18-q*/
         hexMap.reset();
         try {
-            new Hexagon(new Point (1, 1), 13, 1);
+            new Hexagon(new Point (1, 1), new Point (13, 1));
             fail("Allowed Invalid Q!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(new Point (1, 1), 1, 8);
+            new Hexagon(new Point (1, 1), new Point (1, 8));
             fail("Allowed invalid R!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(new Point (1, 1), 8, 19);
+            new Hexagon(new Point (1, 1), new Point (8, 19));
             fail("Allowed invalid R!");
         } catch (IllegalArgumentException _){
 

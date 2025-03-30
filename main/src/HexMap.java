@@ -183,7 +183,7 @@ public class HexMap extends Application {
     }
 
     private Hexagon createHexagon(double centerX, double centerY, int q, int r, Pane root) {
-        Hexagon hex = new Hexagon(new Point(centerX, centerY), q, r); // Create a new polygon.
+        Hexagon hex = new Hexagon(new Point(centerX, centerY), new Point (q, r)); // Create a new polygon.
         hex.getPoints().addAll(// Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
                 centerX - utility.LENGTH, centerY,
                 centerX - (utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * utility.LENGTH),

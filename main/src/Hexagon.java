@@ -2,45 +2,22 @@ import javafx.scene.shape.Polygon;
 
 public class Hexagon extends Polygon {
     Point centre;
-    int q, r;
+    Point coordinatePosition;
 
-    public Hexagon(Point centre, int q, int r) {
+    public Hexagon(Point centre, Point coordinatePosition) {
         /*Q AND R ERROR CHECKING */
         /*Negative Obviously Wrong*/
-        if(q < 0 || r < 0){
-            throw new IllegalArgumentException("Positions of Hexagons must be within the board!");
-        }
-        /*If Q is 0 - 6 goes up to Q + 6*/
-        if(q > 12){
-            throw new IllegalArgumentException("There are not more than 12 columns of hexagons");
-        }
-
-        if(q <= 6){
-            if(r > q + 6){
-                throw new IllegalArgumentException("For first 7 columns of hexagons, where i is the column, there is no more than i + 6 rows");
-            }
-        }
-        else {
-            if(r > 18 - q){
-                throw new IllegalArgumentException("For columns 7 to 12, where i is the column, there is no more than 18 - i rows");
-            }
-        }
-
         this.centre = centre;
-        this.q = q;
-        this.r = r;
+        this.coordinatePosition = coordinatePosition;
+        coordinatePosition.coordinateCheck();
     }
 
     public Point getCentre(){
         return this.centre;
     }
 
-    public int getQ() {
-        return this.q; // Column index
-    }
-
-    public int getR() {
-        return this.r; // Row index
+    public Point getCoordinatePosition(){
+        return this.coordinatePosition;
     }
 
     public boolean contains(double px, double py) {
