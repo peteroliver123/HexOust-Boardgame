@@ -4,7 +4,8 @@ import javafx.scene.text.Text;
 
 public class utility {
     /*Constants */
-    private static final double LENGTH = 30; // Size of hexagon (Distance from center to any vertice)
+    public static final double LENGTH = 30;// Size of hexagon (Distance from center to any vertices)
+
 
     public static Circle drawCircle(double x, double y) {
         Circle circle = new Circle();

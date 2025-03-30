@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -7,7 +6,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.robot.Robot;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
@@ -15,15 +13,13 @@ import java.util.ArrayList;
 
 
 public class HexMap extends Application {
-    private static final int SIZE = 7; // Size of hexmap board (Adjustable board size (Possible extra additions later))
+    private static final int SIZE = 7; // Size of hexMap board (Adjustable board size (Possible extra additions later))
     private static final double CENTRE_X = 100;
     private static final double CENTRE_Y = 520; // Center coordinates of the first initial hexagon (bottom left, [0][0])
-    private static final double LENGTH = 30; // Size of hexagon (Distance from center to any vertice)
-    private static final double PADDING = 150;
-    public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexmap, based on size of board.
+    public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap, based on size of board.
     public static Circle playerTurnCircle;
-    public static ArrayList<Hexagon> redCircles = new ArrayList<Hexagon>();
-    public static ArrayList<Hexagon> blueCircles = new ArrayList<Hexagon>();
+    public static ArrayList<Hexagon> redCircles = new ArrayList<>();
+    public static ArrayList<Hexagon> blueCircles = new ArrayList<>();
 
     public static ArrayList<Hexagon> getBlueCircles() {
         return blueCircles;
@@ -42,6 +38,7 @@ public class HexMap extends Application {
             return this == RED ? BLUE : RED;
         }
     }
+
     public static PlayerTurn currentPlayer = PlayerTurn.RED;
     public static PlayerTurn startingPlayer = PlayerTurn.RED;
     public static boolean gameOver = false;
@@ -53,7 +50,7 @@ public class HexMap extends Application {
         double x = CENTRE_X;
         double y = CENTRE_Y; // Variables assigned constants.
         double tempY = y; // Temporary y variable for generating hexagons at a perfect ideal spacing vertically.
-        int column = SIZE; // Amount of hexagons in each column. Incr/Decr depending on ascFlag.
+        int column = SIZE; // Amount of hexagons in each column. Increment/Decrement depending on ascFlag.
         boolean ascFlag = true; // Ascension flag. Turns false after generating the center column of hexagon.
 
         for (int q = 0; q < ((SIZE * 2) - 1); q++) { // Loop for all columns
@@ -63,7 +60,7 @@ public class HexMap extends Application {
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex); // Add hexagon to scene/map.
-                    tempY -= ((Math.sqrt(0.75) * LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
+                    tempY -= ((Math.sqrt(0.75) * utility.LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
                 }
             } else {
                 ascFlag = false; // Flag set to false, loop to generate descending columns.
@@ -72,18 +69,18 @@ public class HexMap extends Application {
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex);
-                    tempY -= ((Math.sqrt(0.75) * LENGTH) * 2);
+                    tempY -= ((Math.sqrt(0.75) * utility.LENGTH) * 2);
                 }
             }
 
             if (ascFlag) { // Increase y coordinate of next initial hexagon for next column
-                y += (Math.sqrt(0.75) * LENGTH);
+                y += (Math.sqrt(0.75) * utility.LENGTH);
                 column++;
             } else { // Decrease y coordinate of next initial hexagon for next column
-                y -= (Math.sqrt(0.75) * LENGTH);
+                y -= (Math.sqrt(0.75) * utility.LENGTH);
                 column--;
             }
-            x += (LENGTH * 1.5); // X coordinate of next column
+            x += (utility.LENGTH * 1.5); // X coordinate of next column
             tempY = y; // Reset tempY to new y
         }
 
@@ -187,14 +184,13 @@ public class HexMap extends Application {
 
     private Hexagon createHexagon(double centerX, double centerY, int q, int r, Pane root) {
         Hexagon hex = new Hexagon(centerX, centerY, q, r); // Create a new polygon.
-        hex.getPoints().addAll(new Double[]{ // Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
-                centerX - LENGTH, centerY,
-                centerX - (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),
-                centerX + (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),
-                centerX + LENGTH, centerY,
-                centerX + (LENGTH * 0.5), centerY - (Math.sqrt(0.75) * LENGTH),
-                centerX - (LENGTH * 0.5), centerY - (Math.sqrt(0.75) * LENGTH),
-        });
+        hex.getPoints().addAll(// Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
+                centerX - utility.LENGTH, centerY,
+                centerX - (utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * utility.LENGTH),
+                centerX + (utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * utility.LENGTH),
+                centerX + utility.LENGTH, centerY,
+                centerX + (utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * utility.LENGTH),
+                centerX - (utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * utility.LENGTH));
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
@@ -211,7 +207,7 @@ public class HexMap extends Application {
         Circle circle = new Circle();
         circle.setCenterX(x);
         circle.setCenterY(y);
-        circle.setRadius(LENGTH / 1.5);
+        circle.setRadius(utility.LENGTH / 1.5);
         circle.setMouseTransparent(true); // Allows mouse events to pass through.
         return circle;
     }*/

@@ -7,7 +7,7 @@ public class Hexagon extends Polygon {
     public Hexagon(double x, double y, int q, int r) {
 
         /*centerX and centerY Error Checking */
-        /*Off Screen */
+        /*Off-Screen */
         if(x < 0 || y < 0){
             throw new IllegalArgumentException("center of Hexagon cannot be outside screen");
         }

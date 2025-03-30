@@ -1,19 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
-
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.PickResult;
 import javafx.scene.layout.Pane;
-import javafx.scene.robot.Robot;
 import org.junit.jupiter.api.*;
 import org.testfx.framework.junit.ApplicationTest;
 
 public class TestFetch extends ApplicationTest {
     public static HexMap hexMap;
     public static Pane root;
-    public static Robot robot;
     @BeforeAll
     public static void initial() {
         System.setProperty("testfx.robot", "glass");
@@ -38,7 +32,7 @@ public class TestFetch extends ApplicationTest {
         assertEquals(1,HexMap.redCircles.size());
     }
 
-    /*This test makes sure the user is unable to place a circle on a hexagon that already containsn one. */
+    /*This test makes sure the user is unable to place a circle on a hexagon that already contains one. */
     @Test
     public void spaceFull(){
         hexMap.reset();
@@ -72,7 +66,7 @@ public class TestFetch extends ApplicationTest {
         assertEquals(3, HexMap.redCircles.size());
     }
 
-    /*This function makes sure that a caputuring move doesn't always end the game */
+    /*This function makes sure that a capturing move doesn't always end the game */
     @Test
     public void capturingButGameNotOver(){
         hexMap.reset();
@@ -97,7 +91,6 @@ public class TestFetch extends ApplicationTest {
     @Test
     public void testWinLong(){
         hexMap.reset();
-        HexMap.PlayerTurn start = HexMap.currentPlayer;
         simulateClick(1,1);//RED NC
         simulateClick(3,3);//BLUE NC
         simulateClick(3,1);//RED NC
@@ -116,15 +109,15 @@ public class TestFetch extends ApplicationTest {
     public void negativeCenter(){
         hexMap.reset();
         try {
-            Hexagon h = new Hexagon(-1, 1, 1, 1);
+            new Hexagon(-1, 1, 1, 1);
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException _){
 
         }
         try {
-            Hexagon h = new Hexagon(1, -1, 1, 1);
+            new Hexagon(1, -1, 1, 1);
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException _){
 
         }
     }
@@ -136,15 +129,15 @@ public class TestFetch extends ApplicationTest {
     public void negativePosition(){
         hexMap.reset();
         try {
-            Hexagon h = new Hexagon(1, 1, -1, 1);
+            new Hexagon(1, 1, -1, 1);
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException _){
 
         }
         try {
-            Hexagon h = new Hexagon(1, 1, 1, -1);
+            new Hexagon(1, 1, 1, -1);
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException _){
 
         }
     }
@@ -156,21 +149,21 @@ public class TestFetch extends ApplicationTest {
         /*Valid Position are q = 0...12, when q = 0..6 r = 0..q + 6 when q = 7..12 r = 0..18-q*/
         hexMap.reset();
         try {
-            Hexagon h = new Hexagon(1, 1, 13, 1);
+            new Hexagon(1, 1, 13, 1);
             fail("Allowed Invalid Q!");
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException _){
 
         }
         try {
-            Hexagon h = new Hexagon(1, 1, 1, 8);
+            new Hexagon(1, 1, 1, 8);
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException _){
 
         }
         try {
-            Hexagon h = new Hexagon(1, 1, 8, 19);
+            new Hexagon(1, 1, 8, 19);
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException _){
 
         }
     }
@@ -199,7 +192,7 @@ public class TestFetch extends ApplicationTest {
             throw new IllegalArgumentException("There are not more than 12 columns of hexagons");
         }
 
-        if(0 <= i && i <= 6){
+        if(i <= 6){
             if(j > i + 6){
                 throw new IllegalArgumentException("For first 7 columns of hexagons, where i is the column, there is no more than i + 6 rows");
             }
