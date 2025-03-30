@@ -1,3 +1,13 @@
+/*
+This is a helper class which describes a hexagon which is made up of two points, a centre of the hexagon
+and its co-ordinate position in relation to the grid of hexagons we are creating. It has four functions:
+getCentre, getCoordinatePosition (basic getter methods), contains and isNeighbour. Contains takes a Point
+that the mouse has clicked and checks whether the current hexagon contains that mousePoint within its
+dimensions and hence returns true if the user has clicked inside the hexagon and else false. isNeighbour
+takes a hexagon and checks whether the current hexagon borders the given hexagon returns true if yes else false.
+ */
+
+/*Imports */
 import javafx.scene.shape.Polygon;
 
 public class Hexagon extends Polygon {
@@ -20,7 +30,7 @@ public class Hexagon extends Polygon {
         return this.coordinatePosition;
     }
 
-    public boolean contains(double px, double py) {
+    public boolean contains(Point mousePoint) {
         Double[] points = this.getPoints().toArray(new Double[0]);
 
         // Point-In-Polygon Algorithm
@@ -30,8 +40,8 @@ public class Hexagon extends Polygon {
             double xi = points[2 * i], yi = points[2 * i + 1];
             double xj = points[2 * j], yj = points[2 * j + 1];
 
-            boolean intersect = ((yi > py) != (yj > py)) &&
-                    (px < (xj - xi) * (py - yi) / (yj - yi) + xi);
+            boolean intersect = ((yi > mousePoint.getY()) != (yj > mousePoint.getY())) &&
+                    (mousePoint.getX() < (xj - xi) * (mousePoint.getY() - yi) / (yj - yi) + xi);
             if (intersect) {
                 inside = !inside;
             }

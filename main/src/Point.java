@@ -1,6 +1,8 @@
 /*
 This is a helper class which describes a point on the pane with an x co-ordinate
-and a y co-ordinate. The function error checks the users input for new points
+and a y co-ordinate. The function error checks the users input for new points. It
+has three methods: getX, getY (basic default getters) and coordinateCheck (Error
+Checking the given input variables but only in the case that x,y represent co-ordinates).
  */
 public class Point {
     /*Variables */

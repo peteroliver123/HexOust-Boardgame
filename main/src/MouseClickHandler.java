@@ -1,3 +1,4 @@
+/*Imports */
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -53,11 +54,10 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         friendlyNeighbour.clear();
         enemyNeighbour.clear();
         tempStorer.clear();
-        double mouseX = event.getX();
-        double mouseY = event.getY();
+        Point mousePoint = new Point(event.getX(), event.getY());
 
         /*PRE-CHECKS */
-        if(!hexagon.contains(mouseX, mouseY)){
+        if(!hexagon.contains(mousePoint)){
             return;
         }
         if(HexMap.gameOver){
@@ -140,7 +140,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         System.out.println("Capture Move Played: Max Group Size: " + max_group + "New Group Size: " + friendlyNeighbour.size());
 
         /*If checks correct draw circle */
-        Circle circle = utility.drawCircle(hexagon.getCentre().getX(), hexagon.getCentre().getY());
+        Circle circle = utility.drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
@@ -153,7 +153,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         //check for victory
         if(enemyHexagons.isEmpty()){
             System.out.println(HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns");
-            Text text = utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", 850, 310);
+            Text text = utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(850, 310));
             root.getChildren().add(text);
             HexMap.gameOver = true;
         }
@@ -164,7 +164,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         for (Node node : root.getChildren()) {
             if (node instanceof Circle) {
                 Circle circle = (Circle) node;
-                if (circle.getCenterX() == hexagon.getCentre().getX() && circle.getCenterY() == hexagon.getCentre().getY()) {
+                if ((int) circle.getCenterX() == (int) hexagon.getCentre().getX() && (int) circle.getCenterY() == (int) hexagon.getCentre().getY()) {
                     return false;
                 }
             }
@@ -185,7 +185,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     public void nonCapture(){
         System.out.println("Non-capturing move performed");
-        Circle circle = utility.drawCircle(hexagon.getCentre().getX(), hexagon.getCentre().getY());
+        Circle circle = utility.drawCircle(new Point (hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
@@ -197,8 +197,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     }
 
     public void capture(ArrayList[] a, int count){
-        int xCent = 0;
-        int yCent = 0;
+        Point centre = null;
         for (int i = 0; i < count; i++) {
             ArrayList<Hexagon> d = a[i];
             for (Hexagon b : d) {
@@ -209,15 +208,14 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
                         blueCircles.remove(b);
                     }
                     /*Con-current access exception can occur */
-                    xCent = (int) b.getCentre().getX();
-                    yCent = (int) b.getCentre().getY();
+                    centre = b.getCentre();
                 }
                 for(int j = 0; j < root.getChildren().size(); j++){
                     Node node = root.getChildren().get(j);
                     if(node instanceof Circle){
                         Circle circle;
                         circle = (Circle) node;
-                        if((int)circle.getCenterX() == xCent && (int)circle.getCenterY() == yCent){
+                        if((int)circle.getCenterX() == (int) centre.getX() && (int)circle.getCenterY() == (int) centre.getY()){
                             root.getChildren().remove(circle);
                         }
                     }

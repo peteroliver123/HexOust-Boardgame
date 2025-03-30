@@ -1,3 +1,4 @@
+/*Imports */
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -85,11 +86,11 @@ public class HexMap extends Application {
         }
 
         // Circle piece corresponding to current player's turn.
-        playerTurnCircle = utility.drawCircle(900, 500);
+        playerTurnCircle = utility.drawCircle(new Point (900, 500));
         root.getChildren().add(playerTurnCircle);
 
         /*Display Text*/
-        Text text = utility.makeText("To Make a Move", 950, 510);
+        Text text = utility.makeText("To Make a Move", new Point (950, 510));
         root.getChildren().add(text);
 
         return root;
@@ -194,7 +195,7 @@ public class HexMap extends Application {
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
-        utility.drawCircle(hex.getCentre().getX(), hex.getCentre().getY());
+        utility.drawCircle(new Point (hex.getCentre().getX(), hex.getCentre().getY()));
        // EventHandler<MouseEvent> Hover = new MouseHoverHandler(root, hex, hoverCircle);
      //   hex.setOnMouseEntered(Hover);
      //   hex.setOnMouseExited(Hover);
@@ -224,7 +225,7 @@ public class HexMap extends Application {
         startingPlayer = PlayerTurn.RED;
         currentPlayer = startingPlayer;
         //redraw player turn circle
-        playerTurnCircle = utility.drawCircle(900, 500);
+        playerTurnCircle = utility.drawCircle(new Point (900, 500));
         root.getChildren().add(playerTurnCircle);
 
         blueCircles.clear();
