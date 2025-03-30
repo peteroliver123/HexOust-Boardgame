@@ -92,7 +92,7 @@ public class HexMap extends Application {
         root.getChildren().add(playerTurnCircle);
 
         /*Display Text*/
-        Text text = makeMoveText();
+        Text text = utility.makeText("To Make a Move", 950, 510);
         root.getChildren().add(text);
 
         return root;
@@ -204,15 +204,6 @@ public class HexMap extends Application {
      //   hex.setOnMouseExited(Hover);
         hex.setOnMouseClicked(new MouseClickHandler(root, hex));
         return hex;
-    }
-
-    public Text makeMoveText(){
-        Text text = new Text("To Make a Move");
-        text.setX(950); // X position on screen
-        text.setY(510); // Y position on screen
-        text.setFont(javafx.scene.text.Font.font("Verdana", 30));
-        text.setFill(javafx.scene.paint.Color.BLACK);
-        return text;
     }
 
 

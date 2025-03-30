@@ -4,6 +4,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -152,6 +153,8 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         //check for victory
         if(enemyHexagons.isEmpty()){
             System.out.println(HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns");
+            Text text = utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", 850, 310);
+            root.getChildren().add(text);
             HexMap.gameOver = true;
         }
     }
