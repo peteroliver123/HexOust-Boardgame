@@ -21,8 +21,8 @@ public class TestFetch extends ApplicationTest {
     public void testHexagonClass() {
         Hexagon[][] hx = HexMap.hexagons;
         assertNotNull(root);
-        assertEquals(100, hx[0][0].getX());
-        assertEquals(520, hx[0][0].getY());
+        assertEquals(100, hx[0][0].getCentre().getX());
+        assertEquals(520, hx[0][0].getCentre().getY());
     }
 
     @Test
@@ -109,13 +109,13 @@ public class TestFetch extends ApplicationTest {
     public void negativeCenter(){
         hexMap.reset();
         try {
-            new Hexagon(-1, 1, 1, 1);
+            new Hexagon(new Point (-1, 1), 1, 1);
             fail("Allowed negative center!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(1, -1, 1, 1);
+            new Hexagon(new Point (1, -1), 1, 1);
             fail("Allowed negative center!");
         } catch (IllegalArgumentException _){
 
@@ -129,13 +129,13 @@ public class TestFetch extends ApplicationTest {
     public void negativePosition(){
         hexMap.reset();
         try {
-            new Hexagon(1, 1, -1, 1);
+            new Hexagon(new Point(1, 1), -1, 1);
             fail("Allowed negative position!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(1, 1, 1, -1);
+            new Hexagon(new Point (1, 1), 1, -1);
             fail("Allowed negative position!");
         } catch (IllegalArgumentException _){
 
@@ -149,19 +149,19 @@ public class TestFetch extends ApplicationTest {
         /*Valid Position are q = 0...12, when q = 0..6 r = 0..q + 6 when q = 7..12 r = 0..18-q*/
         hexMap.reset();
         try {
-            new Hexagon(1, 1, 13, 1);
+            new Hexagon(new Point (1, 1), 13, 1);
             fail("Allowed Invalid Q!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(1, 1, 1, 8);
+            new Hexagon(new Point (1, 1), 1, 8);
             fail("Allowed invalid R!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(1, 1, 8, 19);
+            new Hexagon(new Point (1, 1), 8, 19);
             fail("Allowed invalid R!");
         } catch (IllegalArgumentException _){
 
@@ -206,7 +206,7 @@ public class TestFetch extends ApplicationTest {
         Hexagon hex = HexMap.hexagons[i][j];
         MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
         MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
-                hex.getX(), hex.getY(), 0, 0, MouseButton.PRIMARY, 1,
+                hex.getCentre().getX(), hex.getCentre().getY(), 0, 0, MouseButton.PRIMARY, 1,
                 false, false, false, false, true,
                 false, false, false, false, false, null);
         clickHandler.handle(click);

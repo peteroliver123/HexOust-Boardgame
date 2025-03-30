@@ -1,17 +1,10 @@
 import javafx.scene.shape.Polygon;
 
 public class Hexagon extends Polygon {
-    double x, y;
+    Point centre;
     int q, r;
 
-    public Hexagon(double x, double y, int q, int r) {
-
-        /*centerX and centerY Error Checking */
-        /*Off-Screen */
-        if(x < 0 || y < 0){
-            throw new IllegalArgumentException("center of Hexagon cannot be outside screen");
-        }
-
+    public Hexagon(Point centre, int q, int r) {
         /*Q AND R ERROR CHECKING */
         /*Negative Obviously Wrong*/
         if(q < 0 || r < 0){
@@ -33,18 +26,13 @@ public class Hexagon extends Polygon {
             }
         }
 
-        this.x = x;
-        this.y = y;
+        this.centre = centre;
         this.q = q;
         this.r = r;
     }
 
-    public double getX() {
-        return this.x;
-    }
-
-    public double getY() {
-        return this.y;
+    public Point getCentre(){
+        return this.centre;
     }
 
     public int getQ() {
@@ -77,8 +65,8 @@ public class Hexagon extends Polygon {
     //returns whether the given hex is a neighbor of this one
     public boolean isNeighbor(Hexagon hex){
         boolean toReturn = false;
-        int xDiff = (int)Math.abs(hex.getX() - this.x);
-        int yDiff = (int)Math.abs(hex.getY() - this.y);
+        int xDiff = (int)Math.abs(hex.getCentre().getX() - this.centre.getX());
+        int yDiff = (int)Math.abs(hex.getCentre().getY() - this.centre.getY());
         //the hex is directly above or below the current one
         if(xDiff == 0 && yDiff == 51){
             toReturn = true;

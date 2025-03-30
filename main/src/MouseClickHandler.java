@@ -140,7 +140,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         System.out.println("Capture Move Played: Max Group Size: " + max_group + "New Group Size: " + friendlyNeighbour.size());
 
         /*If checks correct draw circle */
-        Circle circle = utility.drawCircle(hexagon.getX(), hexagon.getY());
+        Circle circle = utility.drawCircle(hexagon.getCentre().getX(), hexagon.getCentre().getY());
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
@@ -164,7 +164,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         for (Node node : root.getChildren()) {
             if (node instanceof Circle) {
                 Circle circle = (Circle) node;
-                if (circle.getCenterX() == hexagon.getX() && circle.getCenterY() == hexagon.getY()) {
+                if (circle.getCenterX() == hexagon.getCentre().getX() && circle.getCenterY() == hexagon.getCentre().getY()) {
                     return false;
                 }
             }
@@ -185,7 +185,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     public void nonCapture(){
         System.out.println("Non-capturing move performed");
-        Circle circle = utility.drawCircle(hexagon.getX(), hexagon.getY());
+        Circle circle = utility.drawCircle(hexagon.getCentre().getX(), hexagon.getCentre().getY());
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
@@ -209,8 +209,8 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
                         blueCircles.remove(b);
                     }
                     /*Con-current access exception can occur */
-                    xCent = (int) b.getX();
-                    yCent = (int) b.getY();
+                    xCent = (int) b.getCentre().getX();
+                    yCent = (int) b.getCentre().getY();
                 }
                 for(int j = 0; j < root.getChildren().size(); j++){
                     Node node = root.getChildren().get(j);

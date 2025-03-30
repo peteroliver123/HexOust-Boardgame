@@ -174,7 +174,7 @@ public class HexMap extends Application {
                 Hexagon hex = HexMap.hexagons[1][2];
                 MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
                 MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
-                        hex.getX(), hex.getY(), 0, 0, MouseButton.PRIMARY, 1,
+                        hex.getCentre().getX(), hex.getCentre().getY(), 0, 0, MouseButton.PRIMARY, 1,
                         false, false, false, false, true,
                         false, false, false, false, false, null);
                 clickHandler.handle(click);
@@ -183,7 +183,7 @@ public class HexMap extends Application {
     }
 
     private Hexagon createHexagon(double centerX, double centerY, int q, int r, Pane root) {
-        Hexagon hex = new Hexagon(centerX, centerY, q, r); // Create a new polygon.
+        Hexagon hex = new Hexagon(new Point(centerX, centerY), q, r); // Create a new polygon.
         hex.getPoints().addAll(// Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
                 centerX - utility.LENGTH, centerY,
                 centerX - (utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * utility.LENGTH),
@@ -194,7 +194,7 @@ public class HexMap extends Application {
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
-        utility.drawCircle(hex.getX(), hex.getY());
+        utility.drawCircle(hex.getCentre().getX(), hex.getCentre().getY());
        // EventHandler<MouseEvent> Hover = new MouseHoverHandler(root, hex, hoverCircle);
      //   hex.setOnMouseEntered(Hover);
      //   hex.setOnMouseExited(Hover);
