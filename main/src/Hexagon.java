@@ -11,17 +11,19 @@ takes a hexagon and checks whether the current hexagon borders the given hexagon
 import javafx.scene.shape.Polygon;
 
 public class Hexagon extends Polygon {
+    /*Variables */
     Point centre;
     Point coordinatePosition;
 
+    /*Constructor */
     public Hexagon(Point centre, Point coordinatePosition) {
-        /*Q AND R ERROR CHECKING */
-        /*Negative Obviously Wrong*/
         this.centre = centre;
         this.coordinatePosition = coordinatePosition;
+        /*Additional Error Check for Co-ordinates*/
         coordinatePosition.coordinateCheck();
     }
 
+    /*Getter Methods */
     public Point getCentre(){
         return this.centre;
     }
@@ -30,18 +32,27 @@ public class Hexagon extends Polygon {
         return this.coordinatePosition;
     }
 
+    /*
+    This function takes a mousePoint that the user has clicked and
+    determines whether it is inside the current hexagon. Returns true
+    if yes and false otherwise. It implements Point-In-Polygon Algorithm.
+    Also makes sure that only allows placement if it is clear which
+    hexagon user is placing in, i.e. User clicks exactly at pixel
+    connecting multiple than don't place.
+    Input: Point
+    Output: Boolean
+     */
     public boolean contains(Point mousePoint) {
         Double[] points = this.getPoints().toArray(new Double[0]);
-
-        // Point-In-Polygon Algorithm
         int n = points.length / 2;
         boolean inside = false;
-        for (int i = 0, j = n - 1; i < n; j = i++) {
-            double xi = points[2 * i], yi = points[2 * i + 1];
-            double xj = points[2 * j], yj = points[2 * j + 1];
 
-            boolean intersect = ((yi > mousePoint.getY()) != (yj > mousePoint.getY())) &&
-                    (mousePoint.getX() < (xj - xi) * (mousePoint.getY() - yi) / (yj - yi) + xi);
+        for (int i = 0, j = n - 1; i < n; j = i++) {
+            Point point1 = new Point(points[2 * i], points[2 * i + 1]);
+            Point point2 = new Point(points[2 * j], points[2 * j + 1]);
+
+            boolean intersect = ((point1.getY() > mousePoint.getY()) != (point2.getY() > mousePoint.getY())) &&
+                    (mousePoint.getX() < (point2.getX() - point1.getX()) * (mousePoint.getY() - point1.getY()) / (point2.getY() - point1.getY()) + point1.getX());
             if (intersect) {
                 inside = !inside;
             }
@@ -49,19 +60,24 @@ public class Hexagon extends Polygon {
         return inside;
     }
 
-    //returns whether the given hex is a neighbor of this one
+    /*
+    This function takes a hexagon and returns whether the given hexagon is
+    touching the current hexagon. Returns true if yes and false otherwise.
+    Input: Hexagon
+    Output: Boolean
+     */
     public boolean isNeighbor(Hexagon hex){
         boolean toReturn = false;
         int xDiff = (int)Math.abs(hex.getCentre().getX() - this.centre.getX());
         int yDiff = (int)Math.abs(hex.getCentre().getY() - this.centre.getY());
-        //the hex is directly above or below the current one
+
+        /*The hex is directly above or below the current one*/
         if(xDiff == 0 && yDiff == 51){
             toReturn = true;
         }
 
-        //hex is to the side of the current one
+        /*The hex is to the side of the current one*/
         int height = (int)((Math.sqrt(0.75)) * 30);
-
         if(xDiff == 45 && yDiff == height){
             toReturn = true;
         }

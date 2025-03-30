@@ -13,7 +13,7 @@ public class Point {
     public Point(double x, double y){
         /*Error Checking */
         if(x < 0 || y < 0){//Check if user input is off-screen
-            throw new IllegalArgumentException("center of Hexagon cannot be outside screen");
+            throw new IllegalArgumentException("Point cannot be outside screen!");
         }
 
         this.x = x;
@@ -29,23 +29,21 @@ public class Point {
         return this.y;
     }
 
+    /*Error Checking Function for Co-ordinate implementation of Point class */
     public void coordinateCheck(){
-        if(x < 0 || y < 0){
-            throw new IllegalArgumentException("Positions of Hexagons must be within the board!");
-        }
         /*If x is 0 - 6 goes up to x + 6*/
         if(x > 12){
-            throw new IllegalArgumentException("There are not more than 12 columns of hexagons");
+            throw new IllegalArgumentException("There are not more than 12 columns of hexagons!");
         }
 
         if(x <= 6){
             if(y > x + 6){
-                throw new IllegalArgumentException("For first 7 columns of hexagons, where i is the column, there is no more than i + 6 rows");
+                throw new IllegalArgumentException("For first 7 columns of hexagons, where i is the column, there is no more than i + 6 rows!");
             }
         }
         else {
             if(y > 18 - x){
-                throw new IllegalArgumentException("For columns 7 to 12, where i is the column, there is no more than 18 - i rows");
+                throw new IllegalArgumentException("For columns 7 to 12, where i is the column, there is no more than 18 - i rows!");
             }
         }
     }
