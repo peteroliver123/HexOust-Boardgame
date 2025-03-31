@@ -26,7 +26,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     }
 
     /*Checks valid moves not related to mouse event */
-    public boolean checkMoveValid(int max_group){
+    public boolean checkMoveValid(int maxGroup){
         if(!isValidClick()){
             return false;
         }
@@ -35,7 +35,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
                 System.out.println("Invalid move. Cant place by own stone");
                 return false;
             }
-            else if (max_group >= friendlyNeighbour.size()) {
+            else if (maxGroup >= friendlyNeighbour.size()) {
                 System.out.println("Invalid move! Group not big Enough");
                 return false;
             }
@@ -112,7 +112,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         //size of friendlyNeighbour is now size of new group
 
         /*ENEMY SUBGROUPS */
-        int max_group = 0;
+        int maxGroup = 0;
         int numSubGroups = 0;
         int size = 100;
         ArrayList[] arrayOfArrayLists = new ArrayList[size];
@@ -127,20 +127,20 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
                     }
                 }
             }
-            max_group = Math.max(max_group, tempStorer.size());
+            maxGroup = Math.max(maxGroup, tempStorer.size());
             arrayOfArrayLists[numSubGroups] = new ArrayList<>(tempStorer);
             numSubGroups ++;
             tempStorer.clear();
         }
 
-        if(!checkMoveValid(max_group)){
+        if(!checkMoveValid(maxGroup)){
             return;
         }
 
-        System.out.println("Capture Move Played: Max Group Size: " + max_group + "New Group Size: " + friendlyNeighbour.size());
+        System.out.println("Capture Move Played: Max Group Size: " + maxGroup + "New Group Size: " + friendlyNeighbour.size());
 
         /*If checks correct draw circle */
-        Circle circle = utility.drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
+        Circle circle = Utility.drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
@@ -153,7 +153,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         //check for victory
         if(enemyHexagons.isEmpty()){
             System.out.println(HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns");
-            Text text = utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(850, 310));
+            Text text = Utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(850, 310));
             root.getChildren().add(text);
             HexMap.gameOver = true;
         }
@@ -185,7 +185,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     public void nonCapture(){
         System.out.println("Non-capturing move performed");
-        Circle circle = utility.drawCircle(new Point (hexagon.getCentre().getX(), hexagon.getCentre().getY()));
+        Circle circle = Utility.drawCircle(new Point (hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {

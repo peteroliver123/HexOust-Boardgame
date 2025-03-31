@@ -61,7 +61,7 @@ public class HexMap extends Application {
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex); // Add hexagon to scene/map.
-                    tempY -= ((Math.sqrt(0.75) * utility.LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
+                    tempY -= ((Math.sqrt(0.75) * Utility.LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
                 }
             } else {
                 ascFlag = false; // Flag set to false, loop to generate descending columns.
@@ -70,27 +70,27 @@ public class HexMap extends Application {
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex);
-                    tempY -= ((Math.sqrt(0.75) * utility.LENGTH) * 2);
+                    tempY -= ((Math.sqrt(0.75) * Utility.LENGTH) * 2);
                 }
             }
 
             if (ascFlag) { // Increase y coordinate of next initial hexagon for next column
-                y += (Math.sqrt(0.75) * utility.LENGTH);
+                y += (Math.sqrt(0.75) * Utility.LENGTH);
                 column++;
             } else { // Decrease y coordinate of next initial hexagon for next column
-                y -= (Math.sqrt(0.75) * utility.LENGTH);
+                y -= (Math.sqrt(0.75) * Utility.LENGTH);
                 column--;
             }
-            x += (utility.LENGTH * 1.5); // X coordinate of next column
+            x += (Utility.LENGTH * 1.5); // X coordinate of next column
             tempY = y; // Reset tempY to new y
         }
 
         // Circle piece corresponding to current player's turn.
-        playerTurnCircle = utility.drawCircle(new Point (900, 500));
+        playerTurnCircle = Utility.drawCircle(new Point (900, 500));
         root.getChildren().add(playerTurnCircle);
 
         /*Display Text*/
-        Text text = utility.makeText("To Make a Move", new Point (950, 510));
+        Text text = Utility.makeText("To Make a Move", new Point (950, 510));
         root.getChildren().add(text);
 
         return root;
@@ -171,7 +171,7 @@ public class HexMap extends Application {
             if(keyEvent.getText().equals("r")){
                 reset();
             }
-            if(keyEvent.getText().equals("t")){
+          /*  if(keyEvent.getText().equals("t")){
                 Hexagon hex = HexMap.hexagons[1][2];
                 MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
                 MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
@@ -179,23 +179,23 @@ public class HexMap extends Application {
                         false, false, false, false, true,
                         false, false, false, false, false, null);
                 clickHandler.handle(click);
-            }
+            }*/
         }
     }
 
     private Hexagon createHexagon(double centerX, double centerY, int q, int r, Pane root) {
         Hexagon hex = new Hexagon(new Point(centerX, centerY), new Point (q, r)); // Create a new polygon.
         hex.getPoints().addAll(// Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
-                centerX - utility.LENGTH, centerY,
-                centerX - (utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * utility.LENGTH),
-                centerX + (utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * utility.LENGTH),
-                centerX + utility.LENGTH, centerY,
-                centerX + (utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * utility.LENGTH),
-                centerX - (utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * utility.LENGTH));
+                centerX - Utility.LENGTH, centerY,
+                centerX - (Utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * Utility.LENGTH),
+                centerX + (Utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * Utility.LENGTH),
+                centerX + Utility.LENGTH, centerY,
+                centerX + (Utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * Utility.LENGTH),
+                centerX - (Utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * Utility.LENGTH));
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
-        utility.drawCircle(new Point (hex.getCentre().getX(), hex.getCentre().getY()));
+        Utility.drawCircle(new Point (hex.getCentre().getX(), hex.getCentre().getY()));
        // EventHandler<MouseEvent> Hover = new MouseHoverHandler(root, hex, hoverCircle);
      //   hex.setOnMouseEntered(Hover);
      //   hex.setOnMouseExited(Hover);
@@ -208,7 +208,7 @@ public class HexMap extends Application {
         Circle circle = new Circle();
         circle.setCenterX(x);
         circle.setCenterY(y);
-        circle.setRadius(utility.LENGTH / 1.5);
+        circle.setRadius(Utility.LENGTH / 1.5);
         circle.setMouseTransparent(true); // Allows mouse events to pass through.
         return circle;
     }*/
@@ -216,7 +216,11 @@ public class HexMap extends Application {
     //resets game state
     public void reset(){
         for(int i = 0; i < root.getChildren().size(); i++){
-            if(root.getChildren().get(i).getClass() == Circle.class){
+            if(root.getChildren().get(i).getClass() == Circle.class) {
+                root.getChildren().remove(i);
+                i--;
+            }
+            else if (root.getChildren().get(i).getClass() == Text.class){
                 root.getChildren().remove(i);
                 i--;
             }
@@ -225,8 +229,10 @@ public class HexMap extends Application {
         startingPlayer = PlayerTurn.RED;
         currentPlayer = startingPlayer;
         //redraw player turn circle
-        playerTurnCircle = utility.drawCircle(new Point (900, 500));
+        playerTurnCircle = Utility.drawCircle(new Point (900, 500));
         root.getChildren().add(playerTurnCircle);
+        Text text = Utility.makeText("To Make a Move", new Point (950, 510));
+        root.getChildren().add(text);
 
         blueCircles.clear();
         redCircles.clear();

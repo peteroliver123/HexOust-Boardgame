@@ -5,9 +5,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 /*Utility Class */
-public class utility {
+public class Utility {
     /**************
-       CONSTANTS
+     CONSTANTS
      ***************/
 
     public static final double LENGTH = 30;// Size of hexagon (Distance from center to any vertices)
@@ -15,8 +15,8 @@ public class utility {
     public static final Color DEFAULT_TEXT_COLOR = Color.BLACK;//default text color
 
     /**************
-    UTILITY METHODS
-    **************/
+     UTILITY METHODS
+     **************/
 
     /*
     This function takes a double x, double y and draws a circle with centre(x,y) on
