@@ -8,7 +8,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-/*Utility Class */
+/*Utility Class  */
 public class Utility {
     /**************
      CONSTANTS
