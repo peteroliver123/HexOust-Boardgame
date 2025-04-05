@@ -1,6 +1,10 @@
 /*Imports */
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -49,4 +53,55 @@ public class Utility {
         text.setFill(DEFAULT_TEXT_COLOR);
         return text;
     }
+
+    /*Background of board*/
+    public static Rectangle background() {
+        Rectangle background = new Rectangle(HexMap.BASE_WIDTH, HexMap.BASE_HEIGHT);
+        background.setArcWidth(25);
+        background.setArcHeight(25);
+        background.setFill(Color.DIMGREY);
+        background.setStroke(Color.BLACK);
+        background.setStrokeWidth(3);
+        background.setStrokeLineCap(StrokeLineCap.ROUND);
+        background.setStrokeType(StrokeType.INSIDE);
+        return background;
+    }
+
+    /*
+    Draws a grid over the entire stage with variable width and height dimensions as well as
+    variable step intervals.
+    Made for debugging graphical symmetry/conformity for if any GUI elements are to be centered or
+    adjusted to make space.
+     */
+//    public static void drawDebugGrid(Pane root, double width, double height, double step) {
+//        for (double x = 0; x <= width; x += step) {
+//            javafx.scene.shape.Line verticalLine = new javafx.scene.shape.Line(x, 0, x, height);
+//            verticalLine.setStroke(Color.rgb(200, 0, 0, 0.2));
+//            verticalLine.setStrokeWidth(1);
+//            root.getChildren().add(verticalLine);
+//
+//            if (x % (step * 1) == 0) {
+//                javafx.scene.text.Text label = new javafx.scene.text.Text("x = " + (int)x);
+//                label.setX(x + 2);
+//                label.setY(10);
+//                label.setStyle("-fx-font-size: 9px;");
+//                root.getChildren().add(label);
+//            }
+//        }
+//
+//        for (double y = 0; y <= height; y += step) {
+//            javafx.scene.shape.Line horizontalLine = new javafx.scene.shape.Line(0, y, width, y);
+//            horizontalLine.setStroke(Color.rgb(0, 0, 200, 0.2));
+//            horizontalLine.setStrokeWidth(1);
+//            root.getChildren().add(horizontalLine);
+//
+//            if (y % (step * 1) == 0) {
+//                javafx.scene.text.Text label = new javafx.scene.text.Text("y = " + (int)y);
+//                label.setX(2);
+//                label.setY(y - 2);
+//                label.setStyle("-fx-font-size: 9px;");
+//                root.getChildren().add(label);
+//            }
+//        }
+//    }
 }

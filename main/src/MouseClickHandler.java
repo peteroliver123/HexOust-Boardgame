@@ -4,8 +4,8 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
@@ -153,9 +153,19 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         //check for victory
         if(enemyHexagons.isEmpty()){
             System.out.println(HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns");
-            Text text = Utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(850, 310));
-            root.getChildren().add(text);
+            HexMap.endGameText = Utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(820, 310));
+            root.getChildren().add(HexMap.endGameText);
             HexMap.gameOver = true;
+
+            /*Call end game splash screen and set replay button to color of winner (For fun and to also demonstrate
+            the certain graphical functions available to us as well as how they are called)
+            */
+            String winnerColor = (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
+            HexMap.extendedPlay.endGameSplash(HexMap.currentPlayer, HexMap::reset);
+            HexMap.extendedPlay.button.setFill(LinearGradient.valueOf
+                    ("from 0px 0px to 10px 20px, " +
+                            "reflect, " + winnerColor + " 0.0%, 0x000000 100.0%")
+            );
         }
     }
 

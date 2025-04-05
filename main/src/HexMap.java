@@ -1,6 +1,7 @@
 /*Imports */
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -16,11 +17,15 @@ import java.util.ArrayList;
 public class HexMap extends Application {
     private static final int SIZE = 7; // Size of hexMap board (Adjustable board size (Possible extra additions later))
     private static final double CENTRE_X = 100;
-    private static final double CENTRE_Y = 520; // Center coordinates of the first initial hexagon (bottom left, [0][0])
+    private static final double CENTRE_Y = 515.88; // Center coordinates of the first initial hexagon (bottom left, [0][0])
+    public static final double BASE_WIDTH = 1280;
+    public static final double BASE_HEIGHT = 720;
     public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap, based on size of board.
     public static Circle playerTurnCircle;
     public static ArrayList<Hexagon> redCircles = new ArrayList<>();
     public static ArrayList<Hexagon> blueCircles = new ArrayList<>();
+    public static ExtendedPlay extendedPlay;
+    public static Text endGameText;
 
     public static ArrayList<Hexagon> getBlueCircles() {
         return blueCircles;
@@ -93,17 +98,29 @@ public class HexMap extends Application {
         Text text = Utility.makeText("To Make a Move", new Point (950, 510));
         root.getChildren().add(text);
 
+        /*Prime the end game splash screen*/
+        extendedPlay = new ExtendedPlay(root);
+
+        //Utility.drawDebugGrid(root, BASE_WIDTH, BASE_HEIGHT, 50);
+        root.getChildren().addFirst(Utility.background());
         return root;
     }
 
     @Override
     public void start(Stage primaryStage) {
-        Pane root = initialize();
-        Scene scene = new Scene(root, 1280, 720); // Initialize new scene, taking in field/map and size parameters.
+        Parent root = initialize();
+        LetterBox letterBox = new LetterBox();
+        Scene scene = letterBox.scene(root, BASE_WIDTH, BASE_HEIGHT); // Initialize new scene and letterboxing the contents (Scaling + Center)
+
+
         primaryStage.setScene(scene); // Set scene to stage.
         primaryStage.setTitle("HexMap"); // Title of stage.
         scene.setOnKeyPressed(new keyPressHandler()); //quit button
         primaryStage.show(); // Render stage.
+
+        /*Set a minimum window size for the board*/
+        primaryStage.setMinWidth(primaryStage.getWidth());
+        primaryStage.setMinHeight(primaryStage.getHeight());
     }
 
 
@@ -162,7 +179,7 @@ public class HexMap extends Application {
         }
     }*/
 
-    private class keyPressHandler implements EventHandler<KeyEvent>{
+    private static class keyPressHandler implements EventHandler<KeyEvent>{
         @Override
         public void handle(KeyEvent keyEvent){
             if(keyEvent.getText().equals("q")){
@@ -171,7 +188,7 @@ public class HexMap extends Application {
             if(keyEvent.getText().equals("r")){
                 reset();
             }
-          /*  if(keyEvent.getText().equals("t")){
+            if(keyEvent.getText().equals("t")){
                 Hexagon hex = HexMap.hexagons[1][2];
                 MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
                 MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
@@ -179,7 +196,7 @@ public class HexMap extends Application {
                         false, false, false, false, true,
                         false, false, false, false, false, null);
                 clickHandler.handle(click);
-            }*/
+            }
         }
     }
 
@@ -208,19 +225,25 @@ public class HexMap extends Application {
         Circle circle = new Circle();
         circle.setCenterX(x);
         circle.setCenterY(y);
-        circle.setRadius(Utility.LENGTH / 1.5);
+        circle.setRadius(utility.LENGTH / 1.5);
         circle.setMouseTransparent(true); // Allows mouse events to pass through.
         return circle;
     }*/
 
     //resets game state
-    public void reset(){
+    public static void reset(){
+        /*Removal of end game splash screen elements*/
+        if (endGameText != null && root.getChildren().contains(endGameText)) {
+            root.getChildren().remove(endGameText);
+            endGameText = null;
+        }
+
+        if (extendedPlay != null) {
+            extendedPlay.newGameSplash();
+        }
+
         for(int i = 0; i < root.getChildren().size(); i++){
-            if(root.getChildren().get(i).getClass() == Circle.class) {
-                root.getChildren().remove(i);
-                i--;
-            }
-            else if (root.getChildren().get(i).getClass() == Text.class){
+            if(root.getChildren().get(i).getClass() == Circle.class){
                 root.getChildren().remove(i);
                 i--;
             }
@@ -231,8 +254,6 @@ public class HexMap extends Application {
         //redraw player turn circle
         playerTurnCircle = Utility.drawCircle(new Point (900, 500));
         root.getChildren().add(playerTurnCircle);
-        Text text = Utility.makeText("To Make a Move", new Point (950, 510));
-        root.getChildren().add(text);
 
         blueCircles.clear();
         redCircles.clear();
