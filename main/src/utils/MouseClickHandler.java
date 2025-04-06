@@ -1,3 +1,4 @@
+package utils;
 /*Imports */
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -6,8 +7,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.Circle;
-
 import java.util.ArrayList;
+import static utils.Utility.*;
 
 public class MouseClickHandler implements EventHandler<MouseEvent> {
     Pane root;
@@ -140,7 +141,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         System.out.println("Capture Move Played: Max Group Size: " + maxGroup + "New Group Size: " + friendlyNeighbour.size());
 
         /*If checks correct draw circle */
-        Circle circle = Utility.drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
+        Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
@@ -153,16 +154,16 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         //check for victory
         if(enemyHexagons.isEmpty()){
             System.out.println(HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns");
-            HexMap.endGameText = Utility.makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(820, 310));
-            root.getChildren().add(HexMap.endGameText);
+            ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(820, 310));
+            root.getChildren().add(ExtendedPlay.endGameText);
             HexMap.gameOver = true;
 
             /*Call end game splash screen and set replay button to color of winner (For fun and to also demonstrate
             the certain graphical functions available to us as well as how they are called)
             */
             String winnerColor = (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
-            HexMap.extendedPlay.endGameSplash(HexMap.currentPlayer, HexMap::reset);
-            HexMap.extendedPlay.button.setFill(LinearGradient.valueOf
+            ExtendedPlay.extendedPlay.endGameSplash(HexMap.currentPlayer, ExtendedPlay::reset);
+            ExtendedPlay.extendedPlay.button.setFill(LinearGradient.valueOf
                     ("from 0px 0px to 10px 20px, " +
                             "reflect, " + winnerColor + " 0.0%, 0x000000 100.0%")
             );
@@ -186,16 +187,16 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         HexMap.currentPlayer = HexMap.currentPlayer.next();
 
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            HexMap.playerTurnCircle.setFill(Color.BLUE);
+            playerTurnCircle.setFill(Color.BLUE);
         } else {
-            HexMap.playerTurnCircle.setFill(Color.RED);
+            playerTurnCircle.setFill(Color.RED);
         }
         HexMap.turnCount++;
     }
 
     public void nonCapture(){
         System.out.println("Non-capturing move performed");
-        Circle circle = Utility.drawCircle(new Point (hexagon.getCentre().getX(), hexagon.getCentre().getY()));
+        Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {

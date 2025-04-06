@@ -1,9 +1,9 @@
-import java.util.*;
+package utils;
 
 public class NonCapturing {
   /*  private int[][] placementGrid;
-    private List<Hexagon> redHexagons;
-    private List<Hexagon> blueHexagons;
+    private List<utils.Hexagon> redHexagons;
+    private List<utils.Hexagon> blueHexagons;
     private static final int[][] HEX_NEIGHBOR_OFFSETS = {
             {1, 0}, {1, -1}, {0, 1}, {0, -1}, {-1, 0}, {-1, -1}
     };
@@ -19,16 +19,16 @@ public class NonCapturing {
     ALSO HAVE CHECK TO PREVENT OUT OF INDEX (IF OFFSETS APPLIED LEADS TO -1)
      */
 /*
-    public NonCapturing(int size) {
+    public utils.NonCapturing(int size) {
         this.placementGrid = new int[2 * size - 1][2 * size - 1];
         this.redHexagons = new ArrayList<>();
         this.blueHexagons = new ArrayList<>();
     }
 
-    public void updatePlacement(Hexagon hex, int q, int r, HexMap.PlayerTurn currentPlayer) {
-        int playerValue = (currentPlayer == HexMap.PlayerTurn.RED) ? 1 : -1;
+    public void updatePlacement(utils.Hexagon hex, int q, int r, utils.HexMap.PlayerTurn currentPlayer) {
+        int playerValue = (currentPlayer == utils.HexMap.PlayerTurn.RED) ? 1 : -1;
 
-        if (currentPlayer == HexMap.PlayerTurn.RED) {
+        if (currentPlayer == utils.HexMap.PlayerTurn.RED) {
             redHexagons.add(hex);
         } else {
             blueHexagons.add(hex);
@@ -49,14 +49,14 @@ public class NonCapturing {
         }
     }
 
-    public boolean isValidPlacement(int q, int r, HexMap.PlayerTurn currentPlayer) {
+    public boolean isValidPlacement(int q, int r, utils.HexMap.PlayerTurn currentPlayer) {
         int value = placementGrid[q][r];
-        // System.out.println(value + " Hexagon: " + q + " " + r + " " + currentPlayer);
+        // System.out.println(value + " utils.Hexagon: " + q + " " + r + " " + currentPlayer);
         if (value == 0 || Math.abs(value) == 2) {
             return true;
         }
-        return (currentPlayer == HexMap.PlayerTurn.RED && value == -1) ||
-                (currentPlayer == HexMap.PlayerTurn.BLUE && value == 1);
+        return (currentPlayer == utils.HexMap.PlayerTurn.RED && value == -1) ||
+                (currentPlayer == utils.HexMap.PlayerTurn.BLUE && value == 1);
     }
 
     private boolean isValidHex(int q, int r) {

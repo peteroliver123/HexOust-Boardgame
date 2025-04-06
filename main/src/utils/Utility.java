@@ -1,5 +1,5 @@
+package utils;
 /*Imports */
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -14,9 +14,19 @@ public class Utility {
      CONSTANTS
      ***************/
 
-    public static final double LENGTH = 30;// Size of hexagon (Distance from center to any vertices)
-    public static final Font DEFAULT_FONT = new Font("verdana", 30);//default font with name of font and size
-    public static final Color DEFAULT_TEXT_COLOR = Color.BLACK;//default text color
+    /*utils.Hexagon sizing */
+    public static final double LENGTH = 30;
+
+    /*Pane Sizing */
+    public static final double BASE_WIDTH = 1280;
+    public static final double BASE_HEIGHT = 720;
+
+    /*GUI Elements */
+    public static Circle playerTurnCircle;
+
+    /*Text Settings */
+    public static final Font DEFAULT_FONT = new Font("verdana", 30);
+    public static final Color DEFAULT_TEXT_COLOR = Color.BLACK;
 
     /**************
      UTILITY METHODS
@@ -54,9 +64,16 @@ public class Utility {
         return text;
     }
 
+    /*Helper function for producing some text with some hexadecimal colour when we have no position*/
+    public static Text makeTextWithHex(String content, String colorHex) {
+        Text t = new Text(content);
+        t.setFill(Color.web(colorHex));
+        return t;
+    }
+
     /*Background of board*/
     public static Rectangle background() {
-        Rectangle background = new Rectangle(HexMap.BASE_WIDTH, HexMap.BASE_HEIGHT);
+        Rectangle background = new Rectangle(BASE_WIDTH, BASE_HEIGHT);
         background.setArcWidth(25);
         background.setArcHeight(25);
         background.setFill(Color.DIMGREY);
@@ -66,6 +83,12 @@ public class Utility {
         background.setStrokeType(StrokeType.INSIDE);
         return background;
     }
+
+    public static void drawPlayerTurnCircle(){
+        playerTurnCircle = drawCircle(new Point (900, 500));
+        HexMap.root.getChildren().add(playerTurnCircle);
+    }
+
 
     /*
     Draws a grid over the entire stage with variable width and height dimensions as well as

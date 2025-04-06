@@ -1,7 +1,8 @@
+package utils;
 /*
 This is a helper class which describes a hexagon which is made up of two points, a centre of the hexagon
 and its co-ordinate position in relation to the grid of hexagons we are creating. It has four functions:
-getCentre, getCoordinatePosition (basic getter methods), contains and isNeighbour. Contains takes a Point
+getCentre, getCoordinatePosition (basic getter methods), contains and isNeighbour. Contains takes a utils.Point
 that the mouse has clicked and checks whether the current hexagon contains that mousePoint within its
 dimensions and hence returns true if the user has clicked inside the hexagon and else false. isNeighbour
 takes a hexagon and checks whether the current hexagon borders the given hexagon returns true if yes else false.
@@ -35,11 +36,11 @@ public class Hexagon extends Polygon {
     /*
     This function takes a mousePoint that the user has clicked and
     determines whether it is inside the current hexagon. Returns true
-    if yes and false otherwise. It implements Point-In-Polygon Algorithm.
+    if yes and false otherwise. It implements utils.Point-In-Polygon Algorithm.
     Also makes sure that only allows placement if it is clear which
     hexagon user is placing in, i.e. User clicks exactly at pixel
     connecting multiple than don't place.
-    Input: Point
+    Input: utils.Point
     Output: Boolean
      */
     public boolean contains(Point mousePoint) {
@@ -63,7 +64,7 @@ public class Hexagon extends Polygon {
     /*
     This function takes a hexagon and returns whether the given hexagon is
     touching the current hexagon. Returns true if yes and false otherwise.
-    Input: Hexagon
+    Input: utils.Hexagon
     Output: Boolean
      */
     public boolean isNeighbor(Hexagon hex){

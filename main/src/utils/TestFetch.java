@@ -1,3 +1,4 @@
+package utils;
 /*Imports */
 import static org.junit.jupiter.api.Assertions.*;
 import javafx.scene.input.MouseButton;
@@ -23,12 +24,12 @@ public class TestFetch extends ApplicationTest {
         Hexagon[][] hx = HexMap.hexagons;
         assertNotNull(root);
         assertEquals(100, hx[0][0].getCentre().getX());
-        assertEquals(520, hx[0][0].getCentre().getY());
+        assertEquals(515.88, hx[0][0].getCentre().getY());
     }
 
     @Test
     public void testMakeCircle(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         simulateClick(1,1);
         assertEquals(1,HexMap.redCircles.size());
     }
@@ -36,7 +37,7 @@ public class TestFetch extends ApplicationTest {
     /*This test makes sure the user is unable to place a circle on a hexagon that already contains one. */
     @Test
     public void spaceFull(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         simulateClick(1, 1);
         simulateClick(1, 1);
         assertEquals(1, HexMap.redCircles.size());
@@ -46,7 +47,7 @@ public class TestFetch extends ApplicationTest {
     /*This test makes sure user isn't allowed to place on an invalid tile. */
     @Test
     public void invalidMove(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         simulateClick(1, 1);
         simulateClick(5,5);
         simulateClick(1,2);
@@ -57,7 +58,7 @@ public class TestFetch extends ApplicationTest {
     /*This function makes sure capturing moves operate as intended */
     @Test
     public void capturing(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
         simulateClick(3,3);//BLUE NC
         simulateClick(5, 4);//RED NC
@@ -70,7 +71,7 @@ public class TestFetch extends ApplicationTest {
     /*This function makes sure that a capturing move doesn't always end the game */
     @Test
     public void capturingButGameNotOver(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
         simulateClick(3,3);//BLUE NC
         simulateClick(5, 4);//RED NC
@@ -81,7 +82,7 @@ public class TestFetch extends ApplicationTest {
 
     @Test
     public void testWin(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
         simulateClick(1,3);//BLUE NC
         simulateClick(1,2);//RED C
@@ -91,7 +92,7 @@ public class TestFetch extends ApplicationTest {
 
     @Test
     public void testWinLong(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
         simulateClick(3,3);//BLUE NC
         simulateClick(3,1);//RED NC
@@ -104,31 +105,31 @@ public class TestFetch extends ApplicationTest {
         assertEquals(5,HexMap.turnCount);
     }
 
-    /*Testing Hexagon.java*/
-    /*This function tests the Hexagon class handles error when we hand it a negative value for the centre of the Hexagon*/
+    /*Testing utils.Hexagon.java*/
+    /*This function tests the utils.Hexagon class handles error when we hand it a negative value for the centre of the utils.Hexagon*/
     @Test
     public void negativeCenter(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         try {
-            new Hexagon(new Point (-1, 1), new Point(1, 1));
+            new Hexagon(new Point(-1, 1), new Point(1, 1));
             fail("Allowed negative center!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(new Point (1, -1), new Point (1, 1));
+            new Hexagon(new Point(1, -1), new Point(1, 1));
             fail("Allowed negative center!");
         } catch (IllegalArgumentException _){
 
         }
     }
 
-    /*This function checks Hexagon class handles errors when we hand
+    /*This function checks utils.Hexagon class handles errors when we hand
     it a negative q and r position.
      */
     @Test
     public void negativePosition(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         try {
             new Hexagon(new Point(1, 1), new Point(-1, 1));
             fail("Allowed negative position!");
@@ -136,7 +137,7 @@ public class TestFetch extends ApplicationTest {
 
         }
         try {
-            new Hexagon(new Point (1, 1), new Point (1, -1));
+            new Hexagon(new Point(1, 1), new Point(1, -1));
             fail("Allowed negative position!");
         } catch (IllegalArgumentException _){
 
@@ -148,21 +149,21 @@ public class TestFetch extends ApplicationTest {
     @Test
     public void invalidPosition(){
         /*Valid Position are q = 0...12, when q = 0..6 r = 0..q + 6 when q = 7..12 r = 0..18-q*/
-        hexMap.reset();
+        ExtendedPlay.reset();
         try {
-            new Hexagon(new Point (1, 1), new Point (13, 1));
+            new Hexagon(new Point(1, 1), new Point(13, 1));
             fail("Allowed Invalid Q!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(new Point (1, 1), new Point (1, 8));
+            new Hexagon(new Point(1, 1), new Point(1, 8));
             fail("Allowed invalid R!");
         } catch (IllegalArgumentException _){
 
         }
         try {
-            new Hexagon(new Point (1, 1), new Point (8, 19));
+            new Hexagon(new Point(1, 1), new Point(8, 19));
             fail("Allowed invalid R!");
         } catch (IllegalArgumentException _){
 
@@ -173,7 +174,7 @@ public class TestFetch extends ApplicationTest {
     and another case where they are not neighbours also works correctly */
     @Test
     public void isNeighbour(){
-        hexMap.reset();
+        ExtendedPlay.reset();
         Hexagon[][] hx = HexMap.hexagons;
         Hexagon a = hx[0][0];
         Hexagon b = hx[0][1];

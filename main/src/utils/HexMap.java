@@ -1,39 +1,30 @@
+package utils;
 /*Imports */
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
-
+import static utils.Utility.*;
 
 public class HexMap extends Application {
     private static final int SIZE = 7; // Size of hexMap board (Adjustable board size (Possible extra additions later))
     private static final double CENTRE_X = 100;
     private static final double CENTRE_Y = 515.88; // Center coordinates of the first initial hexagon (bottom left, [0][0])
-    public static final double BASE_WIDTH = 1280;
-    public static final double BASE_HEIGHT = 720;
+
     public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap, based on size of board.
-    public static Circle playerTurnCircle;
+
     public static ArrayList<Hexagon> redCircles = new ArrayList<>();
     public static ArrayList<Hexagon> blueCircles = new ArrayList<>();
-    public static ExtendedPlay extendedPlay;
-    public static Text endGameText;
-
-    public static ArrayList<Hexagon> getBlueCircles() {
-        return blueCircles;
-    }
-
-    public static ArrayList<Hexagon> getRedCircles(){
-        return redCircles;
-    }
+    public static PlayerTurn currentPlayer = PlayerTurn.RED;
+    public static boolean gameOver = false;
+    public static int turnCount = 1; //starts at one because it only increments when player is changed
+    public static Pane root;
 
     public enum PlayerTurn {
         RED,
@@ -45,11 +36,13 @@ public class HexMap extends Application {
         }
     }
 
-    public static PlayerTurn currentPlayer = PlayerTurn.RED;
-    public static PlayerTurn startingPlayer = PlayerTurn.RED;
-    public static boolean gameOver = false;
-    public static int turnCount = 1; //starts at one because it only increments when player is changed
-    public static Pane root;
+    public static ArrayList<Hexagon> getBlueCircles() {
+        return blueCircles;
+    }
+
+    public static ArrayList<Hexagon> getRedCircles(){
+        return redCircles;
+    }
 
     public Pane initialize() {
         root = new Pane(); // Initialize the field/map
@@ -66,7 +59,7 @@ public class HexMap extends Application {
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex); // Add hexagon to scene/map.
-                    tempY -= ((Math.sqrt(0.75) * Utility.LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
+                    tempY -= ((Math.sqrt(0.75) * LENGTH) * 2); // Move down y coordinates by distance of 2 'h' (Pythagoras yummy!!)
                 }
             } else {
                 ascFlag = false; // Flag set to false, loop to generate descending columns.
@@ -75,34 +68,33 @@ public class HexMap extends Application {
                     // System.out.println("q: " + q + ", i: " + i);
                     hexagons[q][i] = hex;
                     root.getChildren().add(hex);
-                    tempY -= ((Math.sqrt(0.75) * Utility.LENGTH) * 2);
+                    tempY -= ((Math.sqrt(0.75) * LENGTH) * 2);
                 }
             }
 
             if (ascFlag) { // Increase y coordinate of next initial hexagon for next column
-                y += (Math.sqrt(0.75) * Utility.LENGTH);
+                y += (Math.sqrt(0.75) * LENGTH);
                 column++;
             } else { // Decrease y coordinate of next initial hexagon for next column
-                y -= (Math.sqrt(0.75) * Utility.LENGTH);
+                y -= (Math.sqrt(0.75) * LENGTH);
                 column--;
             }
-            x += (Utility.LENGTH * 1.5); // X coordinate of next column
+            x += (LENGTH * 1.5); // X coordinate of next column
             tempY = y; // Reset tempY to new y
         }
 
         // Circle piece corresponding to current player's turn.
-        playerTurnCircle = Utility.drawCircle(new Point (900, 500));
-        root.getChildren().add(playerTurnCircle);
+        drawPlayerTurnCircle();
 
         /*Display Text*/
-        Text text = Utility.makeText("To Make a Move", new Point (950, 510));
+        Text text = makeText("To Make a Move", new Point(950, 510));
         root.getChildren().add(text);
 
         /*Prime the end game splash screen*/
-        extendedPlay = new ExtendedPlay(root);
+        ExtendedPlay.extendedPlay = new ExtendedPlay(root);
 
-        //Utility.drawDebugGrid(root, BASE_WIDTH, BASE_HEIGHT, 50);
-        root.getChildren().addFirst(Utility.background());
+        //drawDebugGrid(root, BASE_WIDTH, BASE_HEIGHT, 50);
+        root.getChildren().addFirst(background());
         return root;
     }
 
@@ -112,9 +104,8 @@ public class HexMap extends Application {
         LetterBox letterBox = new LetterBox();
         Scene scene = letterBox.scene(root, BASE_WIDTH, BASE_HEIGHT); // Initialize new scene and letterboxing the contents (Scaling + Center)
 
-
         primaryStage.setScene(scene); // Set scene to stage.
-        primaryStage.setTitle("HexMap"); // Title of stage.
+        primaryStage.setTitle("HexOust"); // Title of stage.
         scene.setOnKeyPressed(new keyPressHandler()); //quit button
         primaryStage.show(); // Render stage.
 
@@ -127,10 +118,10 @@ public class HexMap extends Application {
 
   /*  private class MouseHoverHandler implements EventHandler<MouseEvent> {
         Pane root;
-        Hexagon hexagon;
+        utils.Hexagon hexagon;
         Circle hoverCircle;
 
-        public MouseHoverHandler(Pane root, Hexagon hexagon, Circle hoverCircle) {
+        public MouseHoverHandler(Pane root, utils.Hexagon hexagon, Circle hoverCircle) {
             this.root = root;
             this.hexagon = hexagon;
             this.hoverCircle = hoverCircle;
@@ -186,33 +177,33 @@ public class HexMap extends Application {
                 System.exit(1);
             }
             if(keyEvent.getText().equals("r")){
-                reset();
+                ExtendedPlay.reset();
             }
-            if(keyEvent.getText().equals("t")){
-                Hexagon hex = HexMap.hexagons[1][2];
-                MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
+            /*if(keyEvent.getText().equals("t")){
+                utils.Hexagon hex = utils.HexMap.hexagons[1][2];
+                utils.MouseClickHandler clickHandler = new utils.MouseClickHandler(root, hex);
                 MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
                         hex.getCentre().getX(), hex.getCentre().getY(), 0, 0, MouseButton.PRIMARY, 1,
                         false, false, false, false, true,
                         false, false, false, false, false, null);
                 clickHandler.handle(click);
-            }
+            }*/
         }
     }
 
     private Hexagon createHexagon(double centerX, double centerY, int q, int r, Pane root) {
-        Hexagon hex = new Hexagon(new Point(centerX, centerY), new Point (q, r)); // Create a new polygon.
+        Hexagon hex = new Hexagon(new Point(centerX, centerY), new Point(q, r)); // Create a new polygon.
         hex.getPoints().addAll(// Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
-                centerX - Utility.LENGTH, centerY,
-                centerX - (Utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * Utility.LENGTH),
-                centerX + (Utility.LENGTH * 0.5), centerY + (Math.sqrt(0.75) * Utility.LENGTH),
-                centerX + Utility.LENGTH, centerY,
-                centerX + (Utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * Utility.LENGTH),
-                centerX - (Utility.LENGTH * 0.5), centerY - (Math.sqrt(0.75) * Utility.LENGTH));
+                centerX - LENGTH, centerY,
+                centerX - (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),
+                centerX + (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),
+                centerX + LENGTH, centerY,
+                centerX + (LENGTH * 0.5), centerY - (Math.sqrt(0.75) * LENGTH),
+                centerX - (LENGTH * 0.5), centerY - (Math.sqrt(0.75) * LENGTH));
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
-        Utility.drawCircle(new Point (hex.getCentre().getX(), hex.getCentre().getY()));
+        drawCircle(new Point(hex.getCentre().getX(), hex.getCentre().getY()));
        // EventHandler<MouseEvent> Hover = new MouseHoverHandler(root, hex, hoverCircle);
      //   hex.setOnMouseEntered(Hover);
      //   hex.setOnMouseExited(Hover);
@@ -225,43 +216,12 @@ public class HexMap extends Application {
         Circle circle = new Circle();
         circle.setCenterX(x);
         circle.setCenterY(y);
-        circle.setRadius(utility.LENGTH / 1.5);
+        circle.setRadius(LENGTH / 1.5);
         circle.setMouseTransparent(true); // Allows mouse events to pass through.
         return circle;
     }*/
 
-    //resets game state
-    public static void reset(){
-        /*Removal of end game splash screen elements*/
-        if (endGameText != null && root.getChildren().contains(endGameText)) {
-            root.getChildren().remove(endGameText);
-            endGameText = null;
-        }
-
-        if (extendedPlay != null) {
-            extendedPlay.newGameSplash();
-        }
-
-        for(int i = 0; i < root.getChildren().size(); i++){
-            if(root.getChildren().get(i).getClass() == Circle.class){
-                root.getChildren().remove(i);
-                i--;
-            }
-        }
-        //makes game start with alternating players
-        startingPlayer = PlayerTurn.RED;
-        currentPlayer = startingPlayer;
-        //redraw player turn circle
-        playerTurnCircle = Utility.drawCircle(new Point (900, 500));
-        root.getChildren().add(playerTurnCircle);
-
-        blueCircles.clear();
-        redCircles.clear();
-        gameOver = false;
-
-        turnCount = 1;
-    }
-
+    /*Application built with utils.HexMap as starter */
     public static void main(String[] args) {
         launch(args);
     }

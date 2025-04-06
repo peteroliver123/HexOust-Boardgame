@@ -77,7 +77,7 @@
                 <configuration>
                 <archive>
                     <manifest>
-                        <mainClass>Main</mainClass>
+                        <mainClass>utils.Main</mainClass>
                     </manifest>
                 </archive>
                 <descriptorRefs>
@@ -100,7 +100,7 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>
-                        Main.java
+                        utils.Main.java
                     </mainClass>
                 </configuration>
             </plugin>

@@ -1,3 +1,5 @@
+package utils;
+
 /*Imports*/
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -5,12 +7,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
+import static utils.Utility.*;
 
 /*
 This class handles and deals with any function or GUI elements in regard to
@@ -27,7 +30,10 @@ public class ExtendedPlay {
     private int redWin = 0;
     private int blueWin = 0;
     private int totalTurn = 0;
-    private Runnable resetCallback; // Reference to the reset function in HexMap
+    private Runnable resetCallback; // Reference to the reset function in utils.HexMap
+
+    public static ExtendedPlay extendedPlay;
+    public static Text endGameText;
 
     public ExtendedPlay(Pane root) {
         /*Display the current round and the number of wins for each player*/
@@ -35,30 +41,29 @@ public class ExtendedPlay {
                 new Text("Round: "),
                 turnCount = new Text("0"),
                 new Text("            "),
-                makeText("Red ", "0xc9180c"),
+                makeTextWithHex("Red ", "0xc9180c"),
                 redScore = new Text("0"),
                 new Text(" | "),
-                makeText("Blue ", "0x0c42c9"),
+                Utility.makeTextWithHex("Blue ", "0x0c42c9"),
                 blueScore = new Text("0")
         );
         winCount.setLayoutX(625);
         winCount.setLayoutY(50);
         winCount.setStyle("-fx-font-size: 40px; -fx-font-weight: bold");
 
-        /*Replay button made in a stackpane such that the replay button text will be centered inside of the button*/
+        /*Replay button made in a stack-pane such that the replay button text will be centered inside the button*/
         replayButton = new StackPane();
         replayButton.setLayoutX(900);
         replayButton.setLayoutY(540);
         replayButton.setPrefSize(210, 70);
+
         button = new Rectangle(210, 70);
         button.setArcWidth(20);
         button.setArcHeight(20);
         button.setStroke(Color.BLACK);
         button.setVisible(false);
 
-        replayButtonText = new Text("Replay!");
-        replayButtonText.setX(935);
-        replayButtonText.setY(565);
+        replayButtonText = Utility.makeText("Replay!", new Point (935, 565));
         replayButtonText.setStyle("-fx-font-size: 42px; -fx-font-weight: bold");
         replayButtonText.setFill(Color.valueOf("#c9a00c"));
         replayButtonText.setStroke(Color.BLACK);
@@ -70,7 +75,7 @@ public class ExtendedPlay {
         replayButton.setOnMouseClicked(this::replayHandle);
 
         /*Small animations for the replay button*/
-        replayButton.setOnMouseEntered(e -> {
+        replayButton.setOnMouseEntered(_ -> {
             ScaleTransition scale = new ScaleTransition(Duration.millis(200), replayButton);
             scale.setToX(1.1);
             scale.setToY(1.1);
@@ -87,7 +92,7 @@ public class ExtendedPlay {
             shake.play();
         });
 
-        replayButton.setOnMouseExited(e -> {
+        replayButton.setOnMouseExited(_ -> {
             ScaleTransition scale = new ScaleTransition(Duration.millis(150), replayButton);
             scale.setToX(1.0);
             scale.setToY(1.0);
@@ -132,10 +137,34 @@ public class ExtendedPlay {
         turnCount.setText(String.valueOf(totalTurn));
     }
 
-    /*Helper function for producing some text with some hexadecimal colour*/
-    private Text makeText(String content, String colorHex) {
-        Text t = new Text(content);
-        t.setFill(Color.web(colorHex));
-        return t;
+    //resets game state
+    public static void reset(){
+        /*Removal of end game splash screen elements*/
+        if (endGameText != null && HexMap.root.getChildren().contains(endGameText)) {
+            HexMap.root.getChildren().remove(endGameText);
+            endGameText = null;
+        }
+
+        if (extendedPlay != null) {
+            extendedPlay.newGameSplash();
+        }
+
+        /*Remove Circles */
+        for(int i = 0; i < HexMap.root.getChildren().size(); i++){
+            if(HexMap.root.getChildren().get(i).getClass() == Circle.class){
+                HexMap.root.getChildren().remove(i);
+                i--;
+            }
+        }
+
+        /*Redraw player turn circle*/
+        HexMap.currentPlayer = HexMap.PlayerTurn.RED;
+        Utility.drawPlayerTurnCircle();
+
+        /*Reset Variables */
+        HexMap.blueCircles.clear();
+        HexMap.redCircles.clear();
+        HexMap.gameOver = false;
+        HexMap.turnCount = 1;
     }
 }
