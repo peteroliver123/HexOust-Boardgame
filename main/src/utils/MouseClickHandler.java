@@ -16,7 +16,6 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     Hexagon hexagon;
 
 
-
     public MouseClickHandler(Pane root, Hexagon hexagon) {
         this.root = root;
         this.hexagon = hexagon;
@@ -24,7 +23,6 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
-        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redCircles : HexMap.blueCircles;
         ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueCircles : HexMap.redCircles;
 
         /*Remove Invalid Move Text */
@@ -35,33 +33,26 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
         Point mousePoint = new Point(event.getX(), event.getY());
         /*PRE-CHECKS */
-        if(!hexagon.contains(mousePoint)){
+        if (!hexagon.contains(mousePoint)) {
             Possibilities.getBoardState();
             return;
         }
-        if(HexMap.gameOver){
+        if (HexMap.gameOver) {
             System.out.println("Game is over, please start a new one to keep playing!");
             Possibilities.getBoardState();
             return;
         }
 
-        if(Possibilities.state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 1){
+        if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 1) {
             nonCapture();
-        } else if (Possibilities.state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2){
+        } else if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2) {
             ArrayList[] arrayOfArrayLists = new ArrayList[100];
-            Possibilities.isCapturing((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY(), 1, arrayOfArrayLists);
-
-            Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
-            root.getChildren().add(circle);
-            if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-                HexMap.blueCircles.add(hexagon);
-            } else {
-                HexMap.redCircles.add(hexagon);
-            }
+            Possibilities.isCapturing((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY(), arrayOfArrayLists);
+            addCircleToTheBoard();
             capture(arrayOfArrayLists);
 
             //check for victory
-            if(enemyHexagons.isEmpty()){
+            if (enemyHexagons.isEmpty()) {
                 ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns!", new Point(720, 310));
                 root.getChildren().add(ExtendedPlay.endGameText);
                 HexMap.gameOver = true;
@@ -77,15 +68,14 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
                 );
             }
 
-        }
-        else {
+        } else {
             ExtendedPlay.invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
             HexMap.root.getChildren().add(ExtendedPlay.invalidMoveText);
         }
         Possibilities.getBoardState();
     }
 
-    public void changePlayer(){
+    public void changePlayer() {
         HexMap.currentPlayer = HexMap.currentPlayer.next();
 
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
@@ -96,15 +86,18 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         HexMap.turnCount++;
     }
 
-    public void nonCapture(){
+    public void addCircleToTheBoard() {
         Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
-        //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
             HexMap.blueCircles.add(hexagon);
         } else {
             HexMap.redCircles.add(hexagon);
         }
+    }
+
+    public void nonCapture(){
+        addCircleToTheBoard();
         changePlayer();
     }
 

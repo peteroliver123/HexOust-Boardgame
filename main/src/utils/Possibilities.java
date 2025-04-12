@@ -9,14 +9,8 @@ import static utils.Utility.*;
 import java.util.ArrayList;
 
 public class Possibilities {
-    public static ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>();
-    public static ArrayList<Hexagon> enemyNeighbour = new ArrayList<>();
-    public static ArrayList<Hexagon> tempStorer = new ArrayList<>();
-
-    public static int [][] state = new int[2 * SIZE - 1][2 * SIZE - 1];//0 indicates invalid 1 indicates valid non capture 2 indicates valid capture
 
     public static void getBoardState(){
-
         for(int i = 0; i < 13; i++){
             for(int j = 0; j < 13; j++){
                 state[i][j] = 0;
@@ -26,7 +20,7 @@ public class Possibilities {
                         if(isNonCapturing(i, j)){
                             state[i][j] = 1;
 
-                        } else if (isCapturing(i, j, 0, new ArrayList[100])){
+                        } else if (isCapturing(i, j, null)){
                             state[i][j] = 2;
                         }
                     }
@@ -66,12 +60,12 @@ public class Possibilities {
         return true;
     }
 
-    public static boolean isCapturing(int x, int y, int type, ArrayList[] z){
+    public static boolean isCapturing(int x, int y, ArrayList[] z){
         ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redCircles : HexMap.blueCircles;
         ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueCircles : HexMap.redCircles;
+        ArrayList<Hexagon> tempStorer = new ArrayList<>();
         friendlyNeighbour.clear();
         enemyNeighbour.clear();
-        tempStorer.clear();
         Hexagon hex = hexagons[x][y];
 
         /*NON CAPTURING */
@@ -122,7 +116,7 @@ public class Possibilities {
                 }
             }
             maxGroup = Math.max(maxGroup, tempStorer.size());
-            if(type == 1){
+            if(z != null){
                 z[numSubGroups] = new ArrayList<>(tempStorer);
                 numSubGroups ++;
             }

@@ -1,6 +1,8 @@
 package utils;
 /*Imports */
 import static org.junit.jupiter.api.Assertions.*;
+
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -188,24 +190,7 @@ public class TestFetch extends ApplicationTest {
     public void simulateClick(int i, int j){
 
         /*Negative Obviously Wrong*/
-        if(i < 0 || j < 0){
-            throw new IllegalArgumentException("Positions of Hexagons must be within the board!");
-        }
-        /*If Q is 0 - 6 goes up to Q + 6*/
-        if(i > 12){
-            throw new IllegalArgumentException("There are not more than 12 columns of hexagons");
-        }
-
-        if(i <= 6){
-            if(j > i + 6){
-                throw new IllegalArgumentException("For first 7 columns of hexagons, where i is the column, there is no more than i + 6 rows");
-            }
-        }
-        else {
-            if(j > 18 - i){
-                throw new IllegalArgumentException("For columns 7 to 12, where i is the column, there is no more than 18 - i rows");
-            }
-        }
+        Possibilities.isValidHexagon(i, j);
 
         Hexagon hex = hexagons[i][j];
         MouseClickHandler clickHandler = new MouseClickHandler(root, hex);

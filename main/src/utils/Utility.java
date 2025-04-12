@@ -8,6 +8,8 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
+
 /*Utility Class  */
 public class Utility {
     /**************
@@ -18,6 +20,10 @@ public class Utility {
     public static final double LENGTH = 30;
     public static final int SIZE = 7; // Size of hexMap board (Adjustable board size (Possible extra additions later))
     public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap, based on size of board.
+    public static ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>();
+    public static ArrayList<Hexagon> enemyNeighbour = new ArrayList<>();
+    public static int [][] state = new int[2 * SIZE - 1][2 * SIZE - 1];//0 indicates invalid 1 indicates valid non capture 2 indicates valid capture
+
     /*Pane Sizing */
     public static final double BASE_WIDTH = 1280;
     public static final double BASE_HEIGHT = 720;
