@@ -6,6 +6,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.*;
 import org.testfx.framework.junit.ApplicationTest;
+import static utils.Utility.*;
+
 
 public class TestFetch extends ApplicationTest {
     public static HexMap hexMap;
@@ -21,7 +23,7 @@ public class TestFetch extends ApplicationTest {
 
     @Test
     public void testHexagonClass() {
-        Hexagon[][] hx = HexMap.hexagons;
+        Hexagon[][] hx = hexagons;
         assertNotNull(root);
         assertEquals(100, hx[0][0].getCentre().getX());
         assertEquals(515.88, hx[0][0].getCentre().getY());
@@ -175,7 +177,7 @@ public class TestFetch extends ApplicationTest {
     @Test
     public void isNeighbour(){
         ExtendedPlay.reset();
-        Hexagon[][] hx = HexMap.hexagons;
+        Hexagon[][] hx = hexagons;
         Hexagon a = hx[0][0];
         Hexagon b = hx[0][1];
         Hexagon c = hx[2][2];
@@ -205,7 +207,7 @@ public class TestFetch extends ApplicationTest {
             }
         }
 
-        Hexagon hex = HexMap.hexagons[i][j];
+        Hexagon hex = hexagons[i][j];
         MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
         MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
                 hex.getCentre().getX(), hex.getCentre().getY(), 0, 0, MouseButton.PRIMARY, 1,

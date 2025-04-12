@@ -3,6 +3,7 @@ package utils;
 /*Imports*/
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -167,5 +168,6 @@ public class ExtendedPlay {
         HexMap.redCircles.clear();
         HexMap.gameOver = false;
         HexMap.turnCount = 1;
+        Possibilities.getBoardState();
     }
 }

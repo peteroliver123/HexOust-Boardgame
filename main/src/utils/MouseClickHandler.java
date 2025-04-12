@@ -7,7 +7,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import static utils.Utility.*;
@@ -16,180 +15,74 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     Pane root;
     Hexagon hexagon;
 
-    ArrayList<Hexagon> blueCircles = HexMap.getBlueCircles();
-    ArrayList<Hexagon> redCircles = HexMap.getRedCircles();
 
-    ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>();
-    ArrayList<Hexagon> enemyNeighbour = new ArrayList<>();
-    ArrayList<Hexagon> tempStorer = new ArrayList<>();
 
     public MouseClickHandler(Pane root, Hexagon hexagon) {
         this.root = root;
         this.hexagon = hexagon;
     }
 
-    /*Checks valid moves not related to mouse event */
-    public boolean checkMoveValid(int maxGroup){
-        if(!isValidClick()){
-            return false;
-        }
-        else {
-            if (enemyNeighbour.isEmpty()) {
-                ExtendedPlay.invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
-                HexMap.root.getChildren().add(ExtendedPlay.invalidMoveText);
-                return false;
-            }
-            else if (maxGroup >= friendlyNeighbour.size()) {
-                ExtendedPlay.invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
-                HexMap.root.getChildren().add(ExtendedPlay.invalidMoveText);
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-    }
-
-
     @Override
     public void handle(MouseEvent event) {
+        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redCircles : HexMap.blueCircles;
+        ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueCircles : HexMap.redCircles;
+
+        /*Remove Invalid Move Text */
         if (ExtendedPlay.invalidMoveText != null && HexMap.root.getChildren().contains(ExtendedPlay.invalidMoveText)) {
             HexMap.root.getChildren().remove(ExtendedPlay.invalidMoveText);
             ExtendedPlay.invalidMoveText = null;
         }
 
-
-        boolean isNonCapturing = true;
-        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? redCircles : blueCircles;
-        ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? blueCircles : redCircles;
-        friendlyNeighbour.clear();
-        enemyNeighbour.clear();
-        tempStorer.clear();
         Point mousePoint = new Point(event.getX(), event.getY());
-
         /*PRE-CHECKS */
         if(!hexagon.contains(mousePoint)){
+            Possibilities.getBoardState();
             return;
         }
         if(HexMap.gameOver){
             System.out.println("Game is over, please start a new one to keep playing!");
+            Possibilities.getBoardState();
             return;
         }
 
-        if(!isValidClick()){
-            return;
-        }
-
-        /*If it doesn't have circle perform checks*/
-        /*NON CAPTURING */
-        for(Hexagon a : playerHexagons){
-            if(hexagon.isNeighbor(a)){
-                isNonCapturing = false;
-                friendlyNeighbour.add(a);
-            }
-        }
-
-        if(isNonCapturing){
+        if(Possibilities.state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 1){
             nonCapture();
-            return;
-        }
+        } else if (Possibilities.state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2){
+            ArrayList[] arrayOfArrayLists = new ArrayList[100];
+            Possibilities.isCapturing((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY(), 1, arrayOfArrayLists);
 
-        //Is not non-capturing so proceed.
-        /*Find the enemies that are touching you */
-        for(Hexagon a : enemyHexagons){
-            if(hexagon.isNeighbor(a)){
-                enemyNeighbour.add(a);
+            Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
+            root.getChildren().add(circle);
+            if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
+                HexMap.blueCircles.add(hexagon);
+            } else {
+                HexMap.redCircles.add(hexagon);
             }
-        }
+            capture(arrayOfArrayLists);
 
-        /*Find size of new group */
-        friendlyNeighbour.add(hexagon);
-        for(int i = 0; i < friendlyNeighbour.size(); i++){
-            Hexagon a = friendlyNeighbour.get(i);
-            for(Hexagon b : playerHexagons){
-                if(a.isNeighbor(b) && (!friendlyNeighbour.contains(b))){
-                    friendlyNeighbour.add(b);
-                }
-                for(Hexagon d : enemyHexagons){
-                    if(a.isNeighbor(b) && b.isNeighbor(d)){
-                        enemyNeighbour.add(d);
-                    }
-                }
-            }
-        }
-
-
-
-        //size of friendlyNeighbour is now size of new group
-
-        /*ENEMY SUBGROUPS */
-        int maxGroup = 0;
-        int numSubGroups = 0;
-        int size = 100;
-        ArrayList[] arrayOfArrayLists = new ArrayList[size];
-
-        for(Hexagon a : enemyNeighbour){
-            tempStorer.add(a);
-            for(int i = 0; i < tempStorer.size(); i++){
-                Hexagon c = tempStorer.get(i);
-                for(Hexagon b : enemyHexagons){
-                    if(c.isNeighbor(b) && (!tempStorer.contains(b))){
-                        tempStorer.add(b);
-                    }
-                }
-            }
-            maxGroup = Math.max(maxGroup, tempStorer.size());
-            arrayOfArrayLists[numSubGroups] = new ArrayList<>(tempStorer);
-            numSubGroups ++;
-            tempStorer.clear();
-        }
-
-        if(!checkMoveValid(maxGroup)){
-            return;
-        }
-
-        System.out.println("Capture Move Played: Max Group Size: " + maxGroup + "New Group Size: " + friendlyNeighbour.size());
-
-        /*If checks correct draw circle */
-        Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
-        root.getChildren().add(circle);
-        //adds new hexagon to appropriate array based on current player turn
-        if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            blueCircles.add(hexagon);
-        } else {
-            redCircles.add(hexagon);
-        }
-        capture(arrayOfArrayLists, numSubGroups);
-
-        //check for victory
-        if(enemyHexagons.isEmpty()){
-            ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns!", new Point(720, 310));
-            root.getChildren().add(ExtendedPlay.endGameText);
-            HexMap.gameOver = true;
+            //check for victory
+            if(enemyHexagons.isEmpty()){
+                ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns!", new Point(720, 310));
+                root.getChildren().add(ExtendedPlay.endGameText);
+                HexMap.gameOver = true;
 
             /*Call end game splash screen and set replay button to color of winner (For fun and to also demonstrate
             the certain graphical functions available to us as well as how they are called)
             */
-            String winnerColor = (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
-            ExtendedPlay.extendedPlay.endGameSplash(HexMap.currentPlayer, ExtendedPlay::reset);
-            ExtendedPlay.extendedPlay.button.setFill(LinearGradient.valueOf
-                    ("from 0px 0px to 10px 20px, " +
-                            "reflect, " + winnerColor + " 0.0%, 0x000000 100.0%")
-            );
-        }
-    }
-
-    public boolean isValidClick(){
-        /* Check if hexagon already has circle */
-        for (Node node : root.getChildren()) {
-            if (node instanceof Circle) {
-                Circle circle = (Circle) node;
-                if ((int) circle.getCenterX() == (int) hexagon.getCentre().getX() && (int) circle.getCenterY() == (int) hexagon.getCentre().getY()) {
-                    return false;
-                }
+                String winnerColor = (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
+                ExtendedPlay.extendedPlay.endGameSplash(HexMap.currentPlayer, ExtendedPlay::reset);
+                ExtendedPlay.extendedPlay.button.setFill(LinearGradient.valueOf
+                        ("from 0px 0px to 10px 20px, " +
+                                "reflect, " + winnerColor + " 0.0%, 0x000000 100.0%")
+                );
             }
+
         }
-        return true;
+        else {
+            ExtendedPlay.invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
+            HexMap.root.getChildren().add(ExtendedPlay.invalidMoveText);
+        }
+        Possibilities.getBoardState();
     }
 
     public void changePlayer(){
@@ -204,28 +97,29 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     }
 
     public void nonCapture(){
-        System.out.println("Non-capturing move performed");
         Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         //adds new hexagon to appropriate array based on current player turn
         if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            blueCircles.add(hexagon);
+            HexMap.blueCircles.add(hexagon);
         } else {
-            redCircles.add(hexagon);
+            HexMap.redCircles.add(hexagon);
         }
         changePlayer();
     }
 
-    public void capture(ArrayList[] a, int count){
+    public void capture(ArrayList[] a){
         Point centre = null;
-        for (int i = 0; i < count; i++) {
+        int i = 0;
+
+        while(a[i] != null){
             ArrayList<Hexagon> d = a[i];
             for (Hexagon b : d) {
                 if (b instanceof Hexagon) {
                     if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-                        redCircles.remove(b);
+                        HexMap.redCircles.remove(b);
                     } else {
-                        blueCircles.remove(b);
+                        HexMap.blueCircles.remove(b);
                     }
                     /*Con-current access exception can occur */
                     centre = b.getCentre();
@@ -241,6 +135,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
                     }
                 }
             }
+            i ++;
         }
     }
 

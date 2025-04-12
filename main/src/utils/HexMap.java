@@ -13,11 +13,9 @@ import java.util.ArrayList;
 import static utils.Utility.*;
 
 public class HexMap extends Application {
-    private static final int SIZE = 7; // Size of hexMap board (Adjustable board size (Possible extra additions later))
     private static final double CENTRE_X = 100;
     private static final double CENTRE_Y = 515.88; // Center coordinates of the first initial hexagon (bottom left, [0][0])
 
-    public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap, based on size of board.
 
     public static ArrayList<Hexagon> redCircles = new ArrayList<>();
     public static ArrayList<Hexagon> blueCircles = new ArrayList<>();
@@ -95,6 +93,7 @@ public class HexMap extends Application {
 
         //drawDebugGrid(root, BASE_WIDTH, BASE_HEIGHT, 50);
         root.getChildren().addFirst(background());
+        Possibilities.getBoardState();
         return root;
     }
 

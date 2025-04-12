@@ -16,7 +16,8 @@ public class Utility {
 
     /*utils.Hexagon sizing */
     public static final double LENGTH = 30;
-
+    public static final int SIZE = 7; // Size of hexMap board (Adjustable board size (Possible extra additions later))
+    public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap, based on size of board.
     /*Pane Sizing */
     public static final double BASE_WIDTH = 1280;
     public static final double BASE_HEIGHT = 720;
