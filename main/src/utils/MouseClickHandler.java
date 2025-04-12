@@ -7,6 +7,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+
 import java.util.ArrayList;
 import static utils.Utility.*;
 
@@ -33,11 +35,13 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         }
         else {
             if (enemyNeighbour.isEmpty()) {
-                System.out.println("Invalid move. Cant place by own stone");
+                ExtendedPlay.invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
+                HexMap.root.getChildren().add(ExtendedPlay.invalidMoveText);
                 return false;
             }
             else if (maxGroup >= friendlyNeighbour.size()) {
-                System.out.println("Invalid move! Group not big Enough");
+                ExtendedPlay.invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
+                HexMap.root.getChildren().add(ExtendedPlay.invalidMoveText);
                 return false;
             }
             else {
@@ -49,6 +53,12 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
+        if (ExtendedPlay.invalidMoveText != null && HexMap.root.getChildren().contains(ExtendedPlay.invalidMoveText)) {
+            HexMap.root.getChildren().remove(ExtendedPlay.invalidMoveText);
+            ExtendedPlay.invalidMoveText = null;
+        }
+
+
         boolean isNonCapturing = true;
         ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? redCircles : blueCircles;
         ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? blueCircles : redCircles;

@@ -33,6 +33,7 @@ public class ExtendedPlay {
     private Runnable resetCallback; // Reference to the reset function in utils.HexMap
 
     public static ExtendedPlay extendedPlay;
+    public static Text invalidMoveText;
     public static Text endGameText;
 
     public ExtendedPlay(Pane root) {
