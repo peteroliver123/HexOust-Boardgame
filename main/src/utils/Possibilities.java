@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Possibilities {
 
     public static void getBoardState(){
+        int maximum = 0;
         for(int i = 0; i < 13; i++){
             for(int j = 0; j < 13; j++){
                 state[i][j] = 0;
@@ -23,6 +24,12 @@ public class Possibilities {
                         } else if (isCapturing(i, j, null)){
                             state[i][j] = 2;
                         }
+                        maximum = Math.max(maximum, state[i][j]);
+                    }
+                    if(maximum == 0){
+                        noValidMoves = true;
+                    } else {
+                        noValidMoves = false;
                     }
                 } catch (IllegalArgumentException _){
 

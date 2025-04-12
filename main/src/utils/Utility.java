@@ -35,6 +35,9 @@ public class Utility {
     public static final Font DEFAULT_FONT = new Font("verdana", 30);
     public static final Color DEFAULT_TEXT_COLOR = Color.BLACK;
 
+    /*Game Management */
+    public static boolean noValidMoves = false;
+
     /**************
      UTILITY METHODS
      **************/

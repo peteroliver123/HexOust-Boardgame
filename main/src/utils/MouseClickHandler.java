@@ -23,6 +23,10 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
+        if(noValidMoves){
+            System.out.println("No moves availale for " + HexMap.currentPlayer);
+            changePlayer();
+        }
         ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueCircles : HexMap.redCircles;
 
         /*Remove Invalid Move Text */
