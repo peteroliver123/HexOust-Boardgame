@@ -29,7 +29,7 @@ public class ExtendedPlay {
     public Text replayButtonText, redScore, blueScore, turnCount;
     private int redWin = 0;
     private int blueWin = 0;
-    private int totalTurn = 0;
+    private int totalTurn = 1;
     private Runnable resetCallback; // Reference to the reset function in utils.HexMap
 
     public static ExtendedPlay extendedPlay;
@@ -39,7 +39,7 @@ public class ExtendedPlay {
         /*Display the current round and the number of wins for each player*/
         winCount = new TextFlow(
                 new Text("Round: "),
-                turnCount = new Text("0"),
+                turnCount = new Text("1"),
                 new Text("            "),
                 makeTextWithHex("Red ", "0xc9180c"),
                 redScore = new Text("0"),

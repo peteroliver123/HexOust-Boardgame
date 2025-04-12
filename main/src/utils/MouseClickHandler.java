@@ -153,8 +153,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
         //check for victory
         if(enemyHexagons.isEmpty()){
-            System.out.println(HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns");
-            ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.currentPlayer + " won!", new Point(820, 310));
+            ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns!", new Point(720, 310));
             root.getChildren().add(ExtendedPlay.endGameText);
             HexMap.gameOver = true;
 
