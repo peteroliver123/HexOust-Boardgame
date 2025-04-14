@@ -16,13 +16,12 @@ public class Utility {
      CONSTANTS
      ***************/
 
-    /*utils.Hexagon sizing */
-    public static final double LENGTH = 30;
-    public static final int SIZE = 7; // Size of hexMap board (Adjustable board size (Possible extra additions later))
-    public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap, based on size of board.
-    public static ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>();
-    public static ArrayList<Hexagon> enemyNeighbour = new ArrayList<>();
-    public static int [][] state = new int[2 * SIZE - 1][2 * SIZE - 1];//0 indicates invalid 1 indicates valid non capture 2 indicates valid capture
+    /*Hexagon Logic*/
+    public static final double LENGTH = 30;//Length of side of each individual hexagon
+    public static final int SIZE = 7; // Size of hexMap board
+    public static Hexagon[][] hexagons = new Hexagon[2 * SIZE - 1][2 * SIZE - 1]; // 2D array of all the hexagons on the hexMap.
+    public static int [][] state = new int[2 * SIZE - 1][2 * SIZE - 1];//2D array with state of play of all the hexagons on the hexMap
+    // ^^^ 0 indicates invalid 1 indicates valid non capture 2 indicates valid capture
 
     /*Pane Sizing */
     public static final double BASE_WIDTH = 1280;
@@ -94,6 +93,7 @@ public class Utility {
         return background;
     }
 
+    /*Draw the current player colored circle beside the Make a Move Text */
     public static void drawPlayerTurnCircle(){
         playerTurnCircle = drawCircle(new Point (900, 500));
         HexMap.root.getChildren().add(playerTurnCircle);

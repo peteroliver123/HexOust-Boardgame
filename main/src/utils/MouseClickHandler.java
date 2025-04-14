@@ -52,7 +52,6 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         } else if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2) {
             ArrayList[] arrayOfArrayLists = new ArrayList[100];
             Possibilities.isCapturing((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY(), arrayOfArrayLists);
-            addCircleToTheBoard();
             capture(arrayOfArrayLists);
 
             //check for victory
@@ -106,6 +105,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     }
 
     public void capture(ArrayList[] a){
+        addCircleToTheBoard();
         Point centre = null;
         int i = 0;
 

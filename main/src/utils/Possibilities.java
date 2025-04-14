@@ -1,3 +1,11 @@
+/*This class tells the program which hexagons are what type of moves. There are three
+types of moves invalid moves (which have different types treated the same), valid
+non-capturing, valid capturing. It has _ functions getBoardState which alters the global
+multidimensional state array which holds the hexagons states. 0 for invalid, 1 for non-capturing,
+2 for capturing. isNonCapturing returns true if for a given i, j in the hexagons array, the
+hexagon having a circle for the current player turn would be non-capturing. isCapturing does the same
+for capturing moves. */
+
 package utils;
 
 import javafx.scene.Node;
@@ -17,7 +25,7 @@ public class Possibilities {
                 state[i][j] = 0;
                 try{
                     isValidHexagon(i, j);
-                    if(isValidClick2(i, j)){
+                    if(isValidClick(i, j)){
                         if(isNonCapturing(i, j)){
                             state[i][j] = 1;
 
@@ -26,11 +34,7 @@ public class Possibilities {
                         }
                         maximum = Math.max(maximum, state[i][j]);
                     }
-                    if(maximum == 0){
-                        noValidMoves = true;
-                    } else {
-                        noValidMoves = false;
-                    }
+                    noValidMoves = maximum == 0;
                 } catch (IllegalArgumentException _){
 
                 }
@@ -68,11 +72,12 @@ public class Possibilities {
     }
 
     public static boolean isCapturing(int x, int y, ArrayList[] z){
+        ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>(); //arrayList of hexagons controlled by current player that touch current player or its neighbours.
+        ArrayList<Hexagon> enemyNeighbour = new ArrayList<>(); //arrayList of hexagons not controlled by current player that touch current player or its neighbours.
+
         ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redCircles : HexMap.blueCircles;
         ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueCircles : HexMap.redCircles;
-        ArrayList<Hexagon> tempStorer = new ArrayList<>();
-        friendlyNeighbour.clear();
-        enemyNeighbour.clear();
+        ArrayList<Hexagon> enemySubGroup = new ArrayList<>();
         Hexagon hex = hexagons[x][y];
 
         /*NON CAPTURING */
@@ -113,21 +118,21 @@ public class Possibilities {
         int numSubGroups = 0;
 
         for(Hexagon a : enemyNeighbour){
-            tempStorer.add(a);
-            for(int i = 0; i < tempStorer.size(); i++){
-                Hexagon c = tempStorer.get(i);
+            enemySubGroup.add(a);
+            for(int i = 0; i < enemySubGroup.size(); i++){
+                Hexagon c = enemySubGroup.get(i);
                 for(Hexagon b : enemyHexagons){
-                    if(c.isNeighbor(b) && (!tempStorer.contains(b))){
-                        tempStorer.add(b);
+                    if(c.isNeighbor(b) && (!enemySubGroup.contains(b))){
+                        enemySubGroup.add(b);
                     }
                 }
             }
-            maxGroup = Math.max(maxGroup, tempStorer.size());
+            maxGroup = Math.max(maxGroup, enemySubGroup.size());
             if(z != null){
-                z[numSubGroups] = new ArrayList<>(tempStorer);
+                z[numSubGroups] = new ArrayList<>(enemySubGroup);
                 numSubGroups ++;
             }
-            tempStorer.clear();
+            enemySubGroup.clear();
         }
 
         if(enemyNeighbour.isEmpty()){
@@ -138,12 +143,11 @@ public class Possibilities {
         }
     }
 
-    public static boolean isValidClick2(int i, int j){
+    public static boolean isValidClick(int i, int j){
         Hexagon hex = hexagons[i][j];
         /* Check if hexagon already has circle */
         for (Node node : HexMap.root.getChildren()) {
-            if (node instanceof Circle) {
-                Circle circle = (Circle) node;
+            if (node instanceof Circle circle) {
                 if ((int) circle.getCenterX() == (int) hex.getCentre().getX() && (int) circle.getCenterY() == (int) hex.getCentre().getY()) {
                     return false;
                 }
