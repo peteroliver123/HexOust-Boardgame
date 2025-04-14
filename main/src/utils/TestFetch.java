@@ -187,8 +187,9 @@ public class TestFetch extends ApplicationTest {
 
     public void simulateClick(int i, int j){
 
-        /*Negative Obviously Wrong*/
-        Possibilities.isValidHexagon(i, j);
+        /*Error Checking*/
+        Point a = new Point(i, j);
+        a.coordinateCheck();
 
         Hexagon hex = hexagons[i][j];
         MouseClickHandler clickHandler = new MouseClickHandler(root, hex);

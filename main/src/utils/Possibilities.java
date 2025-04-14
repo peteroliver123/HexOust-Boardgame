@@ -24,7 +24,8 @@ public class Possibilities {
             for(int j = 0; j < 13; j++){
                 state[i][j] = 0;
                 try{
-                    isValidHexagon(i, j);
+                    Point a = new Point(i, j);
+                    a.coordinateCheck();
                     if(isValidClick(i, j)){
                         if(isNonCapturing(i, j)){
                             state[i][j] = 1;
@@ -44,7 +45,8 @@ public class Possibilities {
         for(int i = 0; i < 13; i++){
             for(int j = 0; j < 13; j++){
                 try{
-                    isValidHexagon(i, j);
+                    Point a = new Point(i, j);
+                    a.coordinateCheck();
                     if(state[i][j] == 1 || state[i][j] == 2){
                         hexagons[i][j].setFill(Color.GREEN);
                     }
@@ -154,27 +156,5 @@ public class Possibilities {
             }
         }
         return true;
-    }
-
-    public static void isValidHexagon(int i, int j){
-        /*Negative Obviously Wrong*/
-        if(i < 0 || j < 0){
-            throw new IllegalArgumentException("Positions of Hexagons must be within the board!");
-        }
-        /*If Q is 0 - 6 goes up to Q + 6*/
-        if(i > 12){
-            throw new IllegalArgumentException("There are not more than 12 columns of hexagons");
-        }
-
-        if(i < 7){
-            if(j > i + 6){
-                throw new IllegalArgumentException("For first 7 columns of hexagons, where i is the column, there is no more than i + 6 rows");
-            }
-        }
-        else {
-            if(j > 18 - i){
-                throw new IllegalArgumentException("For columns 7 to 12, where i is the column, there is no more than 18 - i rows");
-            }
-        }
     }
 }
