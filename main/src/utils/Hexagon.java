@@ -13,8 +13,8 @@ import javafx.scene.shape.Polygon;
 
 public class Hexagon extends Polygon {
     /*Variables */
-    Point centre;
-    Point coordinatePosition;
+    private final Point centre;
+    private final Point coordinatePosition;
 
     /*Constructor */
     public Hexagon(Point centre, Point coordinatePosition) {
@@ -37,11 +37,6 @@ public class Hexagon extends Polygon {
     This function takes a mousePoint that the user has clicked and
     determines whether it is inside the current hexagon. Returns true
     if yes and false otherwise. It implements utils.Point-In-Polygon Algorithm.
-    Also makes sure that only allows placement if it is clear which
-    hexagon user is placing in, i.e. User clicks exactly at pixel
-    connecting multiple than don't place.
-    Input: utils.Point
-    Output: Boolean
      */
     public boolean contains(Point mousePoint) {
         Double[] points = this.getPoints().toArray(new Double[0]);
@@ -63,26 +58,24 @@ public class Hexagon extends Polygon {
 
     /*
     This function takes a hexagon and returns whether the given hexagon is
-    touching the current hexagon. Returns true if yes and false otherwise.
-    Input: utils.Hexagon
-    Output: Boolean
+    touching the current hexagon.
      */
     public boolean isNeighbor(Hexagon hex){
-        boolean toReturn = false;
+        boolean isNeighbor = false;
         int xDiff = (int)Math.abs(hex.getCentre().getX() - this.centre.getX());
         int yDiff = (int)Math.abs(hex.getCentre().getY() - this.centre.getY());
 
         /*The hex is directly above or below the current one*/
         if(xDiff == 0 && yDiff == 51){
-            toReturn = true;
+            isNeighbor = true;
         }
 
         /*The hex is to the side of the current one*/
         int height = (int)((Math.sqrt(0.75)) * 30);
         if(xDiff == 45 && yDiff == height){
-            toReturn = true;
+            isNeighbor = true;
         }
 
-        return toReturn;
+        return isNeighbor;
     }
 }

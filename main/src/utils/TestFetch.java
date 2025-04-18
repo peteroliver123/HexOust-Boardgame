@@ -33,7 +33,7 @@ public class TestFetch extends ApplicationTest {
     public void testMakeCircle(){
         ExtendedPlay.reset();
         simulateClick(1,1);
-        assertEquals(1,HexMap.redCircles.size());
+        assertEquals(1,HexMap.redHexagons.size());
     }
 
     /*This test makes sure the user is unable to place a circle on a hexagon that already contains one. */
@@ -42,8 +42,8 @@ public class TestFetch extends ApplicationTest {
         ExtendedPlay.reset();
         simulateClick(1, 1);
         simulateClick(1, 1);
-        assertEquals(1, HexMap.redCircles.size());
-        assertEquals(0, HexMap.blueCircles.size());
+        assertEquals(1, HexMap.redHexagons.size());
+        assertEquals(0, HexMap.blueHexagons.size());
     }
 
     /*This test makes sure user isn't allowed to place on an invalid tile. */
@@ -53,8 +53,8 @@ public class TestFetch extends ApplicationTest {
         simulateClick(1, 1);
         simulateClick(5,5);
         simulateClick(1,2);
-        assertEquals(1, HexMap.redCircles.size());
-        assertEquals(1, HexMap.blueCircles.size());
+        assertEquals(1, HexMap.redHexagons.size());
+        assertEquals(1, HexMap.blueHexagons.size());
     }
 
     /*This function makes sure capturing moves operate as intended */
@@ -66,8 +66,8 @@ public class TestFetch extends ApplicationTest {
         simulateClick(5, 4);//RED NC
         simulateClick(1, 2);//BLUE NC
         simulateClick(2,1);//RED C
-        assertEquals(1, HexMap.blueCircles.size());
-        assertEquals(3, HexMap.redCircles.size());
+        assertEquals(1, HexMap.blueHexagons.size());
+        assertEquals(3, HexMap.redHexagons.size());
     }
 
     /*This function makes sure that a capturing move doesn't always end the game */
@@ -185,7 +185,7 @@ public class TestFetch extends ApplicationTest {
         assertFalse(a.isNeighbor(c));
     }
 
-    public void simulateClick(int i, int j){
+    private void simulateClick(int i, int j){
 
         /*Error Checking*/
         Point a = new Point(i, j);

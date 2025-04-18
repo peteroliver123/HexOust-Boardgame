@@ -61,7 +61,7 @@ public class Possibilities {
     }
 
     public static boolean isNonCapturing(int i, int j){
-        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redCircles : HexMap.blueCircles;
+        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redHexagons : HexMap.blueHexagons;
         Hexagon hex = hexagons[i][j];
 
         for(Hexagon a : playerHexagons){
@@ -77,8 +77,8 @@ public class Possibilities {
         ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>(); //arrayList of hexagons controlled by current player that touch current player or its neighbours.
         ArrayList<Hexagon> enemyNeighbour = new ArrayList<>(); //arrayList of hexagons not controlled by current player that touch current player or its neighbours.
 
-        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redCircles : HexMap.blueCircles;
-        ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueCircles : HexMap.redCircles;
+        ArrayList<Hexagon> playerHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.redHexagons : HexMap.blueHexagons;
+        ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueHexagons : HexMap.redHexagons;
         ArrayList<Hexagon> enemySubGroup = new ArrayList<>();
         Hexagon hex = hexagons[x][y];
 

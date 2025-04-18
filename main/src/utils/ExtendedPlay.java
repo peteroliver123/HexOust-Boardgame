@@ -3,7 +3,6 @@ package utils;
 /*Imports*/
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
-import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -24,10 +23,10 @@ the end game.
  */
 
 public class ExtendedPlay {
-    public TextFlow winCount;
+    private TextFlow winCount;
     public Rectangle button;
-    public StackPane replayButton;
-    public Text replayButtonText, redScore, blueScore, turnCount;
+    private StackPane replayButton;
+    private Text replayButtonText, redScore, blueScore, turnCount;
     private int redWin = 0;
     private int blueWin = 0;
     private int totalTurn = 1;
@@ -53,30 +52,82 @@ public class ExtendedPlay {
         winCount.setLayoutY(50);
         winCount.setStyle("-fx-font-size: 40px; -fx-font-weight: bold");
 
-        /*Replay button made in a stack-pane such that the replay button text will be centered inside the button*/
-        replayButton = new StackPane();
-        replayButton.setLayoutX(900);
-        replayButton.setLayoutY(540);
-        replayButton.setPrefSize(210, 70);
-
-        button = new Rectangle(210, 70);
-        button.setArcWidth(20);
-        button.setArcHeight(20);
-        button.setStroke(Color.BLACK);
-        button.setVisible(false);
-
-        replayButtonText = Utility.makeText("Replay!", new Point (935, 565));
-        replayButtonText.setStyle("-fx-font-size: 42px; -fx-font-weight: bold");
-        replayButtonText.setFill(Color.valueOf("#c9a00c"));
-        replayButtonText.setStroke(Color.BLACK);
-        replayButtonText.setStrokeLineCap(StrokeLineCap.ROUND);
-        replayButtonText.setVisible(false);
+        setUpReplayButton();
 
         replayButton.getChildren().addAll(button, replayButtonText);
         root.getChildren().addAll(winCount, replayButton);
         replayButton.setOnMouseClicked(this::replayHandle);
 
-        /*Small animations for the replay button*/
+        setReplayButtonAnimations();
+
+        replayButtonText.setOnMouseClicked(this::replayHandle);
+    }
+
+    /*Display the splash screen for the end of a round*/
+    public void endGameSplash (HexMap.PlayerTurn winner, Runnable resetCallback) {
+        if (winner == HexMap.PlayerTurn.RED) redWin++;
+        else if (winner == HexMap.PlayerTurn.BLUE) blueWin++;
+        totalTurn++;
+        updateWinCount();
+
+        replayButton.setVisible(true);
+        button.setVisible(true);
+        replayButtonText.setVisible(true);
+        this.resetCallback = resetCallback;
+    }
+
+    /*Remove the end game splash screen upon a new round*/
+    public void clearEndGameSplash () {
+        replayButton.setVisible(false);
+        button.setVisible(false);
+        replayButtonText.setVisible(false);
+    }
+
+    /*Start new round upon replay button being clicked*/
+    private void replayHandle (MouseEvent event) {
+        if (resetCallback != null) {
+            clearEndGameSplash();
+            resetCallback.run();
+        }
+    }
+
+    private void updateWinCount () {
+        redScore.setText(String.valueOf(redWin));
+        blueScore.setText(String.valueOf(blueWin));
+        turnCount.setText(String.valueOf(totalTurn));
+    }
+
+    //resets game state
+    public static void reset(){
+        /*Removal of end game splash screen elements*/
+        if (endGameText != null && HexMap.root.getChildren().contains(endGameText)) {
+            HexMap.root.getChildren().remove(endGameText);
+            endGameText = null;
+        }
+
+        if (extendedPlay != null) {
+            extendedPlay.clearEndGameSplash();
+        }
+
+        /*Remove Circles */
+        for(Circle circle : HexMap.circles){
+           HexMap.root.getChildren().remove(circle);
+        }
+
+        /*Redraw player turn circle*/
+        HexMap.currentPlayer = HexMap.PlayerTurn.RED;
+        Utility.drawPlayerTurnCircle(HexMap.root);
+
+        /*Reset Variables */
+        HexMap.blueHexagons.clear();
+        HexMap.redHexagons.clear();
+        HexMap.gameOver = false;
+        HexMap.turnCount = 1;
+        Possibilities.getBoardState();
+    }
+
+
+    private void setReplayButtonAnimations(){
         replayButton.setOnMouseEntered(_ -> {
             ScaleTransition scale = new ScaleTransition(Duration.millis(200), replayButton);
             scale.setToX(1.1);
@@ -102,72 +153,26 @@ public class ExtendedPlay {
 
             replayButton.setTranslateX(0);
         });
-        replayButtonText.setOnMouseClicked(this::replayHandle);
     }
 
-    /*Display the splash screen for the end of a round*/
-    public void endGameSplash (HexMap.PlayerTurn winner, Runnable resetCallback) {
-        if (winner == HexMap.PlayerTurn.RED) redWin++;
-        else if (winner == HexMap.PlayerTurn.BLUE) blueWin++;
-        totalTurn++;
-        updateWinCount();
+    private void setUpReplayButton(){
+        /*Replay button made in a stack-pane such that the replay button text will be centered inside the button*/
+        replayButton = new StackPane();
+        replayButton.setLayoutX(900);
+        replayButton.setLayoutY(540);
+        replayButton.setPrefSize(210, 70);
 
-        replayButton.setVisible(true);
-        button.setVisible(true);
-        replayButtonText.setVisible(true);
-        this.resetCallback = resetCallback;
-    }
-
-    /*Remove the end game splash screen upon a new round*/
-    public void newGameSplash () {
-        replayButton.setVisible(false);
+        button = new Rectangle(210, 70);
+        button.setArcWidth(20);
+        button.setArcHeight(20);
+        button.setStroke(Color.BLACK);
         button.setVisible(false);
+
+        replayButtonText = Utility.makeText("Replay!", new Point (935, 565));
+        replayButtonText.setStyle("-fx-font-size: 42px; -fx-font-weight: bold");
+        replayButtonText.setFill(Color.valueOf("#c9a00c"));
+        replayButtonText.setStroke(Color.BLACK);
+        replayButtonText.setStrokeLineCap(StrokeLineCap.ROUND);
         replayButtonText.setVisible(false);
-    }
-
-    /*Start new round upon replay button being clicked*/
-    private void replayHandle (MouseEvent event) {
-        if (resetCallback != null) {
-            newGameSplash();
-            resetCallback.run();
-        }
-    }
-
-    private void updateWinCount () {
-        redScore.setText(String.valueOf(redWin));
-        blueScore.setText(String.valueOf(blueWin));
-        turnCount.setText(String.valueOf(totalTurn));
-    }
-
-    //resets game state
-    public static void reset(){
-        /*Removal of end game splash screen elements*/
-        if (endGameText != null && HexMap.root.getChildren().contains(endGameText)) {
-            HexMap.root.getChildren().remove(endGameText);
-            endGameText = null;
-        }
-
-        if (extendedPlay != null) {
-            extendedPlay.newGameSplash();
-        }
-
-        /*Remove Circles */
-        for(int i = 0; i < HexMap.root.getChildren().size(); i++){
-            if(HexMap.root.getChildren().get(i).getClass() == Circle.class){
-                HexMap.root.getChildren().remove(i);
-                i--;
-            }
-        }
-
-        /*Redraw player turn circle*/
-        HexMap.currentPlayer = HexMap.PlayerTurn.RED;
-        Utility.drawPlayerTurnCircle();
-
-        /*Reset Variables */
-        HexMap.blueCircles.clear();
-        HexMap.redCircles.clear();
-        HexMap.gameOver = false;
-        HexMap.turnCount = 1;
-        Possibilities.getBoardState();
     }
 }

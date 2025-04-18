@@ -33,7 +33,6 @@ public class Point {
 
     /*Error Checking Function for Co-ordinate implementation of Point class */
     public void coordinateCheck(){
-        /*Cannot have x > 12 */
         if(x > 12){
             throw new IllegalArgumentException("There are not more than 12 columns of hexagons!");
         }
