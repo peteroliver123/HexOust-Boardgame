@@ -8,8 +8,8 @@ Checking the given input variables but only in the case that x,y represent co-or
  */
 public class Point {
     /*Variables */
-    private final double x;
-    private final double y;
+    private double x;
+    private double y;
 
     /*Constructor */
     public Point(double x, double y){
@@ -29,6 +29,14 @@ public class Point {
 
     public double getY() {
         return this.y;
+    }
+
+    public void setX(double x){
+        this.x = x;
+    }
+
+    public void setY(double y){
+        this.y = y;
     }
 
     /*Error Checking Function for Co-ordinate implementation of Point class */

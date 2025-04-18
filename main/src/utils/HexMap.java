@@ -57,7 +57,7 @@ public class HexMap extends Application {
         boolean ascFlag = true; // Ascension flag. Turns false after generating the center column of hexagon.
 
         for (int q = 0; q < ((SIZE * 2) - 1); q++) { // Loop for all columns
-            makeColumn(column, q, x, tempY);
+            makeColumn(column, q, new Point(x, tempY));
             if (q >= SIZE-1) {
                 ascFlag = false;
             }
@@ -113,15 +113,15 @@ public class HexMap extends Application {
         }
     }
 
-    private Hexagon createHexagon(double centerX, double centerY, int q, int r, Pane root) {
-        Hexagon hex = new Hexagon(new Point(centerX, centerY), new Point(q, r)); // Create a new polygon.
+    private Hexagon createHexagon(Point center, int q, int r, Pane root) {
+        Hexagon hex = new Hexagon(new Point(center.getX(), center.getY()), new Point(q, r)); // Create a new polygon.
         hex.getPoints().addAll(// Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
-                centerX - LENGTH, centerY,
-                centerX - (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),
-                centerX + (LENGTH * 0.5), centerY + (Math.sqrt(0.75) * LENGTH),
-                centerX + LENGTH, centerY,
-                centerX + (LENGTH * 0.5), centerY - (Math.sqrt(0.75) * LENGTH),
-                centerX - (LENGTH * 0.5), centerY - (Math.sqrt(0.75) * LENGTH));
+                center.getX() - LENGTH, center.getY(),
+                center.getX() - (LENGTH * 0.5), center.getY() + (Math.sqrt(0.75) * LENGTH),
+                center.getX() + (LENGTH * 0.5), center.getY() + (Math.sqrt(0.75) * LENGTH),
+                center.getX() + LENGTH, center.getY(),
+                center.getX() + (LENGTH * 0.5), center.getY() - (Math.sqrt(0.75) * LENGTH),
+                center.getX() - (LENGTH * 0.5), center.getY() - (Math.sqrt(0.75) * LENGTH));
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
 
@@ -130,12 +130,12 @@ public class HexMap extends Application {
         return hex;
     }
 
-    private void makeColumn(int column, int q, double x, double y){
+    private void makeColumn(int column, int q, Point center){
         for (int i = 0; i < column; i++) {
-            Hexagon hex = createHexagon(x, y, q, i, root); // Create new hexagon using center point.
+            Hexagon hex = createHexagon(center, q, i, root); // Create new hexagon using center point.
             hexagons[q][i] = hex;
             root.getChildren().add(hex);
-            y -= ((Math.sqrt(0.75) * LENGTH) * 2); // Move down y coordinates by distance of 2 'h'
+            center.setY(center.getY() - ((Math.sqrt(0.75) * LENGTH) * 2)); // Move down y coordinates by distance of 2 'h'
         }
     }
 
