@@ -29,7 +29,7 @@ public class ExtendedPlay {
     private Text replayButtonText, redScore, blueScore, turnCount;
     private int redWin = 0;
     private int blueWin = 0;
-    private int totalTurn = 1;
+    private int totalTurn;
     private Runnable resetCallback; // Reference to the reset function in utils.HexMap
 
     public static ExtendedPlay extendedPlay;
@@ -37,6 +37,7 @@ public class ExtendedPlay {
     public static Text endGameText;
 
     public ExtendedPlay(Pane root) {
+        totalTurn = 1;
         /*Display the current round and the number of wins for each player*/
         winCount = new TextFlow(
                 new Text("Round: "),
@@ -174,5 +175,15 @@ public class ExtendedPlay {
         replayButtonText.setStroke(Color.BLACK);
         replayButtonText.setStrokeLineCap(StrokeLineCap.ROUND);
         replayButtonText.setVisible(false);
+    }
+
+
+    //testing utils
+    public int getTurnCount(){
+        return this.totalTurn;
+    }
+
+    public int getRedWin(){
+        return redWin;
     }
 }

@@ -23,10 +23,18 @@ public class TestFetch extends ApplicationTest {
 
     @Test
     public void testHexagonClass() {
+        ExtendedPlay.reset();
         Hexagon[][] hx = hexagons;
         assertNotNull(root);
         assertEquals(100, hx[0][0].getCentre().getX());
         assertEquals(515.88, hx[0][0].getCentre().getY());
+    }
+
+    @Test
+    public void testHexagonContains(){
+        ExtendedPlay.reset();
+        Hexagon[][] hx = hexagons;
+        assertTrue(hx[0][0].contains(hx[0][0].getCentre()));
     }
 
     @Test
@@ -106,6 +114,33 @@ public class TestFetch extends ApplicationTest {
         assertEquals(HexMap.PlayerTurn.RED, HexMap.currentPlayer);
         assertEquals(5,HexMap.turnCount);
     }
+
+    @Test
+    public void playRound2(){
+        hexMap.initialize();
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(1,3);//BLUE NC
+        simulateClick(1,2);//RED C
+        ExtendedPlay.reset();
+        assertEquals(2,ExtendedPlay.extendedPlay.getTurnCount());
+    }
+
+    @Test
+    public void countWins(){
+        hexMap.initialize();
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(1,3);//BLUE NC
+        simulateClick(1,2);//RED Wins
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(1,3);//BLUE NC
+        simulateClick(1,2);//RED Wins
+        assertEquals(2,ExtendedPlay.extendedPlay.getRedWin());
+    }
+
+
 
     /*Testing utils.Hexagon.java*/
     /*This function tests the utils.Hexagon class handles error when we hand it a negative value for the centre of the utils.Hexagon*/
