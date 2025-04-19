@@ -24,6 +24,10 @@ public class MoveHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
+        if (ExtendedPlay.getGameOverStatus()) {
+            return;
+        }
+
         /*Remove Invalid Move Text */
         if (invalidMoveText != null && HexMap.root.getChildren().contains(invalidMoveText)) {
             HexMap.root.getChildren().remove(invalidMoveText);

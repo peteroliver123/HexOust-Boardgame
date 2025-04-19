@@ -1,4 +1,6 @@
-package utils;
+package test;
+
+import utils.*;
 /*Imports */
 import static org.junit.jupiter.api.Assertions.*;
 import javafx.scene.input.MouseButton;
@@ -6,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.*;
 import org.testfx.framework.junit.ApplicationTest;
+
 import static utils.Utility.*;
 
 
@@ -150,13 +153,13 @@ public class TestFetch extends ApplicationTest {
         try {
             new Hexagon(new Point(-1, 1), new Point(1, 1));
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
 
         }
         try {
             new Hexagon(new Point(1, -1), new Point(1, 1));
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
 
         }
     }
@@ -170,13 +173,13 @@ public class TestFetch extends ApplicationTest {
         try {
             new Hexagon(new Point(1, 1), new Point(-1, 1));
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
 
         }
         try {
             new Hexagon(new Point(1, 1), new Point(1, -1));
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
 
         }
     }
@@ -190,19 +193,19 @@ public class TestFetch extends ApplicationTest {
         try {
             new Hexagon(new Point(1, 1), new Point(13, 1));
             fail("Allowed Invalid Q!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
 
         }
         try {
             new Hexagon(new Point(1, 1), new Point(1, 8));
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
 
         }
         try {
             new Hexagon(new Point(1, 1), new Point(8, 19));
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
 
         }
     }

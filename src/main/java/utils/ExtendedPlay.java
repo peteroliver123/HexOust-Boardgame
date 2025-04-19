@@ -58,7 +58,7 @@ public class ExtendedPlay {
                 makeTextWithHex("Red ", "0xc9180c"),
                 redScore = new Text("0"),
                 new Text(" | "),
-                Utility.makeTextWithHex("Blue ", "0x0c42c9"),
+                makeTextWithHex("Blue ", "0x0c42c9"),
                 blueScore = new Text("0")
         );
         winCount.setLayoutX(625);
@@ -138,7 +138,7 @@ public class ExtendedPlay {
         if(HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE){
             HexMap.changePlayer();
         }
-        Utility.drawPlayerTurnCircle(HexMap.root);
+        drawPlayerTurnCircle(HexMap.root);
 
         /*Reset Variables */
         HexMap.getRedHexagons().clear();
@@ -150,7 +150,7 @@ public class ExtendedPlay {
 
 
     private void setReplayButtonAnimations(){
-        replayButton.setOnMouseEntered(_ -> {
+        replayButton.setOnMouseEntered(e -> {
             ScaleTransition scale = new ScaleTransition(Duration.millis(200), replayButton);
             scale.setToX(1.1);
             scale.setToY(1.1);
@@ -167,7 +167,7 @@ public class ExtendedPlay {
             shake.play();
         });
 
-        replayButton.setOnMouseExited(_ -> {
+        replayButton.setOnMouseExited(e -> {
             ScaleTransition scale = new ScaleTransition(Duration.millis(150), replayButton);
             scale.setToX(1.0);
             scale.setToY(1.0);
@@ -190,7 +190,7 @@ public class ExtendedPlay {
         button.setStroke(Color.BLACK);
         button.setVisible(false);
 
-        replayButtonText = Utility.makeText("Replay!", new Point (935, 565));
+        replayButtonText = makeText("Replay!", new Point (935, 565));
         replayButtonText.setStyle("-fx-font-size: 42px; -fx-font-weight: bold");
         replayButtonText.setFill(Color.valueOf("#c9a00c"));
         replayButtonText.setStroke(Color.BLACK);

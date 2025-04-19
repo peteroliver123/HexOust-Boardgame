@@ -15,7 +15,7 @@ public class Point {
     public Point(double x, double y){
         /*Error Checking */
         if(x < 0 || y < 0){//Check if user input is off-screen
-            throw new IllegalArgumentException("utils.Point cannot be outside screen!");
+            throw new IllegalArgumentException("Point cannot be outside screen!");
         }
 
         this.x = x;

@@ -39,7 +39,7 @@ public class Possibilities {
                     /*Game Management */
                     noValidMoves = maximum == 0;
                     updateColor(currentHexCoordinates);
-                } catch (IllegalArgumentException _){
+                } catch (IllegalArgumentException e){
                 }
             }
         }
@@ -54,7 +54,7 @@ public class Possibilities {
         int j = (int) currentHexCoordinates.getY();
 
         if(state[i][j] == 1 || state[i][j] == 2){
-            hexagons[i][j].setFill(Color.GREEN);
+            hexagons[i][j].setFill(Color.web("#99c999"));
         }
         else {
             hexagons[i][j].setFill(Color.web("#DEE6E8"));
