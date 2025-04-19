@@ -41,7 +41,7 @@ public class TestFetch extends ApplicationTest {
     public void testMakeCircle(){
         ExtendedPlay.reset();
         simulateClick(1,1);
-        assertEquals(1,HexMap.redHexagons.size());
+        assertEquals(1,HexMap.getRedHexagons().size());
     }
 
     /*This test makes sure the user is unable to place a circle on a hexagon that already contains one. */
@@ -50,8 +50,8 @@ public class TestFetch extends ApplicationTest {
         ExtendedPlay.reset();
         simulateClick(1, 1);
         simulateClick(1, 1);
-        assertEquals(1, HexMap.redHexagons.size());
-        assertEquals(0, HexMap.blueHexagons.size());
+        assertEquals(1, HexMap.getRedHexagons().size());
+        assertEquals(0, HexMap.getBlueHexagons().size());
     }
 
     /*This test makes sure user isn't allowed to place on an invalid tile. */
@@ -61,8 +61,8 @@ public class TestFetch extends ApplicationTest {
         simulateClick(1, 1);
         simulateClick(5,5);
         simulateClick(1,2);
-        assertEquals(1, HexMap.redHexagons.size());
-        assertEquals(1, HexMap.blueHexagons.size());
+        assertEquals(1, HexMap.getRedHexagons().size());
+        assertEquals(1, HexMap.getBlueHexagons().size());
     }
 
     /*This function makes sure capturing moves operate as intended */
@@ -74,8 +74,8 @@ public class TestFetch extends ApplicationTest {
         simulateClick(5, 4);//RED NC
         simulateClick(1, 2);//BLUE NC
         simulateClick(2,1);//RED C
-        assertEquals(1, HexMap.blueHexagons.size());
-        assertEquals(3, HexMap.redHexagons.size());
+        assertEquals(1, HexMap.getBlueHexagons().size());
+        assertEquals(3, HexMap.getRedHexagons().size());
     }
 
     /*This function makes sure that a capturing move doesn't always end the game */
@@ -97,7 +97,7 @@ public class TestFetch extends ApplicationTest {
         simulateClick(1,3);//BLUE NC
         simulateClick(1,2);//RED C
         assertTrue(HexMap.gameOver);
-        assertEquals(HexMap.PlayerTurn.RED, HexMap.currentPlayer);
+        assertEquals(HexMap.PlayerTurn.RED, HexMap.getCurrentPlayer());
     }
 
     @Test
@@ -111,8 +111,8 @@ public class TestFetch extends ApplicationTest {
         simulateClick(3,2);//RED C RED WINS!
         assertTrue(HexMap.gameOver);
         /*Red Was Winner */
-        assertEquals(HexMap.PlayerTurn.RED, HexMap.currentPlayer);
-        assertEquals(5,HexMap.turnCount);
+        assertEquals(HexMap.PlayerTurn.RED, HexMap.getCurrentPlayer());
+        assertEquals(5,HexMap.getTurnCount());
     }
 
     @Test

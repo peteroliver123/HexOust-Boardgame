@@ -116,14 +116,16 @@ public class ExtendedPlay {
         }
 
         /*Redraw player turn circle*/
-        HexMap.currentPlayer = HexMap.PlayerTurn.RED;
+        if(HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE){
+            HexMap.changePlayer();
+        }
         Utility.drawPlayerTurnCircle(HexMap.root);
 
         /*Reset Variables */
-        HexMap.blueHexagons.clear();
-        HexMap.redHexagons.clear();
+        HexMap.getRedHexagons().clear();
+        HexMap.getBlueHexagons().clear();
         HexMap.gameOver = false;
-        HexMap.turnCount = 1;
+        HexMap.setTurnCount(1);
         Possibilities.getBoardState();
     }
 

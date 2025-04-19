@@ -20,14 +20,15 @@ import static utils.Utility.*;
 public class HexMap extends Application {
     private static final double CENTRE_X = 100;
     private static final double CENTRE_Y = 515.88; // Center coordinates of the first initial hexagon (bottom left, [0][0])
+    private static final ArrayList<Hexagon> redHexagons = new ArrayList<>();
+    private static final ArrayList<Hexagon> blueHexagons = new ArrayList<>();
+    private static PlayerTurn currentPlayer = PlayerTurn.RED;
+    private static int turnCount = 1; //starts at one because it only increments when player is changed
 
 
-    public static ArrayList<Hexagon> redHexagons = new ArrayList<>();
-    public static ArrayList<Hexagon> blueHexagons = new ArrayList<>();
     public static ArrayList<Circle> circles = new ArrayList<>();
-    public static PlayerTurn currentPlayer = PlayerTurn.RED;
     public static boolean gameOver = false;
-    public static int turnCount = 1; //starts at one because it only increments when player is changed
+
     public static Pane root;
 
     public enum PlayerTurn {
@@ -40,13 +41,17 @@ public class HexMap extends Application {
         }
     }
 
+    public static int getTurnCount(){return turnCount;}
+    public static void setTurnCount(int newCount){turnCount = newCount;}
+    public static PlayerTurn getCurrentPlayer(){return currentPlayer;}
     public static ArrayList<Hexagon> getBlueHexagons() {
         return blueHexagons;
     }
-
     public static ArrayList<Hexagon> getRedHexagons(){
         return redHexagons;
     }
+    public static ArrayList<Hexagon> getPlayerHexagons(){return (currentPlayer == PlayerTurn.RED) ? redHexagons : blueHexagons;}
+    public static ArrayList<Hexagon> getEnemyHexagons(){return (currentPlayer == PlayerTurn.RED) ? blueHexagons : redHexagons;}
 
     public Pane initialize() {
         root = new Pane(); // Initialize the field/map
@@ -150,6 +155,17 @@ public class HexMap extends Application {
         background.setStrokeLineCap(StrokeLineCap.ROUND);
         background.setStrokeType(StrokeType.INSIDE);
         return background;
+    }
+
+    public static void changePlayer() {
+        currentPlayer = currentPlayer.next();
+
+        if (currentPlayer == PlayerTurn.BLUE) {
+            playerTurnCircle.setFill(Color.BLUE);
+        } else {
+            playerTurnCircle.setFill(Color.RED);
+        }
+        turnCount++;
     }
 
 

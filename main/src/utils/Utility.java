@@ -50,7 +50,7 @@ public class Utility {
         circle.setCenterX(position.getX());
         circle.setCenterY(position.getY());
         circle.setRadius(LENGTH / 1.5);
-        if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
+        if (HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE) {
             circle.setFill(Color.BLUE); // Fill color
         } else {
             circle.setFill(Color.RED); // Fill color

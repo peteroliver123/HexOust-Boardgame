@@ -23,8 +23,8 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent event) {
         if(noValidMoves){
-            System.out.println("No moves availale for " + HexMap.currentPlayer);
-            changePlayer();
+            System.out.println("No moves availale for " + HexMap.getCurrentPlayer());
+            HexMap.changePlayer();
         }
 
         /*Remove Invalid Move Text */
@@ -42,7 +42,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             nonCapture();
         } else if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2) {
             ArrayList[] arrayOfArrayLists = new ArrayList[100];
-            Possibilities.isCapturing((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY(), arrayOfArrayLists);
+            Possibilities.isCapturing(new Point ((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY()), arrayOfArrayLists);
             capture(arrayOfArrayLists);
             checkWin();
 
@@ -53,31 +53,20 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         Possibilities.getBoardState();
     }
 
-    public void changePlayer() {
-        HexMap.currentPlayer = HexMap.currentPlayer.next();
-
-        if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            playerTurnCircle.setFill(Color.BLUE);
-        } else {
-            playerTurnCircle.setFill(Color.RED);
-        }
-        HexMap.turnCount++;
-    }
-
     public void addCircleToBoard() {
         Circle circle = drawCircle(new Point(hexagon.getCentre().getX(), hexagon.getCentre().getY()));
         root.getChildren().add(circle);
         HexMap.circles.add(circle);
-        if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            HexMap.blueHexagons.add(hexagon);
+        if (HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE) {
+            HexMap.getBlueHexagons().add(hexagon);
         } else {
-            HexMap.redHexagons.add(hexagon);
+            HexMap.getRedHexagons().add(hexagon);
         }
     }
 
     public void nonCapture(){
         addCircleToBoard();
-        changePlayer();
+        HexMap.changePlayer();
     }
 
     public void capture(ArrayList[] a){
@@ -99,7 +88,6 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         }
     }
 
-
     private void addCenters(ArrayList<Point> centersArray, ArrayList<Hexagon> hexes){
         for(Hexagon hex : hexes){
             removeHexFromMap(hex);
@@ -108,10 +96,10 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     }
 
     private void removeHexFromMap(Hexagon hex){
-        if (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) {
-            HexMap.redHexagons.remove(hex);
+        if (HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE) {
+            HexMap.getRedHexagons().remove(hex);
         } else {
-            HexMap.blueHexagons.remove(hex);
+            HexMap.getBlueHexagons().remove(hex);
         }
     }
 
@@ -130,17 +118,17 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     }
 
     private void checkWin(){
-        ArrayList<Hexagon> enemyHexagons = (HexMap.currentPlayer == HexMap.PlayerTurn.RED) ? HexMap.blueHexagons : HexMap.redHexagons;
+        ArrayList<Hexagon> enemyHexagons = HexMap.getEnemyHexagons();
         if (enemyHexagons.isEmpty()) {
-            ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.currentPlayer + " won in " + HexMap.turnCount + " turns!", new Point(720, 310));
+            ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.getCurrentPlayer() + " won in " + HexMap.getTurnCount() + " turns!", new Point(720, 310));
             root.getChildren().add(ExtendedPlay.endGameText);
             HexMap.gameOver = true;
 
             /*Call end game splash screen and set replay button to color of winner (For fun and to also demonstrate
             the certain graphical functions available to us as well as how they are called)
             */
-            String winnerColor = (HexMap.currentPlayer == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
-            ExtendedPlay.extendedPlay.endGameSplash(HexMap.currentPlayer, ExtendedPlay::reset);
+            String winnerColor = (HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
+            ExtendedPlay.extendedPlay.endGameSplash(HexMap.getCurrentPlayer(), ExtendedPlay::reset);
             ExtendedPlay.extendedPlay.button.setFill(LinearGradient.valueOf
                     ("from 0px 0px to 10px 20px, " +
                             "reflect, " + winnerColor + " 0.0%, 0x000000 100.0%")
