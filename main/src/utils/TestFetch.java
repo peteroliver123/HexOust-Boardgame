@@ -227,7 +227,7 @@ public class TestFetch extends ApplicationTest {
         a.coordinateCheck();
 
         Hexagon hex = hexagons[i][j];
-        MouseClickHandler clickHandler = new MouseClickHandler(root, hex);
+        MoveHandler clickHandler = new MoveHandler(root, hex);
         MouseEvent click = new MouseEvent(MouseEvent.MOUSE_PRESSED,
                 hex.getCentre().getX(), hex.getCentre().getY(), 0, 0, MouseButton.PRIMARY, 1,
                 false, false, false, false, true,

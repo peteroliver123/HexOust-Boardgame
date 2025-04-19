@@ -17,11 +17,10 @@ import static utils.Utility.*;
 import java.util.ArrayList;
 
 public class Possibilities {
-    /*Game Management */
-    private static boolean noValidMoves = false;
 
     public static void getBoardState(){
         int maximum = 0;
+        boolean noValidMoves = false;
 
         for(int i = 0; i < 2 * SIZE - 1; i++){
             for(int j = 0; j < 2 * SIZE - 1; j++){
@@ -37,17 +36,17 @@ public class Possibilities {
                         }
                         maximum = Math.max(maximum, state[i][j]);
                     }
+                    /*Game Management */
                     noValidMoves = maximum == 0;
                     updateColor(currentHexCoordinates);
                 } catch (IllegalArgumentException _){
                 }
             }
         }
-
-    }
-
-    public static boolean getNoValidMoves(){
-        return noValidMoves;
+        if(noValidMoves){
+            HexMap.changePlayer();
+            getBoardState();
+        }
     }
 
     public static void updateColor(Point currentHexCoordinates){
@@ -76,7 +75,7 @@ public class Possibilities {
         return true;
     }
 
-    public static boolean isCapturing(Point hexCoordinates, ArrayList[] enemySubGroupsHolder){
+    public static boolean isCapturing(Point hexCoordinates, ArrayList<Hexagon>[] enemySubGroupsHolder){
         ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>(); //arrayList of hexagons controlled by current player that touch current player or its neighbours.
         ArrayList<Hexagon> enemyNeighbour = new ArrayList<>(); //arrayList of hexagons not controlled by current player that touch current player or its neighbours.
 
@@ -131,8 +130,7 @@ public class Possibilities {
         }
     }
 
-
-    public static int enemySubGroupCalculator(ArrayList[] enemySubGroupsHolder, ArrayList<Hexagon> enemyNeighbour){
+    public static int enemySubGroupCalculator(ArrayList<Hexagon>[] enemySubGroupsHolder, ArrayList<Hexagon> enemyNeighbour){
         ArrayList<Hexagon> enemyHexagons = HexMap.getEnemyHexagons();
         ArrayList<Hexagon> enemySubGroup = new ArrayList<>();
 

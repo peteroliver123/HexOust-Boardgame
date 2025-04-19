@@ -1,55 +1,57 @@
+/* This class is to do with making moves and capturing */
+
 package utils;
 /*Imports */
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import static utils.Utility.*;
 
-public class MouseClickHandler implements EventHandler<MouseEvent> {
+public class MoveHandler implements EventHandler<MouseEvent> {
     Pane root;
     Hexagon hexagon;
+    public static Text invalidMoveText;
 
-    public MouseClickHandler(Pane root, Hexagon hexagon) {
+    public MoveHandler(Pane root, Hexagon hexagon) {
         this.root = root;
         this.hexagon = hexagon;
     }
 
     @Override
     public void handle(MouseEvent event) {
-        if(Possibilities.getNoValidMoves()){
-            System.out.println("No moves availale for " + HexMap.getCurrentPlayer());
-            HexMap.changePlayer();
-        }
-
         /*Remove Invalid Move Text */
-        if (ExtendedPlay.invalidMoveText != null && HexMap.root.getChildren().contains(ExtendedPlay.invalidMoveText)) {
-            HexMap.root.getChildren().remove(ExtendedPlay.invalidMoveText);
-            ExtendedPlay.invalidMoveText = null;
+        if (invalidMoveText != null && HexMap.root.getChildren().contains(invalidMoveText)) {
+            HexMap.root.getChildren().remove(invalidMoveText);
+            invalidMoveText = null;
         }
 
         Point mousePoint = new Point(event.getX(), event.getY());
         if(invalidClick(mousePoint)){
-            return;
-        }
-
-        if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 1) {
-            nonCapture();
-        } else if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2) {
-            ArrayList[] arrayOfArrayLists = new ArrayList[100];
-            Possibilities.isCapturing(new Point ((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY()), arrayOfArrayLists);
-            capture(arrayOfArrayLists);
-            checkWin();
-
+            drawInvalidMoveText();
         } else {
-            ExtendedPlay.invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
-            HexMap.root.getChildren().add(ExtendedPlay.invalidMoveText);
+            if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 1) {
+                nonCapture();
+            } else if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2) {
+                @SuppressWarnings("unchecked")
+                ArrayList<Hexagon>[] enemySubGroupsHolder = (ArrayList<Hexagon>[]) new ArrayList[100];
+                Possibilities.isCapturing(new Point ((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY()), enemySubGroupsHolder);
+                capture(enemySubGroupsHolder);
+                checkWin();
+            } else {
+                drawInvalidMoveText();
+            }
         }
         Possibilities.getBoardState();
+    }
+
+    public void drawInvalidMoveText(){
+        invalidMoveText = makeText("Invalid Move!", new Point(720, 310));
+        HexMap.root.getChildren().add(invalidMoveText);
     }
 
     public void addCircleToBoard() {
@@ -68,7 +70,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         HexMap.changePlayer();
     }
 
-    public void capture(ArrayList[] enemySubGroupsHolder){
+    public void capture(ArrayList<Hexagon>[] enemySubGroupsHolder){
         addCircleToBoard();
         int i = 0;
         ArrayList<Point> capturedCenters = new ArrayList<>();
@@ -136,3 +138,4 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     }
 
 }
+

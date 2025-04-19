@@ -25,9 +25,7 @@ public class HexMap extends Application {
     private static PlayerTurn currentPlayer = PlayerTurn.RED;
     private static int turnCount = 1; //starts at one because it only increments when player is changed
 
-
     public static ArrayList<Circle> circles = new ArrayList<>();
-
     public static Pane root;
 
     public enum PlayerTurn {
@@ -130,7 +128,7 @@ public class HexMap extends Application {
         hex.setFill(Color.web("#DEE6E8"));
 
         circles.add(drawCircle(new Point(hex.getCentre().getX(), hex.getCentre().getY())));
-        hex.setOnMouseClicked(new MouseClickHandler(root, hex));
+        hex.setOnMouseClicked(new MoveHandler(root, hex));
         return hex;
     }
 
@@ -166,7 +164,6 @@ public class HexMap extends Application {
         }
         turnCount++;
     }
-
 
     /*Application built with utils.HexMap as starter */
     public static void main(String[] args) {
