@@ -11,6 +11,8 @@ takes a hexagon and checks whether the current hexagon borders the given hexagon
 /*Imports */
 import javafx.scene.shape.Polygon;
 
+import static utils.Utility.hexagons;
+
 public class Hexagon extends Polygon {
     /*Variables */
     private final Point centre;
@@ -31,6 +33,11 @@ public class Hexagon extends Polygon {
 
     public Point getCoordinatePosition(){
         return this.coordinatePosition;
+    }
+
+    /*Helper Method that returns the hexagon matching a given hexagon co-ordinate position */
+    public static Hexagon getCurrentHexagon(Point currentHexagonCoordinates){
+        return hexagons[(int) currentHexagonCoordinates.getX()][(int) currentHexagonCoordinates.getY()];
     }
 
     /*

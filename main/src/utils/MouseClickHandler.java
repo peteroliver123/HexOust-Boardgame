@@ -14,7 +14,6 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
     Pane root;
     Hexagon hexagon;
 
-
     public MouseClickHandler(Pane root, Hexagon hexagon) {
         this.root = root;
         this.hexagon = hexagon;
@@ -22,7 +21,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
-        if(noValidMoves){
+        if(Possibilities.getNoValidMoves()){
             System.out.println("No moves availale for " + HexMap.getCurrentPlayer());
             HexMap.changePlayer();
         }
@@ -69,13 +68,13 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         HexMap.changePlayer();
     }
 
-    public void capture(ArrayList[] a){
+    public void capture(ArrayList[] enemySubGroupsHolder){
         addCircleToBoard();
         int i = 0;
         ArrayList<Point> capturedCenters = new ArrayList<>();
 
-        while(a[i] != null){
-            ArrayList<Hexagon> d = a[i];
+        while(enemySubGroupsHolder[i] != null){
+            ArrayList<Hexagon> d = enemySubGroupsHolder[i];
             addCenters(capturedCenters, d);
             for (Point centre : capturedCenters) {
                 for(Circle circle : HexMap.circles){
@@ -109,7 +108,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
             Possibilities.getBoardState();
             return true;
         }
-        if (HexMap.gameOver) {
+        if (ExtendedPlay.getGameOverStatus()) {
             System.out.println("Game is over, please start a new one to keep playing!");
             Possibilities.getBoardState();
             return true;
@@ -122,7 +121,7 @@ public class MouseClickHandler implements EventHandler<MouseEvent> {
         if (enemyHexagons.isEmpty()) {
             ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.getCurrentPlayer() + " won in " + HexMap.getTurnCount() + " turns!", new Point(720, 310));
             root.getChildren().add(ExtendedPlay.endGameText);
-            HexMap.gameOver = true;
+            ExtendedPlay.setGameOver(true);
 
             /*Call end game splash screen and set replay button to color of winner (For fun and to also demonstrate
             the certain graphical functions available to us as well as how they are called)

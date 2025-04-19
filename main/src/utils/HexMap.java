@@ -27,7 +27,6 @@ public class HexMap extends Application {
 
 
     public static ArrayList<Circle> circles = new ArrayList<>();
-    public static boolean gameOver = false;
 
     public static Pane root;
 

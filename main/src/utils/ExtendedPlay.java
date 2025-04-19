@@ -23,8 +23,9 @@ the end game.
  */
 
 public class ExtendedPlay {
-    private TextFlow winCount;
     public Rectangle button;
+
+    private TextFlow winCount;
     private StackPane replayButton;
     private Text replayButtonText, redScore, blueScore, turnCount;
     private int redWin = 0;
@@ -35,6 +36,16 @@ public class ExtendedPlay {
     public static ExtendedPlay extendedPlay;
     public static Text invalidMoveText;
     public static Text endGameText;
+
+    private static boolean gameOver = false;
+
+    public static boolean getGameOverStatus(){
+        return gameOver;
+    }
+
+    public static void setGameOver(boolean newStatus){
+        gameOver = newStatus;
+    }
 
     public ExtendedPlay(Pane root) {
         totalTurn = 1;
@@ -98,7 +109,6 @@ public class ExtendedPlay {
         turnCount.setText(String.valueOf(totalTurn));
     }
 
-    //resets game state
     public static void reset(){
         /*Removal of end game splash screen elements*/
         if (endGameText != null && HexMap.root.getChildren().contains(endGameText)) {
@@ -124,7 +134,7 @@ public class ExtendedPlay {
         /*Reset Variables */
         HexMap.getRedHexagons().clear();
         HexMap.getBlueHexagons().clear();
-        HexMap.gameOver = false;
+        gameOver = false;
         HexMap.setTurnCount(1);
         Possibilities.getBoardState();
     }

@@ -17,11 +17,14 @@ import static utils.Utility.*;
 import java.util.ArrayList;
 
 public class Possibilities {
+    /*Game Management */
+    private static boolean noValidMoves = false;
 
     public static void getBoardState(){
         int maximum = 0;
-        for(int i = 0; i < 13; i++){
-            for(int j = 0; j < 13; j++){
+
+        for(int i = 0; i < 2 * SIZE - 1; i++){
+            for(int j = 0; j < 2 * SIZE - 1; j++){
                 try{
                     Point currentHexCoordinates = new Point(i, j);
                     currentHexCoordinates.coordinateCheck();
@@ -29,29 +32,40 @@ public class Possibilities {
                     if(isValidClick(currentHexCoordinates)){
                         if(isNonCapturing(currentHexCoordinates)){
                             state[i][j] = 1;
-
                         } else if (isCapturing(currentHexCoordinates, null)){
                             state[i][j] = 2;
                         }
                         maximum = Math.max(maximum, state[i][j]);
                     }
                     noValidMoves = maximum == 0;
-                    if(state[i][j] == 1 || state[i][j] == 2){
-                        hexagons[i][j].setFill(Color.GREEN);
-                    }
-                    else {
-                        hexagons[i][j].setFill(Color.web("#DEE6E8"));
-                    }
+                    updateColor(currentHexCoordinates);
                 } catch (IllegalArgumentException _){
-
                 }
             }
         }
+
+    }
+
+    public static boolean getNoValidMoves(){
+        return noValidMoves;
+    }
+
+    public static void updateColor(Point currentHexCoordinates){
+        int i = (int) currentHexCoordinates.getX();
+        int j = (int) currentHexCoordinates.getY();
+
+        if(state[i][j] == 1 || state[i][j] == 2){
+            hexagons[i][j].setFill(Color.GREEN);
+        }
+        else {
+            hexagons[i][j].setFill(Color.web("#DEE6E8"));
+        }
+
     }
 
     public static boolean isNonCapturing(Point hexCoordinates){
         ArrayList<Hexagon> playerHexagons = HexMap.getPlayerHexagons();
-        Hexagon currentHex = hexagons[(int) hexCoordinates.getX()][(int) hexCoordinates.getY()];
+        Hexagon currentHex = Hexagon.getCurrentHexagon(hexCoordinates);
 
         for(Hexagon friendlyHex : playerHexagons){
             if(currentHex.isNeighbor(friendlyHex)){
@@ -66,7 +80,7 @@ public class Possibilities {
         ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>(); //arrayList of hexagons controlled by current player that touch current player or its neighbours.
         ArrayList<Hexagon> enemyNeighbour = new ArrayList<>(); //arrayList of hexagons not controlled by current player that touch current player or its neighbours.
 
-        Hexagon currentHex = hexagons[(int) hexCoordinates.getX()][(int) hexCoordinates.getY()];
+        Hexagon currentHex = Hexagon.getCurrentHexagon(hexCoordinates);
 
         updateNeighbours(currentHex, friendlyNeighbour, enemyNeighbour);
 
@@ -79,20 +93,24 @@ public class Possibilities {
             int maxGroup = enemySubGroupCalculator(enemySubGroupsHolder, enemyNeighbour);
             return maxGroup < friendlyNeighbour.size();
         }
+
     }
 
     public static void findNewGroupSize(ArrayList<Hexagon> friendlyNeighbour, ArrayList<Hexagon> enemyNeighbour){
         ArrayList<Hexagon> playerHexagons = HexMap.getPlayerHexagons();
         ArrayList<Hexagon> enemyHexagons = HexMap.getEnemyHexagons();
+
         for(int i = 0; i < friendlyNeighbour.size(); i++){
-            Hexagon a = friendlyNeighbour.get(i);
-            for(Hexagon b : playerHexagons){
-                if(a.isNeighbor(b) && (!friendlyNeighbour.contains(b))){
-                    friendlyNeighbour.add(b);
-                }
-                for(Hexagon d : enemyHexagons){
-                    if(a.isNeighbor(b) && b.isNeighbor(d)){
-                        enemyNeighbour.add(d);
+            Hexagon currentFriendlyHex = friendlyNeighbour.get(i);
+            for(Hexagon potentialTouchingFriend : playerHexagons){
+                if(currentFriendlyHex.isNeighbor(potentialTouchingFriend)){
+                    if(!friendlyNeighbour.contains(potentialTouchingFriend)){
+                        friendlyNeighbour.add(potentialTouchingFriend);
+                    }
+                    for(Hexagon potentialTouchingEnemy : enemyHexagons){
+                        if(potentialTouchingFriend.isNeighbor(potentialTouchingEnemy)){
+                            enemyNeighbour.add(potentialTouchingEnemy);
+                        }
                     }
                 }
             }
@@ -143,11 +161,11 @@ public class Possibilities {
 
 
     public static boolean isValidClick(Point hexCoordinates){
-        Hexagon hex = hexagons[(int) hexCoordinates.getX()][(int) hexCoordinates.getY()];
+        Hexagon currentHex = Hexagon.getCurrentHexagon(hexCoordinates);
         /* Check if hexagon already has circle */
         for (Node node : HexMap.root.getChildren()) {
             if (node instanceof Circle circle) {
-                if ((int) circle.getCenterX() == (int) hex.getCentre().getX() && (int) circle.getCenterY() == (int) hex.getCentre().getY()) {
+                if ((int) circle.getCenterX() == (int) currentHex.getCentre().getX() && (int) circle.getCenterY() == (int) currentHex.getCentre().getY()) {
                     return false;
                 }
             }

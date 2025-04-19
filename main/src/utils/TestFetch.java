@@ -87,7 +87,7 @@ public class TestFetch extends ApplicationTest {
         simulateClick(5, 4);//RED NC
         simulateClick(1, 2);//BLUE NC
         simulateClick(2,1);//RED C
-        assertFalse(HexMap.gameOver);
+        assertFalse(ExtendedPlay.getGameOverStatus());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class TestFetch extends ApplicationTest {
         simulateClick(1,1);//RED NC
         simulateClick(1,3);//BLUE NC
         simulateClick(1,2);//RED C
-        assertTrue(HexMap.gameOver);
+        assertTrue(ExtendedPlay.getGameOverStatus());
         assertEquals(HexMap.PlayerTurn.RED, HexMap.getCurrentPlayer());
     }
 
@@ -109,7 +109,7 @@ public class TestFetch extends ApplicationTest {
         simulateClick(5,3);//BLUE NC
         simulateClick(4,2);//RED C
         simulateClick(3,2);//RED C RED WINS!
-        assertTrue(HexMap.gameOver);
+        assertTrue(ExtendedPlay.getGameOverStatus());
         /*Red Was Winner */
         assertEquals(HexMap.PlayerTurn.RED, HexMap.getCurrentPlayer());
         assertEquals(5,HexMap.getTurnCount());
