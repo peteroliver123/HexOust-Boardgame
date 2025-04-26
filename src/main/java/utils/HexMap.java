@@ -16,7 +16,9 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import static utils.Utility.*;
 
-//board class, controls the state of the actual board and the pieces on it.
+/**
+ * Board class, initializes and stores the state of the current game instance, including the graphical elements.
+ */
 public class HexMap extends Application {
     private static final double CENTRE_X = 100;
     private static final double CENTRE_Y = 515.88; // Center coordinates of the first initial hexagon (bottom left, [0][0])
@@ -50,6 +52,10 @@ public class HexMap extends Application {
     public static ArrayList<Hexagon> getPlayerHexagons(){return (currentPlayer == PlayerTurn.RED) ? redHexagons : blueHexagons;}
     public static ArrayList<Hexagon> getEnemyHexagons(){return (currentPlayer == PlayerTurn.RED) ? blueHexagons : redHexagons;}
 
+    /**
+     * Initializes the board, drawing the blank hexagons in the requisite pattern.
+     * @return Pane that has become the root of the entire scene.
+     */
     public Pane initialize() {
         root = new Pane(); // Initialize the field/map
         double x = CENTRE_X;
@@ -87,6 +93,10 @@ public class HexMap extends Application {
         return root;
     }
 
+    /**
+     * overrides start method for a JavaFX application, starts the game while setting some gui elements
+     * @param primaryStage the stage that the game runs from
+     */
     @Override
     public void start(Stage primaryStage) {
         Parent root = initialize();
@@ -103,6 +113,9 @@ public class HexMap extends Application {
         primaryStage.setMinHeight(primaryStage.getHeight());
     }
 
+    /**
+     * Mostly a testing utility, allows user to reset board state with 'r' key and to quit the application with 'q'.
+     */
     private static class keyPressHandler implements EventHandler<KeyEvent>{
         @Override
         public void handle(KeyEvent keyEvent){
@@ -115,6 +128,14 @@ public class HexMap extends Application {
         }
     }
 
+    /**
+     * Creates a single Hexagon object with specified center point.
+     * @param center center point
+     * @param q q coordinate
+     * @param r r coordinate
+     * @param root root pane for the Hexagon to be attached to, used for adding an event listener to the new Hexagon
+     * @return the created Hexagon
+     */
     private Hexagon createHexagon(Point center, int q, int r, Pane root) {
         Hexagon hex = new Hexagon(new Point(center.getX(), center.getY()), new Point(q, r)); // Create a new polygon.
         hex.getPoints().addAll(// Add coordinates of vertices (in Double form), where vertices are ordered circumferentially.
@@ -132,6 +153,12 @@ public class HexMap extends Application {
         return hex;
     }
 
+    /**
+     * makes column of hexagons
+     * @param column column num
+     * @param q q coordinate for hexagons being created
+     * @param center center point of the column
+     */
     private void makeColumn(int column, int q, Point center){
         for (int i = 0; i < column; i++) {
             Hexagon hex = createHexagon(center, q, i, root); // Create new hexagon using center point.

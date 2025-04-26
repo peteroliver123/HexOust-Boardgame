@@ -12,6 +12,9 @@ import javafx.scene.text.Text;
 import java.util.ArrayList;
 import static utils.Utility.*;
 
+/**
+ * High level control of user click handling. Calls other helper classes in order to resolve user move.
+ */
 public class MoveHandler implements EventHandler<MouseEvent> {
     Pane root;
     Hexagon hexagon;
@@ -22,6 +25,10 @@ public class MoveHandler implements EventHandler<MouseEvent> {
         this.hexagon = hexagon;
     }
 
+    /**
+     * Main handle method, calls auxilary methods such as win-checking, or capture/non-capture move results.
+     * @param event contains information about the MouseEvent that triggered the handle() method
+     */
     @Override
     public void handle(MouseEvent event) {
         if (ExtendedPlay.getGameOverStatus()) {
@@ -74,6 +81,11 @@ public class MoveHandler implements EventHandler<MouseEvent> {
         HexMap.changePlayer();
     }
 
+    /**
+     * resolves a capture move. Does not determine if the move was originally a capture, just resolves the result.
+     * Places down the stone being played and removes the captured stones.
+     * @param enemySubGroupsHolder holds all distinct, non-connected groups of enemy stones
+     */
     public void capture(ArrayList<Hexagon>[] enemySubGroupsHolder){
         addCircleToBoard();
         int i = 0;
@@ -128,17 +140,20 @@ public class MoveHandler implements EventHandler<MouseEvent> {
             ExtendedPlay.endGameText = makeText("Game Over! " + HexMap.getCurrentPlayer() + " won in " + HexMap.getTurnCount() + " turns!", new Point(720, 310));
             root.getChildren().add(ExtendedPlay.endGameText);
             ExtendedPlay.setGameOver(true);
+            renderVictoryGraphics();
+        }
+    }
 
-            /*Call end game splash screen and set replay button to color of winner (For fun and to also demonstrate
+    private void renderVictoryGraphics(){
+         /*Call end game splash screen and set replay button to color of winner (For fun and to also demonstrate
             the certain graphical functions available to us as well as how they are called)
             */
-            String winnerColor = (HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
-            ExtendedPlay.extendedPlay.endGameSplash(HexMap.getCurrentPlayer(), ExtendedPlay::reset);
-            ExtendedPlay.extendedPlay.button.setFill(LinearGradient.valueOf
-                    ("from 0px 0px to 10px 20px, " +
-                            "reflect, " + winnerColor + " 0.0%, 0x000000 100.0%")
-            );
-        }
+        String winnerColor = (HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE) ? "0x0c42c9" : "0xc9180c";
+        ExtendedPlay.extendedPlay.endGameSplash(HexMap.getCurrentPlayer(), ExtendedPlay::reset);
+        ExtendedPlay.extendedPlay.button.setFill(LinearGradient.valueOf
+                ("from 0px 0px to 10px 20px, " +
+                        "reflect, " + winnerColor + " 0.0%, 0x000000 100.0%")
+        );
     }
 
 }

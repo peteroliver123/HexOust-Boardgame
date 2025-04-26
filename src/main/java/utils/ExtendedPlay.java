@@ -15,9 +15,9 @@ import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 import static utils.Utility.*;
 
-/*
+/**
 This class handles and deals with any function or GUI elements in regard to
-the end game.
+the end game and playing more than one round.
 - Displays a score counter that counts the wins for each player
 - Creates a replay button that will call the reset function and remove any end game exclusive elements
  */
@@ -118,6 +118,9 @@ public class ExtendedPlay {
         turnCount.setText(String.valueOf(totalTurn));
     }
 
+    /**
+     * Resets game state, clearing placed stones and setting the board up for another round.
+     */
     public static void reset(){
         /*Removal of end game splash screen elements*/
         if (endGameText != null && HexMap.root.getChildren().contains(endGameText)) {
@@ -149,6 +152,9 @@ public class ExtendedPlay {
     }
 
 
+    /**
+     * Helper function, sets simple hover animations for replay button
+     */
     private void setReplayButtonAnimations(){
         replayButton.setOnMouseEntered(e -> {
             ScaleTransition scale = new ScaleTransition(Duration.millis(200), replayButton);
@@ -177,6 +183,9 @@ public class ExtendedPlay {
         });
     }
 
+    /**
+     * Helper function, creates replay button and sets its style elements
+     */
     private void setUpReplayButton(){
         /*Replay button made in a stack-pane such that the replay button text will be centered inside the button*/
         replayButton = new StackPane();

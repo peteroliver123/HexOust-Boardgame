@@ -1,5 +1,5 @@
 package utils;
-/*
+/**
 This is a helper class which describes a hexagon which is made up of two points, a centre of the hexagon
 and its co-ordinate position in relation to the grid of hexagons we are creating. It has four functions:
 getCentre, getCoordinatePosition (basic getter methods), contains and isNeighbour. Contains takes a utils.Point
@@ -40,10 +40,12 @@ public class Hexagon extends Polygon {
         return hexagons[(int) currentHexagonCoordinates.getX()][(int) currentHexagonCoordinates.getY()];
     }
 
-    /*
-    This function takes a mousePoint that the user has clicked and
-    determines whether it is inside the current hexagon. Returns true
-    if yes and false otherwise. It implements utils.Point-In-Polygon Algorithm.
+    /**
+     * Takes a mousePoint that the user has clicked and
+     * determines whether it is inside the current hexagon.
+     * It implements utils.Point-In-Polygon Algorithm.
+     * @param mousePoint location of user click
+     * @return True if point is inside this Hexagon, false otherwise
      */
     public boolean contains(Point mousePoint) {
         Double[] points = this.getPoints().toArray(new Double[0]);
@@ -63,9 +65,10 @@ public class Hexagon extends Polygon {
         return inside;
     }
 
-    /*
-    This function takes a hexagon and returns whether the given hexagon is
-    touching the current hexagon.
+    /**
+     * Returns whether the input Hex is adjacent to this one
+     * @param hex Hexagon to check for adjacency with this one
+     * @return True if adjacent, false if not.
      */
     public boolean isNeighbor(Hexagon hex){
         boolean isNeighbor = false;

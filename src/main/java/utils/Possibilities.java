@@ -62,6 +62,11 @@ public class Possibilities {
 
     }
 
+    /**
+     * Checks if placing a stone in target hexagon would result in a non-capturing move
+     * @param hexCoordinates hexagon coordinates of target hexagon
+     * @return True if the placement would result in a non-capturing move, false otherwise.
+     */
     public static boolean isNonCapturing(Point hexCoordinates){
         ArrayList<Hexagon> playerHexagons = HexMap.getPlayerHexagons();
         Hexagon currentHex = Hexagon.getCurrentHexagon(hexCoordinates);
@@ -75,6 +80,12 @@ public class Possibilities {
         return true;
     }
 
+    /**
+     * Checks if placing a stone in target hexagon would result in a capturing move
+     * @param hexCoordinates hexagon coordinates of target hexagon
+     * @param enemySubGroupsHolder array of all distinct, non-connected groups of hexagons that hold enemy stones
+     * @return true if the placement would result in a capturing move, false otherwise.
+     */
     public static boolean isCapturing(Point hexCoordinates, ArrayList<Hexagon>[] enemySubGroupsHolder){
         ArrayList<Hexagon> friendlyNeighbour = new ArrayList<>(); //arrayList of hexagons controlled by current player that touch current player or its neighbours.
         ArrayList<Hexagon> enemyNeighbour = new ArrayList<>(); //arrayList of hexagons not controlled by current player that touch current player or its neighbours.
@@ -157,7 +168,11 @@ public class Possibilities {
         return maxGroup;
     }
 
-
+    /**
+     * Checks if a specific hexagon already has a stone in it
+     * @param hexCoordinates hexagon coordinates of the click(not absolute coordinates)
+     * @return True if the click is valid, ie if there is no stone already in that hexagon. False otherwise.
+     */
     public static boolean isValidClick(Point hexCoordinates){
         Hexagon currentHex = Hexagon.getCurrentHexagon(hexCoordinates);
         /* Check if hexagon already has circle */
