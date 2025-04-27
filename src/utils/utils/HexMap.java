@@ -1,4 +1,4 @@
-package utils;
+package utils.utils;
 /*Imports */
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -14,7 +14,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
-import static utils.Utility.*;
+import static utils.utils.Utility.*;
 
 /**
  * Board class, initializes and stores the state of the current game instance, including the graphical elements.

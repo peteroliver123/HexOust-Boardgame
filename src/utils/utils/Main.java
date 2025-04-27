@@ -1,4 +1,4 @@
-package utils;
+package utils.utils;
 
 import javafx.application.Application;
 

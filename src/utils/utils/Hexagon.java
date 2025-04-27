@@ -1,4 +1,4 @@
-package utils;
+package utils.utils;
 /**
 This is a helper class which describes a hexagon which is made up of two points, a centre of the hexagon
 and its co-ordinate position in relation to the grid of hexagons we are creating. It has four functions:
@@ -11,7 +11,7 @@ takes a hexagon and checks whether the current hexagon borders the given hexagon
 /*Imports */
 import javafx.scene.shape.Polygon;
 
-import static utils.Utility.hexagons;
+import static utils.utils.Utility.hexagons;
 
 public class Hexagon extends Polygon {
     /*Variables */

@@ -1,4 +1,4 @@
-package utils;
+package utils.utils;
 
 /*Imports*/
 import javafx.animation.ScaleTransition;
@@ -13,7 +13,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
-import static utils.Utility.*;
+import static utils.utils.Utility.*;
 
 /**
 This class handles and deals with any function or GUI elements in regard to

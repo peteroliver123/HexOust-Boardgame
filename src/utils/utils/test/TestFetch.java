@@ -1,6 +1,5 @@
-package test;
+package utils.utils.test;
 
-import utils.*;
 /*Imports */
 import static org.junit.jupiter.api.Assertions.*;
 import javafx.scene.input.MouseButton;
@@ -8,8 +7,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.*;
 import org.testfx.framework.junit.ApplicationTest;
+import utils.utils.*;
 
-import static utils.Utility.*;
+import static utils.utils.Utility.*;
 
 
 public class TestFetch extends ApplicationTest {

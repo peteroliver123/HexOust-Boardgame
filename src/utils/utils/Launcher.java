@@ -1,4 +1,4 @@
-package utils;
+package utils.utils;
 
 class Launcher {
     public static void main(String[] args) {

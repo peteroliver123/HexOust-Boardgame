@@ -6,13 +6,13 @@ multidimensional state array which holds the hexagons states. 0 for invalid, 1 f
 hexagon having a circle for the current player turn would be non-capturing. isCapturing does the same
 for capturing moves. */
 
-package utils;
+package utils.utils;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import static utils.Utility.*;
+import static utils.utils.Utility.*;
 
 import java.util.ArrayList;
 

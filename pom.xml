@@ -75,7 +75,7 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>
-                        utils.Main
+                        utils.utils.Main
                     </mainClass>
                 </configuration>
             </plugin>
@@ -92,7 +92,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>utils.Main</mainClass>
+                                    <mainClass>utils.utils.Main</mainClass>
                                 </transformer>
                             </transformers>
                             <minimizeJar>true</minimizeJar>

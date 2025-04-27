@@ -1,4 +1,4 @@
-package utils;
+package utils.utils;
 
 /*
 This is a helper class which describes a point on the pane with an x co-ordinate
