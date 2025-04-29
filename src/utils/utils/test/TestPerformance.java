@@ -10,10 +10,7 @@ import utils.utils.*;
 
 import static utils.utils.Utility.*;
 
-
 /*Performance testing */
-
-
 public class TestPerformance {
     public static HexMap hexMap;
     public static Pane root;
