@@ -6,7 +6,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.*;
-import org.testfx.framework.junit.ApplicationTest;
 import utils.utils.*;
 
 import static utils.utils.Utility.*;
@@ -15,7 +14,7 @@ import static utils.utils.Utility.*;
 /*Performance testing */
 
 
-public class TestPerformance extends ApplicationTest {
+public class TestPerformance {
     public static HexMap hexMap;
     public static Pane root;
 

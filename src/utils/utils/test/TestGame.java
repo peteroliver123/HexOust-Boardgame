@@ -7,12 +7,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.junit.jupiter.api.*;
-import org.testfx.framework.junit.ApplicationTest;
 import utils.utils.*;
 
 import static utils.utils.Utility.*;
 
-public class TestGame extends ApplicationTest {
+public class TestGame {
     public static HexMap hexMap;
     public static Pane root;
 
@@ -46,7 +45,7 @@ public class TestGame extends ApplicationTest {
     @Test
     public void testMakeTextOffScreen(){
         try {
-            Text newText = makeText("To Make a Move", new Point (-1000, -1000));
+            makeText("To Make a Move", new Point (-1000, -1000));
             fail("Allowed text off-screen");
         } catch (IllegalArgumentException _){
         }
@@ -208,13 +207,13 @@ public class TestGame extends ApplicationTest {
         ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
 
-        int[] expectedrow1_1 = {1,0,1,1,1,1,1,1,0,0,0,0,0};
-        assertArrayEquals(expectedrow1_1, state[1]);
+        int[] expectedRowOne1 = {1,0,1,1,1,1,1,1,0,0,0,0,0};
+        assertArrayEquals(expectedRowOne1, state[1]);
 
         simulateClick(1, 3);//BLUE NC
 
-        int[] expectedrow1_2 = {0,0,2,0,1,1,1,1,0,0,0,0,0};
-        assertArrayEquals(expectedrow1_2, state[1]);
+        int[] expectedRowOne2 = {0,0,2,0,1,1,1,1,0,0,0,0,0};
+        assertArrayEquals(expectedRowOne2, state[1]);
     }
 
     /*ENDGAME TESTING */
@@ -282,14 +281,12 @@ public class TestGame extends ApplicationTest {
         try {
             new Hexagon(new Point(-1, 1), new Point(1, 1));
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException _){
         }
         try {
             new Hexagon(new Point(1, -1), new Point(1, 1));
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException _){
         }
     }
 
@@ -303,14 +300,12 @@ public class TestGame extends ApplicationTest {
         try {
             new Hexagon(new Point(1, 1), new Point(-1, 1));
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException _){
         }
         try {
             new Hexagon(new Point(1, 1), new Point(1, -1));
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException _){
         }
     }
 
@@ -324,20 +319,17 @@ public class TestGame extends ApplicationTest {
         try {
             new Hexagon(new Point(1, 1), new Point(13, 1));
             fail("Allowed Invalid Q!");
-        } catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException _){
         }
         try {
             new Hexagon(new Point(1, 1), new Point(1, 8));
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException _){
         }
         try {
             new Hexagon(new Point(1, 1), new Point(8, 19));
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException e){
-
+        } catch (IllegalArgumentException _){
         }
     }
 
