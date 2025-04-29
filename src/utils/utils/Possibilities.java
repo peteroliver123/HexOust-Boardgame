@@ -8,12 +8,15 @@ for capturing moves. */
 
 package utils.utils;
 
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import static utils.utils.Utility.*;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Possibilities {
@@ -28,10 +31,10 @@ public class Possibilities {
                     Point currentHexCoordinates = new Point(i, j);
                     currentHexCoordinates.coordinateCheck();
                     state[i][j] = 0;
-                    if(isValidClick(currentHexCoordinates)){
-                        if(isNonCapturing(currentHexCoordinates)){
+                    if (isValidClick(currentHexCoordinates)) {
+                        if (isNonCapturing(currentHexCoordinates)) {
                             state[i][j] = 1;
-                        } else if (isCapturing(currentHexCoordinates, null)){
+                        } else if (isCapturing(currentHexCoordinates, null)) {
                             state[i][j] = 2;
                         }
                         maximum = Math.max(maximum, state[i][j]);
@@ -39,7 +42,7 @@ public class Possibilities {
                     /*Game Management */
                     noValidMoves = maximum == 0;
                     updateColor(currentHexCoordinates);
-                } catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException _){
                 }
             }
         }

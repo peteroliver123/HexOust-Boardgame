@@ -5,12 +5,23 @@ import static org.junit.jupiter.api.Assertions.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import org.junit.jupiter.api.*;
 import org.testfx.framework.junit.ApplicationTest;
 import utils.utils.*;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import static utils.utils.Utility.*;
 
+
+
+/*There should be at least one test for every requirement */
+/*Obscure edge cases */
+/*One concept / one assert per case */
+/*Performance testing */
+/*Test whole Board State */
 
 public class TestFetch extends ApplicationTest {
     public static HexMap hexMap;
@@ -34,6 +45,21 @@ public class TestFetch extends ApplicationTest {
     }
 
     @Test
+    public void testMakeText(){
+        Text newText = makeText("To Make a Move", new Point (0, 0));
+        assertNotNull(newText);
+    }
+
+    @Test
+    public void testMakeTextOffScreen(){
+        try {
+            Text newText = makeText("To Make a Move", new Point (-1000, -1000));
+            fail("Allowed text off-screen");
+        } catch (IllegalArgumentException _){
+        }
+    }
+
+    @Test
     public void testHexagonContains(){
         ExtendedPlay.reset();
         Hexagon[][] hx = hexagons;
@@ -47,9 +73,19 @@ public class TestFetch extends ApplicationTest {
         assertEquals(1,HexMap.getRedHexagons().size());
     }
 
+    @Test
+    public void testMakeCircleInvalid(){
+        try {
+            ExtendedPlay.reset();
+            simulateClick(-1,-1);
+        } catch (IllegalArgumentException _){
+        }
+        assertEquals(0,HexMap.getRedHexagons().size());
+    }
+
     /*This test makes sure the user is unable to place a circle on a hexagon that already contains one. */
     @Test
-    public void spaceFull(){
+    public void testSpaceFull(){
         ExtendedPlay.reset();
         simulateClick(1, 1);
         simulateClick(1, 1);
@@ -59,7 +95,7 @@ public class TestFetch extends ApplicationTest {
 
     /*This test makes sure user isn't allowed to place on an invalid tile. */
     @Test
-    public void invalidMove(){
+    public void testInvalidMove(){
         ExtendedPlay.reset();
         simulateClick(1, 1);
         simulateClick(5,5);
@@ -68,9 +104,18 @@ public class TestFetch extends ApplicationTest {
         assertEquals(1, HexMap.getBlueHexagons().size());
     }
 
+    @Test
+    public void testNonCapturing(){
+        ExtendedPlay.reset();
+        simulateClick(1, 1);
+        simulateClick(5, 5);
+        assertEquals(1, HexMap.getRedHexagons().size());
+        assertEquals(1, HexMap.getBlueHexagons().size());
+    }
+
     /*This function makes sure capturing moves operate as intended */
     @Test
-    public void capturing(){
+    public void testCapturing(){
         ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
         simulateClick(3,3);//BLUE NC
@@ -83,7 +128,7 @@ public class TestFetch extends ApplicationTest {
 
     /*This function makes sure that a capturing move doesn't always end the game */
     @Test
-    public void capturingButGameNotOver(){
+    public void testCapturingButGameNotOver(){
         ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
         simulateClick(3,3);//BLUE NC
@@ -91,6 +136,105 @@ public class TestFetch extends ApplicationTest {
         simulateClick(1, 2);//BLUE NC
         simulateClick(2,1);//RED C
         assertFalse(ExtendedPlay.getGameOverStatus());
+    }
+
+    @Test
+    public void testCapturingState(){
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(3,3);//BLUE NC
+        simulateClick(5, 4);//RED NC
+        simulateClick(1, 2);//BLUE NC
+        assertEquals(2, state[2][1]);
+    }
+
+    @Test
+    public void testNonCapturingState(){
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(3,3);//BLUE NC
+        simulateClick(5, 4);//RED NC
+        simulateClick(1, 2);//BLUE NC
+        assertEquals(1, state[7][7]);
+    }
+
+    @Test
+    public void testOccupiedState(){
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(3,3);//BLUE NC
+        simulateClick(5, 4);//RED NC
+        simulateClick(1, 2);//BLUE NC
+        assertEquals(0, state[1][1]);
+    }
+
+    @Test
+    public void testInvalidState(){
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(3,3);//BLUE NC
+        simulateClick(5, 4);//RED NC
+        simulateClick(1, 2);//BLUE NC
+        assertEquals(0, state[5][3]);
+    }
+
+    @Test
+    public void testOutOfBoundsState(){
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(3,3);//BLUE NC
+        simulateClick(5, 4);//RED NC
+        simulateClick(1, 2);//BLUE NC
+        assertEquals(0, state[12][12]);
+    }
+
+    @Test
+    public void testIsValidClick(){
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        assertFalse(Possibilities.isValidClick(new Point (1,1)));
+        assertTrue(Possibilities.isValidClick(new Point(5, 5)));
+
+        int[] expectedrow1_1 = {1,0,1,1,1,1,1,1,0,0,0,0,0};
+
+        assertArrayEquals(expectedrow1_1, state[1]);
+
+        simulateClick(1, 3);
+        int[] expectedrow1_2 = {0,0,2,0,1,1,1,1,0,0,0,0,0};
+
+        assertArrayEquals(expectedrow1_2, state[1]);
+    }
+
+    @Test
+    public void wholeBoardSequence(){
+        ExtendedPlay.reset();
+        simulateClick(1,1);//RED NC
+        simulateClick(3,3);//BLUE NC
+        simulateClick(5, 4);//RED NC
+        simulateClick(1, 2);//BLUE NC
+
+        assertFalse(Possibilities.isValidClick(new Point (3,3)));
+        assertEquals(0, state[3][3]);
+        int[][] expectedState = new int[][] {
+                {2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+                {2, 1, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+                {1, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
+                {1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 0, 0},
+                {1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0},
+                {1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0},
+                {1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0},
+                {1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0}
+        };
+        assertEquals(expectedState.length, state.length, "Row counts differ");
+
+        for (int i = 0; i < expectedState.length; i++) {
+            assertArrayEquals(expectedState[i], state[i], "Row " + i + " differs");
+        }
     }
 
     @Test
@@ -119,7 +263,7 @@ public class TestFetch extends ApplicationTest {
     }
 
     @Test
-    public void playRound2(){
+    public void testPlayRound2(){
         hexMap.initialize();
         ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
@@ -130,7 +274,7 @@ public class TestFetch extends ApplicationTest {
     }
 
     @Test
-    public void countWins(){
+    public void testCountWins(){
         hexMap.initialize();
         ExtendedPlay.reset();
         simulateClick(1,1);//RED NC
@@ -143,12 +287,10 @@ public class TestFetch extends ApplicationTest {
         assertEquals(2,ExtendedPlay.extendedPlay.getRedWin());
     }
 
-
-
     /*Testing utils.Hexagon.java*/
     /*This function tests the utils.Hexagon class handles error when we hand it a negative value for the centre of the utils.Hexagon*/
     @Test
-    public void negativeCenter(){
+    public void testNegativeCenter(){
         ExtendedPlay.reset();
         try {
             new Hexagon(new Point(-1, 1), new Point(1, 1));
@@ -168,7 +310,7 @@ public class TestFetch extends ApplicationTest {
     it a negative q and r position.
      */
     @Test
-    public void negativePosition(){
+    public void testNegativePosition(){
         ExtendedPlay.reset();
         try {
             new Hexagon(new Point(1, 1), new Point(-1, 1));
@@ -187,7 +329,7 @@ public class TestFetch extends ApplicationTest {
     /*This test checks that hexagon class correctly handles errors when we try
     to create hexagon with values of q and r that are too big */
     @Test
-    public void invalidPosition(){
+    public void testInvalidPosition(){
         /*Valid Position are q = 0...12, when q = 0..6 r = 0..q + 6 when q = 7..12 r = 0..18-q*/
         ExtendedPlay.reset();
         try {
@@ -213,7 +355,7 @@ public class TestFetch extends ApplicationTest {
     /*This Test checks whether the first two hexagons are correctly treated as neighbours
     and another case where they are not neighbours also works correctly */
     @Test
-    public void isNeighbour(){
+    public void testIsNeighbour(){
         ExtendedPlay.reset();
         Hexagon[][] hx = hexagons;
         Hexagon a = hx[0][0];
@@ -224,7 +366,6 @@ public class TestFetch extends ApplicationTest {
     }
 
     private void simulateClick(int i, int j){
-
         /*Error Checking*/
         Point a = new Point(i, j);
         a.coordinateCheck();
