@@ -3,7 +3,7 @@
 ## Clone + Project Structure
 Link GitHub account to your IntelliJ
 Top left, projects tab, get from version control
-Select your github account and the shared repo.
+Select your gitHub account and the shared repo.
 
 Import it as Maven if prompted, but it should be recognized due to the pom.xml
 

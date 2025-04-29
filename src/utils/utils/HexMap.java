@@ -19,6 +19,7 @@ import static utils.utils.Utility.*;
 /**
  * Board class, initializes and stores the state of the current game instance, including the graphical elements.
  */
+
 public class HexMap extends Application {
     private static final double CENTRE_X = 100;
     private static final double CENTRE_Y = 515.88; // Center coordinates of the first initial hexagon (bottom left, [0][0])
@@ -89,7 +90,7 @@ public class HexMap extends Application {
         ExtendedPlay.extendedPlay = new ExtendedPlay(root);
 
         root.getChildren().addFirst(background());
-        Possibilities.getBoardState();
+        Possibilities.refreshBoardState();
         return root;
     }
 
@@ -147,8 +148,6 @@ public class HexMap extends Application {
                 center.getX() - (LENGTH * 0.5), center.getY() - (Math.sqrt(0.75) * LENGTH));
         hex.setStroke(Color.BLACK);
         hex.setFill(Color.web("#DEE6E8"));
-
-        circles.add(drawCircle(new Point(hex.getCentre().getX(), hex.getCentre().getY())));
         hex.setOnMouseClicked(new MoveHandler(root, hex));
         return hex;
     }

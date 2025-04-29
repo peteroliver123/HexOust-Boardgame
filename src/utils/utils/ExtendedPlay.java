@@ -148,7 +148,7 @@ public class ExtendedPlay {
         HexMap.getBlueHexagons().clear();
         gameOver = false;
         HexMap.setTurnCount(1);
-        Possibilities.getBoardState();
+        Possibilities.refreshBoardState();
     }
 
 

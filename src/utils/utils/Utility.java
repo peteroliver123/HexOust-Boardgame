@@ -43,21 +43,21 @@ public class Utility {
         circle.setCenterY(position.getY());
         circle.setRadius(LENGTH / 1.5);
         if (HexMap.getCurrentPlayer() == HexMap.PlayerTurn.BLUE) {
-            circle.setFill(Color.BLUE); // Fill color
+            circle.setFill(Color.BLUE);
         } else {
-            circle.setFill(Color.RED); // Fill color
+            circle.setFill(Color.RED);
         }
         circle.setStroke(Color.BLACK); // Border color
         circle.setStrokeWidth(2);
+        circle.setMouseTransparent(true);
         return circle;
     }
 
-
-    //Draws text at given point
+    /* Draws text at given point */
     public static Text makeText(String s, Point position){
         Text text = new Text(s);
-        text.setX(position.getX()); // X position on screen
-        text.setY(position.getY()); // Y position on screen
+        text.setX(position.getX());
+        text.setY(position.getY());
         text.setFont(DEFAULT_FONT);
         text.setFill(DEFAULT_TEXT_COLOR);
         return text;
@@ -70,6 +70,7 @@ public class Utility {
         return t;
     }
 
+    /*Helper function for drawing the circle which is the color of the current player's turn */
     public static void drawPlayerTurnCircle(Pane root){
         playerTurnCircle = drawCircle(new Point (900, 500));
         root.getChildren().add(playerTurnCircle);

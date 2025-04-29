@@ -40,7 +40,7 @@ public class TestPerformance {
     @Test
     public void testMoveSimpleTime(){
         long startTime = System.nanoTime();
-        Possibilities.getBoardState();
+        Possibilities.refreshBoardState();
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         assertTrue(duration < 5_000_000_000L);
@@ -55,7 +55,7 @@ public class TestPerformance {
         simulateClick(3,1);//RED NC
         simulateClick(5,3);//BLUE NC
         simulateClick(4,2);//RED C
-        Possibilities.getBoardState();
+        Possibilities.refreshBoardState();
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
         assertTrue(duration < 5_000_000_000L);

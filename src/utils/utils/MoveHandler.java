@@ -26,7 +26,7 @@ public class MoveHandler implements EventHandler<MouseEvent> {
     }
 
     /**
-     * Main handle method, calls auxilary methods such as win-checking, or capture/non-capture move results.
+     * Main handle method, calls auxiliary methods such as win-checking, or capture/non-capture move results.
      * @param event contains information about the MouseEvent that triggered the handle() method
      */
     @Override
@@ -45,19 +45,21 @@ public class MoveHandler implements EventHandler<MouseEvent> {
         if(invalidClick(mousePoint)){
             drawInvalidMoveText();
         } else {
-            if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 1) {
-                nonCapture();
-            } else if (state[(int) hexagon.getCoordinatePosition().getX()][(int) hexagon.getCoordinatePosition().getY()] == 2) {
+            int stateX = (int) hexagon.getCoordinatePosition().getX();
+            int stateY = (int) hexagon.getCoordinatePosition().getY();
+            if (state[stateX][stateY] == 1) {//pre-checked to be non-capturing
+                nonCapture();//draw new circle, switch turn
+            } else if (state[stateX][stateY] == 2) {//pre-checked to be capturing
                 @SuppressWarnings("unchecked")
                 ArrayList<Hexagon>[] enemySubGroupsHolder = (ArrayList<Hexagon>[]) new ArrayList[100];
-                Possibilities.isCapturing(new Point ((int) hexagon.getCoordinatePosition().getX(), (int) hexagon.getCoordinatePosition().getY()), enemySubGroupsHolder);
-                capture(enemySubGroupsHolder);
-                checkWin();
-            } else {
+                Possibilities.isCapturing(new Point (stateX, stateY), enemySubGroupsHolder);//generate enemy subgroups
+                capture(enemySubGroupsHolder);//remove enemy subgroups from board and draw new circle
+                checkWin();//make sure capture didn't end game
+            } else {//pre-checked to be invalid
                 drawInvalidMoveText();
             }
         }
-        Possibilities.getBoardState();
+        Possibilities.refreshBoardState();//refresh state array before new click with updated board state.
     }
 
     public void drawInvalidMoveText(){
@@ -123,12 +125,7 @@ public class MoveHandler implements EventHandler<MouseEvent> {
     private boolean invalidClick(Point mousePoint){
         /*PRE-CHECKS */
         if (!hexagon.contains(mousePoint)) {
-            Possibilities.getBoardState();
-            return true;
-        }
-        if (ExtendedPlay.getGameOverStatus()) {
-            System.out.println("Game is over, please start a new one to keep playing!");
-            Possibilities.getBoardState();
+            Possibilities.refreshBoardState();
             return true;
         }
         return false;

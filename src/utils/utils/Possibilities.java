@@ -8,23 +8,19 @@ for capturing moves. */
 
 package utils.utils;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
 import static utils.utils.Utility.*;
-
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Possibilities {
 
-    public static void getBoardState(){
+    public static void refreshBoardState(){
         int maximum = 0;
         boolean noValidMoves = false;
 
+        /*Assign State to each hexagon co-ordinate position */
         for(int i = 0; i < 2 * SIZE - 1; i++){
             for(int j = 0; j < 2 * SIZE - 1; j++){
                 try{
@@ -46,9 +42,10 @@ public class Possibilities {
                 }
             }
         }
+        /*Pass Turn if no moves available */
         if(noValidMoves){
             HexMap.changePlayer();
-            getBoardState();
+            refreshBoardState();
         }
     }
 
@@ -74,6 +71,7 @@ public class Possibilities {
         ArrayList<Hexagon> playerHexagons = HexMap.getPlayerHexagons();
         Hexagon currentHex = Hexagon.getCurrentHexagon(hexCoordinates);
 
+        /*Non-Capturing -> Not touching any friendly Hexagons */
         for(Hexagon friendlyHex : playerHexagons){
             if(currentHex.isNeighbor(friendlyHex)){
                 return false;
@@ -97,13 +95,16 @@ public class Possibilities {
 
         updateNeighbours(currentHex, friendlyNeighbour, enemyNeighbour);
 
+        //adjust friendlyNeighbour so the size is new Group.
         findNewGroupSize(friendlyNeighbour, enemyNeighbour);
 
         if(enemyNeighbour.isEmpty()){
+            //cannot be capturing
             return false;
         }
         else {
-            int maxGroup = enemySubGroupCalculator(enemySubGroupsHolder, enemyNeighbour);
+            //can only be capturing if capturing group is bigger
+            int maxGroup = enemySubGroupCalculator(enemySubGroupsHolder, enemyNeighbour);//find biggest enemy subGroup
             return maxGroup < friendlyNeighbour.size();
         }
 
@@ -113,6 +114,11 @@ public class Possibilities {
         ArrayList<Hexagon> playerHexagons = HexMap.getPlayerHexagons();
         ArrayList<Hexagon> enemyHexagons = HexMap.getEnemyHexagons();
 
+        /*
+        Recurse through all the friendly neighbours and their neighbours and so on until there are no more neighbours,
+        while doing this add all enemy neighbours of these friendly neighbours, essentially getting list of all enemies
+        that boarder the entire new capturing group.
+         */
         for(int i = 0; i < friendlyNeighbour.size(); i++){
             Hexagon currentFriendlyHex = friendlyNeighbour.get(i);
             for(Hexagon potentialTouchingFriend : playerHexagons){
@@ -151,6 +157,13 @@ public class Possibilities {
         int maxGroup = 0;
         int numSubGroups = 0;
 
+        /*
+        For each enemy bordering the new group, we recurse through all of its neighbours and
+        store them in an array, we get the size of this array. And repeating this for all the
+        bordering enemy neighbours we find the max enemy subgroup. If using this function to actually
+        perform a capturing move, we must pass in the enemySubGroupsHolder which will tell the
+        MoveHandler.capture function what circles to remove when performing the capture.
+        */
         for(Hexagon enemyHex : enemyNeighbour){
             enemySubGroup.add(enemyHex);
             for(int i = 0; i < enemySubGroup.size(); i++){
@@ -161,6 +174,7 @@ public class Possibilities {
                     }
                 }
             }
+
             maxGroup = Math.max(maxGroup, enemySubGroup.size());
             if(enemySubGroupsHolder != null){
                 enemySubGroupsHolder[numSubGroups] = new ArrayList<>(enemySubGroup);
