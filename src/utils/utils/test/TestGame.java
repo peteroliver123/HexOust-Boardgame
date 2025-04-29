@@ -10,18 +10,12 @@ import org.junit.jupiter.api.*;
 import org.testfx.framework.junit.ApplicationTest;
 import utils.utils.*;
 
-import java.util.Arrays;
-import java.util.Optional;
-
 import static utils.utils.Utility.*;
 
-
-/*Performance testing */
-
-
-public class TestFetch extends ApplicationTest {
+public class TestGame extends ApplicationTest {
     public static HexMap hexMap;
     public static Pane root;
+
     @BeforeAll
     public static void initial() {
         System.setProperty("testfx.robot", "glass");
@@ -139,7 +133,6 @@ public class TestFetch extends ApplicationTest {
         assertEquals(3, HexMap.getBlueHexagons().size());
         assertEquals(1, HexMap.getRedHexagons().size());
     }
-
 
     /*This function makes sure that a capturing move doesn't always end the game */
     @Test
