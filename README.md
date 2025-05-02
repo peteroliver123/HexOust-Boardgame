@@ -30,4 +30,4 @@ mvn clean package
 The pom.xml has everything needed (Compiler + Assembly plugins with configurations set) and the compiler makes use
 maven shade to compile the necessary dependencies into the jar, thus reducing file size.
 
-<span style="color:red">NOTE: Do not modify structure. Maven shade or just maven in general expects a set location for the root directories. Any modifications or unusual structure can break the compilation and there is no way to make it adjust other than to restructure.</span>
+$${\color{red}NOTE: \space Do \space not \space modify \space structure. \space Maven \space shade \space or \space just \space maven \space in \space general \space expects \space a \space set \space location \space for \space the \space root \space directories. \space Any \space modifications \space or \space unusual \space structure \space can \space break \space the \space compilation \space and \space there \space is \space no \space way \space to \space make \space it \space adjust \space other \space than \space to \space restructure.}$$
