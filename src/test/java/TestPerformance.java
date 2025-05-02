@@ -1,14 +1,11 @@
-package utils.utils.test;
-
 /*Imports */
 import static org.junit.jupiter.api.Assertions.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.*;
-import utils.utils.*;
-
-import static utils.utils.Utility.*;
+import utils.*;
+import static utils.Utility.*;
 
 /*Performance testing */
 public class TestPerformance {

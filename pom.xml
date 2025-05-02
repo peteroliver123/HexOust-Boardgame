@@ -75,7 +75,7 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>
-                        utils.utils.Main
+                        utils.Main
                     </mainClass>
                 </configuration>
             </plugin>
@@ -92,7 +92,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>utils.utils.Main</mainClass>
+                                    <mainClass>utils.Main</mainClass>
                                 </transformer>
                             </transformers>
                             <minimizeJar>true</minimizeJar>
@@ -103,7 +103,7 @@
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
-                                        <exclude>**/TestFetch.class</exclude>
+                                        <exclude>**/TestGame.class</exclude>
                                         <exclude>**/test/**</exclude>
                                     </excludes>
                                 </filter>

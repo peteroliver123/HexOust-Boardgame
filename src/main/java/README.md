@@ -20,7 +20,7 @@ Inside the new VM options field, insert this line of code (Make sure to edit the
 Save and apply.
 
 Note: You will need to do this for any class at all that incorporates JavaFX and renders the stage.
-To avoid it, create a java. or java.Main class that runs the javafx class using Application.launch.
+To avoid it, create a java. or java.utils.Main class that runs the javafx class using Application.launch.
 
 ## Fat-Jar Compiling
 To compile into a jar with the dependencies included, simply open the terminal and run:

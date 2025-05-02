@@ -1,3 +1,4 @@
+package utils;
 /*This class tells the program which hexagons are what type of moves. There are three
 types of moves invalid moves (which have different types treated the same), valid
 non-capturing, valid capturing. It has _ functions getBoardState which alters the global
@@ -6,13 +7,11 @@ multidimensional state array which holds the hexagons states. 0 for invalid, 1 f
 hexagon having a circle for the current player turn would be non-capturing. isCapturing does the same
 for capturing moves. */
 
-package utils.utils;
-
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import static utils.utils.Utility.*;
 import java.util.ArrayList;
+import static utils.Utility.*;
 
 public class Possibilities {
 
@@ -38,7 +37,7 @@ public class Possibilities {
                     /*Game Management */
                     noValidMoves = maximum == 0;
                     updateColor(currentHexCoordinates);
-                } catch (IllegalArgumentException _){
+                } catch (IllegalArgumentException e){
                 }
             }
         }

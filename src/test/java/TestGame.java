@@ -1,15 +1,12 @@
-package utils.utils.test;
-
 /*Imports */
 import static org.junit.jupiter.api.Assertions.*;
+import static utils.Utility.*;
+import utils.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.junit.jupiter.api.*;
-import utils.utils.*;
-
-import static utils.utils.Utility.*;
 
 public class TestGame {
     public static HexMap hexMap;
@@ -45,9 +42,9 @@ public class TestGame {
     @Test
     public void testMakeTextOffScreen(){
         try {
-            makeText("To Make a Move", new Point (-1000, -1000));
+            makeText("To Make a Move", new Point(-1000, -1000));
             fail("Allowed text off-screen");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
     }
 
@@ -56,7 +53,7 @@ public class TestGame {
         ExtendedPlay.reset();
         simulateClick(1,1);
 
-        assertEquals(1,HexMap.getRedHexagons().size());
+        assertEquals(1, HexMap.getRedHexagons().size());
     }
 
     @Test
@@ -64,7 +61,7 @@ public class TestGame {
         ExtendedPlay.reset();
         try {
             simulateClick(-1,-1);
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
 
         assertEquals(0,HexMap.getRedHexagons().size());
@@ -273,7 +270,7 @@ public class TestGame {
     }
 
     /*HEXAGON TESTING */
-    /*This function tests the utils.Hexagon class handles error when we hand it a negative value for the centre of the utils.Hexagon*/
+    /*This function tests the utils.Hexagon class handles error when we hand it a negative value for the centre of the utils.utils.Hexagon*/
     @Test
     public void testNegativeCenter(){
         ExtendedPlay.reset();
@@ -281,12 +278,12 @@ public class TestGame {
         try {
             new Hexagon(new Point(-1, 1), new Point(1, 1));
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
         try {
             new Hexagon(new Point(1, -1), new Point(1, 1));
             fail("Allowed negative center!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
     }
 
@@ -300,12 +297,12 @@ public class TestGame {
         try {
             new Hexagon(new Point(1, 1), new Point(-1, 1));
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
         try {
             new Hexagon(new Point(1, 1), new Point(1, -1));
             fail("Allowed negative position!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
     }
 
@@ -319,17 +316,17 @@ public class TestGame {
         try {
             new Hexagon(new Point(1, 1), new Point(13, 1));
             fail("Allowed Invalid Q!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
         try {
             new Hexagon(new Point(1, 1), new Point(1, 8));
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
         try {
             new Hexagon(new Point(1, 1), new Point(8, 19));
             fail("Allowed invalid R!");
-        } catch (IllegalArgumentException _){
+        } catch (IllegalArgumentException e){
         }
     }
 

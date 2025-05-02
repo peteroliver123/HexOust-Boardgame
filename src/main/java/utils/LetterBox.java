@@ -1,4 +1,4 @@
-package utils.utils;
+package utils;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;

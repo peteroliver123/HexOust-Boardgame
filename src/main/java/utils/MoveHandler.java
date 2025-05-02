@@ -1,6 +1,7 @@
+package utils;
+
 /* This class is to do with making moves and capturing */
 
-package utils.utils;
 /*Imports */
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -8,9 +9,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-
+import static utils.Utility.*;
 import java.util.ArrayList;
-import static utils.utils.Utility.*;
 
 /**
  * High level control of user click handling. Calls other helper classes in order to resolve user move.

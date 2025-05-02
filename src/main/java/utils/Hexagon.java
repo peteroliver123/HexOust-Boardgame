@@ -1,9 +1,7 @@
-package utils.utils;
-
+package utils;
 /*Imports */
 import javafx.scene.shape.Polygon;
-
-import static utils.utils.Utility.hexagons;
+import static utils.Utility.*;
 
 /**
  * This is a helper class which describes a hexagon which is made up of two points, a centre of the hexagon
