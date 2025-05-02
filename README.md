@@ -25,6 +25,9 @@ To avoid it, create a java. or java.utils.Main class that runs the javafx class 
 ## Fat-Jar Compiling
 To compile into a jar with the dependencies included, simply open the terminal and run:
 ```
-mvn package
+mvn clean package
 ```
-The pom.xml has everything needed (Compiler + Assembly plugins with configurations set)
+The pom.xml has everything needed (Compiler + Assembly plugins with configurations set) and the compiler makes use
+maven shade to compile the necessary dependencies into the jar, thus reducing file size.
+
+<span style="color:red">NOTE: Do not modify structure. Maven shade or just maven in general expects a set location for the root directories. Any modifications or unusual structure can break the compilation and there is no way to make it adjust other than to restructure.</span>
